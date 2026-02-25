@@ -2,274 +2,100 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MermiChat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; color: white; overflow: hidden; touch-action: manipulation; }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            color: white;
-        }
+        /* 3D Mermi Animasyonu */
+        .bullet-wrap { width: 100px; height: 100px; margin: 0 auto 16px; perspective: 1000px; }
+        .bullet { width: 30px; height: 80px; margin: 0 auto; position: relative; transform-style: preserve-3d; animation: spin 3s linear infinite; }
+        @keyframes spin { 0% { transform: rotateY(0deg) rotateX(10deg); } 100% { transform: rotateY(360deg) rotateX(10deg); } }
+        .bullet-body { width: 30px; height: 60px; background: linear-gradient(90deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%); border-radius: 0 0 15px 15px; position: absolute; bottom: 0; box-shadow: inset -3px 0 8px rgba(0,0,0,0.3), 0 0 15px rgba(255,215,0,0.5); }
+        .bullet-tip { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 25px solid #c0c0c0; position: absolute; top: 0; }
+        .bullet-ring { width: 34px; height: 6px; background: #b8860b; position: absolute; bottom: 15px; left: -2px; border-radius: 2px; }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-
-        /* 3D Mermi */
-        .bullet-wrap {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-            perspective: 1000px;
-        }
-
-        .bullet {
-            width: 40px;
-            height: 100px;
-            margin: 0 auto;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: spin 3s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotateY(0deg) rotateX(10deg); }
-            100% { transform: rotateY(360deg) rotateX(10deg); }
-        }
-
-        .bullet-body {
-            width: 40px;
-            height: 80px;
-            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            border-radius: 0 0 20px 20px;
-            position: absolute;
-            bottom: 0;
-            box-shadow: inset -5px 0 10px rgba(0,0,0,0.3), 0 0 20px rgba(255,215,0,0.5);
-        }
-
-        .bullet-tip {
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 30px solid #c0c0c0;
-            position: absolute;
-            top: 0;
-        }
-
-        .bullet-ring {
-            width: 44px;
-            height: 8px;
-            background: #b8860b;
-            position: absolute;
-            bottom: 20px;
-            left: -2px;
-            border-radius: 2px;
-        }
-
-        .msg-me {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-top-right-radius: 4px;
-        }
-
-        .msg-other {
-            background: rgba(255, 255, 255, 0.15);
-            border-top-left-radius: 4px;
-        }
-
-        .active-grp {
-            background: rgba(139, 92, 246, 0.3);
-            border-left: 4px solid #8b5cf6;
-        }
-
+        .msg-me { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-bottom-right-radius: 4px; align-self: flex-end; margin-left: auto; }
+        .msg-other { background: rgba(255, 255, 255, 0.15); border-bottom-left-radius: 4px; align-self: flex-start; }
         .hidden { display: none !important; }
         
-        .btn-link {
-            background: none;
-            border: none;
-            color: #a78bfa;
-            cursor: pointer;
-            text-decoration: underline;
-            font-size: inherit;
-        }
-
-        .btn-link:hover {
-            color: #c4b5fd;
-        }
-
-        .admin-badge {
-            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-            color: white;
-            font-size: 0.625rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 4px;
-            font-weight: bold;
-        }
-
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .profile-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-avatar:hover::after {
-            content: '📷';
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .message-image {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar { display: none; }
-        }
-
-        #chat-box::-webkit-scrollbar { width: 5px; }
-        #chat-box::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 10px; }
+        .chat-item { cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .message-bubble { max-width: 85%; padding: 10px 14px; border-radius: 18px; margin-bottom: 8px; word-wrap: break-word; font-size: 15px; }
+        
+        .input-area { position: fixed; bottom: 0; left: 0; right: 0; padding: 12px; background: rgba(22, 33, 62, 0.95); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; align-items: center; z-index: 40; }
+        .media-btn { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; }
+        .send-btn { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; color: white; }
+        .message-input { flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 22px; padding: 12px 16px; color: white; outline: none; }
+        
+        .chat-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+        .messages-container { padding: 80px 16px 100px; overflow-y: auto; height: 100vh; display: flex; flex-direction: column; }
+        
+        .recording { background: #ef4444 !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
     </style>
 </head>
 <body>
 
     <div id="screen-login" class="flex items-center justify-center min-h-screen p-4">
-        <div class="glass rounded-2xl p-8 w-full max-w-md fade-in">
-            <div class="bullet-wrap">
-                <div class="bullet">
-                    <div class="bullet-tip"></div>
-                    <div class="bullet-body"><div class="bullet-ring"></div></div>
-                </div>
-            </div>
-            <h1 class="text-4xl font-bold text-center mb-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">MermiChat</h1>
-            <p class="text-center text-gray-300 mb-8">Hızlı ve Güvenli Mesajlaşma</p>
-            
+        <div class="glass rounded-2xl p-6 w-full max-w-sm">
+            <div class="bullet-wrap"><div class="bullet"><div class="bullet-tip"></div><div class="bullet-body"><div class="bullet-ring"></div></div></div></div>
+            <h1 class="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">MermiChat</h1>
             <div id="box-login">
-                <input type="text" id="user-login" class="w-full p-3 mb-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none" placeholder="Kullanıcı adı">
-                <input type="password" id="pass-login" class="w-full p-3 mb-6 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none" placeholder="Şifre">
-                <button id="btn-do-login" class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-bold hover:opacity-90 transition">Giriş Yap</button>
-                <div class="text-center mt-4 text-gray-400">Hesabın yok mu? <button type="button" id="btn-show-register" class="btn-link">Kayıt Ol</button></div>
+                <input type="text" id="user-login" class="w-full p-3 mb-3 bg-white/10 border border-white/20 rounded-xl text-white outline-none" placeholder="Kullanıcı adı">
+                <input type="password" id="pass-login" class="w-full p-3 mb-4 bg-white/10 border border-white/20 rounded-xl text-white outline-none" placeholder="Şifre">
+                <button onclick="handleLogin()" class="w-full py-3 bg-purple-600 rounded-xl font-bold">Giriş Yap</button>
+                <p class="text-center mt-4 text-sm text-gray-400">Hesabın yok mu? <button onclick="toggleAuth(true)" class="text-purple-400 underline">Kayıt Ol</button></p>
             </div>
-
             <div id="box-register" class="hidden">
-                <input type="text" id="user-reg" class="w-full p-3 mb-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none" placeholder="Kullanıcı adı">
-                <input type="password" id="pass-reg" class="w-full p-3 mb-6 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-purple-500 focus:outline-none" placeholder="Şifre">
-                <button id="btn-do-register" class="w-full py-3 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg font-bold hover:opacity-90 transition">Kayıt Ol</button>
-                <div class="text-center mt-4 text-gray-400">Zaten hesabın var? <button type="button" id="btn-show-login" class="btn-link">Giriş Yap</button></div>
+                <input type="text" id="user-reg" class="w-full p-3 mb-3 bg-white/10 border border-white/20 rounded-xl text-white outline-none" placeholder="Kullanıcı adı">
+                <input type="password" id="pass-reg" class="w-full p-3 mb-4 bg-white/10 border border-white/20 rounded-xl text-white outline-none" placeholder="Şifre">
+                <button onclick="handleRegister()" class="w-full py-3 bg-green-600 rounded-xl font-bold">Kayıt Ol</button>
+                <p class="text-center mt-4 text-sm text-gray-400">Hesabın var mı? <button onclick="toggleAuth(false)" class="text-green-400 underline">Giriş Yap</button></p>
             </div>
         </div>
     </div>
 
-    <div id="screen-app" class="hidden flex flex-col h-screen">
+    <div id="screen-list" class="hidden h-screen flex flex-col">
         <div class="glass p-4 flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" id="header-profile-click">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center overflow-hidden" id="header-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div>
-                    <div class="flex items-center">
-                        <span id="display-user" class="font-bold"></span>
-                        <span id="admin-badge" class="admin-badge hidden">ADMIN</span>
-                    </div>
-                    <div class="text-xs text-green-400">● Çevrimiçi</div>
-                </div>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center"><i class="fas fa-user"></i></div>
+                <div><div id="display-user" class="font-bold"></div><div class="text-xs text-green-400">● Çevrimiçi</div></div>
             </div>
-            <div class="flex gap-2">
-                <button id="btn-new-group" class="px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600">
-                    <i class="fas fa-plus mr-1"></i> Grup
-                </button>
-                <button id="btn-exit" class="px-4 py-2 bg-red-500 rounded-lg hover:bg-red-600">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
+            <button onclick="alert('Profil düzenleme yakında!')" class="w-10 h-10 glass rounded-full flex items-center justify-center"><i class="fas fa-cog"></i></button>
         </div>
-
-        <div class="flex flex-1 overflow-hidden">
-            <div class="sidebar w-80 glass border-r border-white/10 flex flex-col">
-                <div class="p-4 border-b border-white/10"><h3 class="font-bold text-lg mb-2">Gruplar</h3></div>
-                <div id="group-list" class="flex-1 overflow-y-auto"></div>
-            </div>
-            <div class="flex-1 flex flex-col min-w-0">
-                <div class="glass p-4 border-b border-white/10 flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div id="chat-avatar" class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-xl font-bold">A</div>
-                        <div>
-                            <div id="chat-name" class="font-bold text-lg">Ana Grup</div>
-                            <div id="chat-count" class="text-xs text-gray-400">0 üye</div>
-                        </div>
-                    </div>
-                    <button id="btn-add-user" class="p-2 bg-white/10 rounded-lg hover:bg-white/20"><i class="fas fa-user-plus"></i></button>
-                </div>
-                <div id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
-                <div class="glass p-4 border-t border-white/10">
-                    <div class="flex gap-2 items-center">
-                        <input type="text" id="input-msg" class="flex-1 p-3 bg-white/10 border border-white/20 rounded-lg text-white focus:border-purple-500 focus:outline-none" placeholder="Mesaj yaz...">
-                        <button id="btn-send-msg" class="p-3 px-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:opacity-90">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
+        <div class="flex-1 overflow-y-auto" id="chat-list-container">
+            <div class="p-4 border-b border-white/5 flex items-center gap-3 glass m-2 rounded-xl" onclick="openChat('ana-grup', 'Ana Grup')">
+                <div class="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center font-bold">A</div>
+                <div class="flex-1">
+                    <div class="font-bold text-yellow-400">Ana Grup</div>
+                    <div class="text-xs text-gray-400">Girmek için dokun...</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="modal-create" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <div class="glass rounded-2xl p-6 w-full max-w-md">
-            <h3 class="text-xl font-bold mb-4">Yeni Grup</h3>
-            <input type="text" id="input-group-name" class="w-full p-3 mb-4 bg-white/10 border border-white/20 rounded-lg text-white focus:border-purple-500 focus:outline-none" placeholder="Grup adı">
-            <div class="flex gap-2">
-                <button id="btn-cancel-create" class="flex-1 py-2 bg-white/10 rounded-lg hover:bg-white/20">İptal</button>
-                <button id="btn-ok-create" class="flex-1 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg font-bold">Oluştur</button>
-            </div>
+    <div id="screen-chat" class="hidden h-screen flex flex-col bg-[#0f3460]">
+        <div class="glass chat-header">
+            <button onclick="backToList()" class="w-10 h-10 flex items-center justify-center text-xl"><i class="fas fa-arrow-left"></i></button>
+            <div id="chat-avatar" class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold">A</div>
+            <div class="flex-1 font-bold" id="chat-name">Grup</div>
+            <button onclick="alert('Üye ekleme/Grup menüsü')" class="w-10 h-10 flex items-center justify-center"><i class="fas fa-ellipsis-v"></i></button>
         </div>
-    </div>
-
-    <div id="modal-add" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <div class="glass rounded-2xl p-6 w-full max-w-md">
-            <h3 class="text-xl font-bold mb-4">Üye Ekle</h3>
-            <input type="text" id="input-member-name" class="w-full p-3 mb-4 bg-white/10 border border-white/20 rounded-lg text-white focus:border-purple-500 focus:outline-none" placeholder="Kullanıcı adı">
-            <div class="flex gap-2">
-                <button id="btn-cancel-add" class="flex-1 py-2 bg-white/10 rounded-lg hover:bg-white/20">İptal</button>
-                <button id="btn-ok-add" class="flex-1 py-2 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg font-bold">Ekle</button>
-            </div>
+        <div class="messages-container" id="chat-box"></div>
+        
+        <div class="input-area">
+            <label class="media-btn">
+                <i class="fas fa-image"></i>
+                <input type="file" id="file-image" accept="image/*" class="hidden" onchange="alert('Fotoğraf gönderimi hazır (Firebase Storage gerekli)')">
+            </label>
+            <button id="btn-voice" class="media-btn" onclick="toggleVoice()"><i class="fas fa-microphone" id="voice-icon"></i></button>
+            <input type="text" id="input-msg" class="message-input" placeholder="Mesaj yaz...">
+            <button onclick="sendMessage()" class="send-btn"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
@@ -284,97 +110,94 @@
             projectId: "plane-gr",
             storageBucket: "plane-gr.firebasestorage.app"
         };
-        
         firebase.initializeApp(firebaseConfig);
         var database = firebase.database();
         var myUsername = null;
+        var activeGroup = null;
+        var isRecording = false;
 
-        // FORM GEÇİŞLERİ
-        document.getElementById('btn-show-register').onclick = () => {
-            document.getElementById('box-login').classList.add('hidden');
-            document.getElementById('box-register').classList.remove('hidden');
-        };
-        document.getElementById('btn-show-login').onclick = () => {
-            document.getElementById('box-register').classList.add('hidden');
-            document.getElementById('box-login').classList.remove('hidden');
-        };
+        function toggleAuth(isReg) {
+            document.getElementById('box-login').classList.toggle('hidden', isReg);
+            document.getElementById('box-register').classList.toggle('hidden', !isReg);
+        }
 
-        // GİRİŞ YAP
-        document.getElementById('btn-do-login').onclick = () => {
-            let u = document.getElementById('user-login').value.trim();
+        function handleLogin() {
+            let u = document.getElementById('user-login').value.trim().toLowerCase();
             let p = document.getElementById('pass-login').value;
-            if(!u || !p) return alert("Boş alan bırakma!");
-
-            database.ref('users/' + u).once('value').then(s => {
+            if(!u || !p) return;
+            database.ref('users/' + u).once('value', s => {
                 if(s.exists() && s.val().pass === p) {
                     myUsername = u;
-                    loginSuccess();
-                } else {
-                    alert("Hatalı kullanıcı adı veya şifre!");
-                }
+                    document.getElementById('screen-login').classList.add('hidden');
+                    document.getElementById('screen-list').classList.remove('hidden');
+                    document.getElementById('display-user').innerText = u;
+                } else alert("Hata!");
             });
-        };
+        }
 
-        // KAYIT OL
-        document.getElementById('btn-do-register').onclick = () => {
-            let u = document.getElementById('user-reg').value.trim();
+        function handleRegister() {
+            let u = document.getElementById('user-reg').value.trim().toLowerCase();
             let p = document.getElementById('pass-reg').value;
-            if(!u || p.length < 4) return alert("Kullanıcı adı ve min 4 haneli şifre gir!");
-
+            if(!u || p.length < 4) return;
             database.ref('users/' + u).set({ pass: p }).then(() => {
-                alert("Kayıt başarılı! Giriş yapabilirsin.");
-                document.getElementById('btn-show-login').click();
+                alert("Kayıt ok!"); toggleAuth(false);
             });
-        };
-
-        function loginSuccess() {
-            document.getElementById('screen-login').classList.add('hidden');
-            document.getElementById('screen-app').classList.remove('hidden');
-            document.getElementById('display-user').innerText = myUsername;
-            loadMessages();
         }
 
-        // MESAJ GÖNDERME
-        function sendMsg() {
-            let txt = document.getElementById('input-msg').value.trim();
-            if(!txt) return;
-            database.ref('messages/ana-grup').push({
-                user: myUsername,
-                text: txt,
-                time: Date.now()
-            });
-            document.getElementById('input-msg').value = "";
+        function openChat(gid, gname) {
+            activeGroup = gid;
+            document.getElementById('screen-list').classList.add('hidden');
+            document.getElementById('screen-chat').classList.remove('hidden');
+            document.getElementById('chat-name').innerText = gname;
+            loadMessages(gid);
         }
 
-        document.getElementById('btn-send-msg').onclick = sendMsg;
-        document.getElementById('input-msg').onkeypress = (e) => { if(e.key === 'Enter') sendMsg(); };
+        function backToList() {
+            if(activeGroup) database.ref('messages/' + activeGroup).off();
+            document.getElementById('screen-chat').classList.add('hidden');
+            document.getElementById('screen-list').classList.remove('hidden');
+        }
 
-        // MESAJLARI YÜKLE
-        function loadMessages() {
-            database.ref('messages/ana-grup').on('child_added', s => {
+        function loadMessages(gid) {
+            const box = document.getElementById('chat-box');
+            box.innerHTML = "";
+            database.ref('messages/' + gid).off();
+            database.ref('messages/' + gid).on('child_added', s => {
                 let m = s.val();
-                let div = document.createElement('div');
                 let isMe = m.user === myUsername;
-                div.className = `flex ${isMe ? 'justify-end' : 'justify-start'}`;
-                div.innerHTML = `
-                    <div class="max-w-[80%] p-3 rounded-xl ${isMe ? 'msg-me' : 'msg-other'}">
-                        <div class="text-[10px] opacity-70 mb-1">${m.user}</div>
-                        <div>${m.text}</div>
-                    </div>
-                `;
-                document.getElementById('chat-box').appendChild(div);
-                document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+                let div = document.createElement('div');
+                div.className = `message-bubble ${isMe ? 'msg-me' : 'msg-other'}`;
+                div.innerHTML = `<div class="text-[10px] font-bold opacity-50">${m.user}</div><div>${m.text}</div>`;
+                box.appendChild(div);
+                box.scrollTop = box.scrollHeight;
             });
         }
 
-        // MODAL KONTROLLERİ
-        document.getElementById('btn-new-group').onclick = () => document.getElementById('modal-create').classList.remove('hidden');
-        document.getElementById('btn-cancel-create').onclick = () => document.getElementById('modal-create').classList.add('hidden');
-        document.getElementById('btn-add-user').onclick = () => document.getElementById('modal-add').classList.remove('hidden');
-        document.getElementById('btn-cancel-add').onclick = () => document.getElementById('modal-add').classList.add('hidden');
-        document.getElementById('btn-exit').onclick = () => location.reload();
+        function sendMessage() {
+            let inp = document.getElementById('input-msg');
+            let txt = inp.value.trim();
+            if(!txt || !activeGroup) return;
+            database.ref('messages/' + activeGroup).push({
+                user: myUsername, text: txt, time: Date.now()
+            });
+            inp.value = "";
+        }
 
+        function toggleVoice() {
+            isRecording = !isRecording;
+            const btn = document.getElementById('btn-voice');
+            const icon = document.getElementById('voice-icon');
+            if(isRecording) {
+                btn.classList.add('recording');
+                icon.className = "fas fa-stop";
+            } else {
+                btn.classList.remove('recording');
+                icon.className = "fas fa-microphone";
+                alert("Ses kaydedildi (Göndermek için Firebase Storage/Audio API lazım)");
+            }
+        }
+
+        document.getElementById('input-msg').onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
     </script>
 </body>
-                                                                                </html>
-        
+</html>
