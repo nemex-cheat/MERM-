@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MermiChat - Giriş</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .other-message {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        #canvas-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .chat-container {
+            height: calc(100vh - 180px);
+            overflow-y: auto;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Giriş Ekranı -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="glass-effect rounded-2xl p-8 w-full max-w-md animate-fade-in">
+            <!-- 3D Mermi Canvas -->
+            <div id="canvas-container"></div>
+            
+            <h1 class="text-3xl font-bold text-center mb-2 gradient-text">MermiChat</h1>
+            <p class="text-center text-gray-300 mb-6">Hızlı ve Güvenli Mesajlaşma</p>
+            
+            <!-- Giriş Formu -->
+            <div id="login-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2 text-gray-300">Kullanıcı Adı</label>
+                    <input type="text" id="login-username" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition" placeholder="Kullanıcı adınızı girin">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium mb-2 text-gray-300">Şifre</label>
+                    <input type="password" id="login-password" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition" placeholder="Şifrenizi girin">
+                </div>
+                <button onclick="login()" class="w-full py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 font-semibold hover:opacity-90 transition transform hover:scale-105">
+                    Giriş Yap
+                </button>
+                <p class="text-center mt-4 text-gray-400">
+                    Hesabınız yok mu? <a href="#" onclick="showRegister()" class="text-purple-400 hover:text-purple-300">Kayıt Ol</a>
+                </p>
+            </div>
+
+            <!-- Kayıt Formu -->
+            <div id="register-form" class="hidden">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2 text-gray-300">Kullanıcı Adı</label>
+                    <input type="text" id="reg-username" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition" placeholder="Benzersiz kullanıcı adı">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium mb-2 text-gray-300">Şifre</label>
+                    <input type="password" id="reg-password" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition" placeholder="Güçlü bir şifre">
+                </div>
+                <button onclick="register()" class="w-full py-3 rounded-lg bg-gradient-to-r from-green-500 to-teal-500 font-semibold hover:opacity-90 transition transform hover:scale-105">
+                    Kayıt Ol
+                </button>
+                <p class="text-center mt-4 text-gray-400">
+                    Zaten hesabınız var mı? <a href="#" onclick="showLogin()" class="text-purple-400 hover:text-purple-300">Giriş Yap</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana Uygulama Ekranı -->
+    <div id="app-screen" class="hidden min-h-screen">
+        <!-- Header -->
+        <div class="glass-effect p-4 flex justify-between items-center sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                    <i class="fas fa-user text-white"></i>
+                </div>
+                <div>
+                    <h2 id="current-user" class="font-bold"></h2>
+                    <p class="text-xs text-green-400">● Çevrimiçi</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="showCreateGroup()" class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition text-sm font-medium">
+                    <i class="fas fa-plus mr-2"></i>Grup Oluştur
+                </button>
+                <button onclick="logout()" class="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 transition text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex h-screen">
+            <!-- Sol Sidebar - Gruplar -->
+            <div class="w-80 glass-effect border-r border-white/10 hidden md:block">
+                <div class="p-4 border-b border-white/10">
+                    <h3 class="font-bold text-lg mb-2">Gruplarım</h3>
+                    <div class="relative">
+                        <input type="text" placeholder="Grup ara..." class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-sm focus:outline-none focus:border-purple-500">
+                        <i class="fas fa-search absolute right-3 top-2.5 text-gray-400"></i>
+                    </div>
+                </div>
+                <div id="groups-list" class="overflow-y-auto" style="height: calc(100vh - 140px);">
+                    <!-- Gruplar buraya dinamik olarak eklenecek -->
+                </div>
+            </div>
+
+            <!-- Sağ Chat Alanı -->
+            <div class="flex-1 flex flex-col">
+                <!-- Grup Header -->
+                <div class="glass-effect p-4 border-b border-white/10 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-xl font-bold" id="current-group-avatar">
+                            A
+                        </div>
+                        <div>
+                            <h3 id="current-group-name" class="font-bold text-lg">Ana Grup</h3>
+                            <p id="current-group-members" class="text-xs text-gray-400">Tüm kullanıcılar</p>
+                        </div>
+                    </div>
+                    <button onclick="showAddMember()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition">
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Mesajlar -->
+                <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-4">
+                    <!-- Mesajlar buraya dinamik olarak eklenecek -->
+                </div>
+
+                <!-- Mesaj Input -->
+                <div class="glass-effect p-4 border-t border-white/10">
+                    <div class="flex gap-3">
+                        <input type="text" id="message-input" class="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-purple-500" placeholder="Mesajınızı yazın..." onkeypress="if(event.key==='Enter') sendMessage()">
+                        <button onclick="sendMessage()" class="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grup Oluşturma Modal -->
+    <div id="create-group-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass-effect rounded-2xl p-6 w-full max-w-md animate-fade-in">
+            <h3 class="text-xl font-bold mb-4">Yeni Grup Oluştur</h3>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2 text-gray-300">Grup Adı</label>
+                <input type="text" id="new-group-name" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-purple-500" placeholder="Grup adı girin">
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeCreateGroup()" class="flex-1 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition">İptal</button>
+                <button onclick="createGroup()" class="flex-1 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 transition">Oluştur</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Üye Ekleme Modal -->
+    <div id="add-member-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="glass-effect rounded-2xl p-6 w-full max-w-md animate-fade-in">
+            <h3 class="text-xl font-bold mb-4">Üye Ekle</h3>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2 text-gray-300">Kullanıcı Adı</label>
+                <input type="text" id="new-member-username" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-purple-500" placeholder="Eklemek istediğiniz kullanıcı adı">
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeAddMember()" class="flex-1 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition">İptal</button>
+                <button onclick="addMember()" class="flex-1 py-3 rounded-lg bg-gradient-to-r from-green-500 to-teal-500 hover:opacity-90 transition">Ekle</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Three.js 3D Mermi Animasyonu
+        function initBulletAnimation() {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(200, 200);
+            container.appendChild(renderer.domElement);
+
+            // Mermi geometrisi
+            const bulletGeometry = new THREE.CylinderGeometry(0.3, 0.3, 2, 32);
+            const bulletMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0xffd700,
+                metalness: 0.9,
+                roughness: 0.1,
+                emissive: 0xffa500,
+                emissiveIntensity: 0.2
+            });
+            const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+            
+            // Mermi ucu
+            const tipGeometry = new THREE.ConeGeometry(0.3, 0.5, 32);
+            const tipMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0xc0c0c0,
+                metalness: 1,
+                roughness: 0.2
+            });
+            const tip = new THREE.Mesh(tipGeometry, tipMaterial);
+            tip.position.y = 1.25;
+            
+            const bulletGroup = new THREE.Group();
+            bulletGroup.add(bullet);
+            bulletGroup.add(tip);
+            bulletGroup.rotation.z = Math.PI / 4;
+            scene.add(bulletGroup);
+
+            // Işıklar
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            const pointLight = new THREE.PointLight(0xffa500, 1, 100);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
+            
+            const pointLight2 = new THREE.PointLight(0x00ffff, 0.5, 100);
+            pointLight2.position.set(-5, -5, 5);
+            scene.add(pointLight2);
+
+            camera.position.z = 5;
+
+            // Animasyon
+            function animate() {
+                requestAnimationFrame(animate);
+                bulletGroup.rotation.y += 0.01;
+                bulletGroup.rotation.x += 0.005;
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        // Uygulama State'i
+        let currentUser = null;
+        let currentGroup = 'ana-grup';
+        let groups = JSON.parse(localStorage.getItem('groups')) || {
+            'ana-grup': {
+                name: 'Ana Grup',
+                members: [],
+                messages: [],
+                isMain: true
+            }
+        };
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+
+        // Sayfa yüklendiğinde
+        window.onload = function() {
+            initBulletAnimation();
+            loadGroups();
+        };
+
+        // Form geçişleri
+        function showRegister() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        }
+
+        // Kayıt olma
+        function register() {
+            const username = document.getElementById('reg-username').value.trim();
+            const password = document.getElementById('reg-password').value;
+
+            if (!username || !password) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
+            }
+
+            if (users[username]) {
+                alert('Bu kullanıcı adı zaten alınmış!');
+                return;
+            }
+
+            users[username] = { password: password, joinedAt: new Date().toISOString() };
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Ana gruba otomatik ekle
+            if (!groups['ana-grup'].members.includes(username)) {
+                groups['ana-grup'].members.push(username);
+                localStorage.setItem('groups', JSON.stringify(groups));
+            }
+
+            alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+            showLogin();
+        }
+
+        // Giriş yapma
+        function login() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!users[username] || users[username].password !== password) {
+                alert('Kullanıcı adı veya şifre hatalı!');
+                return;
+            }
+
+            currentUser = username;
+            document.getElementById('current-user').textContent = username;
+            
+            // Ana gruba otomatik ekle (eğer değilse)
+            if (!groups['ana-grup'].members.includes(username)) {
+                groups['ana-grup'].members.push(username);
+                localStorage.setItem('groups', JSON.stringify(groups));
+            }
+
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
+            
+            loadGroups();
+            selectGroup('ana-grup');
+        }
+
+        // Çıkış yapma
+        function logout() {
+            currentUser = null;
+            currentGroup = 'ana-grup';
+            document.getElementById('app-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        }
+
+        // Grupları yükle
+        function loadGroups() {
+            const container = document.getElementById('groups-list');
+            container.innerHTML = '';
+
+            for (const [groupId, group] of Object.entries(groups)) {
+                // Sadece üyesi olduğu grupları göster (ana grup hariç herkese açık)
+                if (!group.isMain && !group.members.includes(currentUser)) continue;
+
+                const div = document.createElement('div');
+                div.className = `p-4 cursor-pointer hover:bg-white/10 transition border-b border-white/5 ${currentGroup === groupId ? 'bg-white/20' : ''}`;
+                div.onclick = () => selectGroup(groupId);
+                
+                const unreadCount = group.messages.filter(m => !m.readBy?.includes(currentUser) && m.sender !== currentUser).length;
+                
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-lg font-bold">
+                            ${group.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-semibold ${group.isMain ? 'text-yellow-400' : ''}">${group.name}</h4>
+                                ${unreadCount > 0 ? `<span class="bg-red-500 text-xs px-2 py-1 rounded-full">${unreadCount}</span>` : ''}
+                            </div>
+                            <p class="text-xs text-gray-400 truncate">
+                                ${group.messages.length > 0 ? group.messages[group.messages.length - 1].content : 'Henüz mesaj yok'}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        // Grup seçme
+        function selectGroup(groupId) {
+            currentGroup = groupId;
+            const group = groups[groupId];
+            
+            document.getElementById('current-group-name').textContent = group.name;
+            document.getElementById('current-group-avatar').textContent = group.name.charAt(0).toUpperCase();
+            document.getElementById('current-group-members').textContent = `${group.members.length} üye`;
+            
+            loadMessages();
+            loadGroups(); // Aktif grubu vurgula
+        }
+
+        // Mesajları yükle
+        function loadMessages() {
+            const container = document.getElementById('messages-container');
+                      
