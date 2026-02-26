@@ -2,269 +2,265 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MermiChat V3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mermigram V3 Patron Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background: #0f172a; min-height: 100vh; color: white; overflow: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --bg: #05070a; --glass: rgba(15, 20, 35, 0.98); --indigo: #6366f1; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: white; height: 100dvh; width: 100vw; overflow: hidden; position: fixed; }
         
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        /* EKRANLARIN ÜST ÜSTE BİNMESİNİ ENGELLEYEN FİX */
+        .screen { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--bg); z-index: 10; }
+        .screen-active { display: flex !important; z-index: 50 !important; }
+
+        .glass { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; }
+        .input-box { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; width: 100%; color: white; outline: none; font-size: 16px; position: relative; z-index: 100; }
+        .btn-main { background: linear-gradient(135deg, var(--indigo) 0%, #7c3aed 100%); border-radius: 15px; padding: 16px; font-weight: 900; text-transform: uppercase; width: 100%; color: white; border: none; cursor: pointer; position: relative; z-index: 100; }
+
+        .vip-name { 
+            background: linear-gradient(to right, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6, #ef4444);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: rainbow 3s linear infinite; font-weight: 900;
+        }
+
+        .vip-tag { 
+            display: inline-flex !important; align-items: center !important; justify-content: center !important;
+            background: linear-gradient(135deg, #ffd700, #b45309) !important; 
+            color: black !important; padding: 0 6px !important; border-radius: 4px !important; 
+            font-size: 10px !important; font-weight: 900 !important; margin-left: 5px !important; 
+            height: 18px !important; vertical-align: middle !important; text-transform: uppercase;
+        }
+
+        .vip-msg { border: 2px solid rgba(245, 158, 11, 0.3) !important; box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
+        .img-msg { border-radius: 12px; max-width: 100%; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); display: block; }
+        @keyframes rainbow { to { background-position: 200% center; } }
         
-        /* 3D MERMİ */
-        .bullet-wrap { width: 100px; height: 100px; margin: 0 auto 16px; perspective: 1000px; }
-        .bullet { width: 30px; height: 80px; margin: 0 auto; position: relative; transform-style: preserve-3d; animation: spin 3s linear infinite; }
-        @keyframes spin { 0% { transform: rotateY(0deg) rotateX(10deg); } 100% { transform: rotateY(360deg) rotateX(10deg); } }
-        .bullet-body { width: 30px; height: 60px; background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700); border-radius: 0 0 15px 15px; position: absolute; bottom: 0; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
-        .bullet-tip { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 25px solid #c0c0c0; position: absolute; top: 0; }
-
-        /* GRUP LİSTESİ ANİMASYONU */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .group-card { 
-            animation: fadeInUp 0.5s ease forwards; 
-            transition: all 0.3s ease;
-            border-left: 4px solid #6366f1;
-        }
-        .group-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
-
-        /* SOHBET KAYDIRMA ÇÖZÜMÜ */
-        #chat-screen-content {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .messages-container { 
-            flex: 1;
-            overflow-y: scroll; 
-            padding: 20px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            scroll-behavior: smooth;
-        }
-        /* Gizli Scrollbar */
-        .messages-container::-webkit-scrollbar { width: 0; }
-
-        .msg-me { background: linear-gradient(135deg, #6366f1, #a855f7); align-self: flex-end; border-radius: 18px 18px 4px 18px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
-        .msg-other { background: #1e293b; align-self: flex-start; border-radius: 18px 18px 18px 4px; border: 1px solid rgba(255,255,255,0.05); }
-
-        .input-area { padding: 16px; background: #0f172a; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; align-items: center; }
-        .message-input { flex: 1; background: #1e293b; border-radius: 24px; padding: 12px 20px; color: white; outline: none; border: 1px solid transparent; transition: 0.3s; }
-        .message-input:focus { border-color: #6366f1; }
-        
-        .hidden { display: none !important; }
-        .insta-footer { position: fixed; bottom: 85px; right: 20px; font-size: 10px; color: rgba(255,255,255,0.3); z-index: 40; pointer-events: none; }
+        /* TIKLAMA ALANLARI İÇİN ÖZEL KATMAN */
+        button, label, [onclick] { cursor: pointer; pointer-events: auto !important; position: relative; z-index: 101; }
     </style>
 </head>
 <body>
 
-    <div id="screen-login" class="flex items-center justify-center min-h-screen p-4">
-        <div class="glass rounded-3xl p-8 w-full max-w-sm text-center">
-            <div class="bullet-wrap"><div class="bullet"><div class="bullet-tip"></div><div class="bullet-body"></div></div></div>
-            <h1 class="text-4xl font-black mb-1 tracking-tighter bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">MermiChat</h1>
-            <p class="text-[10px] text-gray-500 mb-8 font-bold tracking-[0.2em]">VERİLERİNİZ GÜVENCEDEDİR</p>
-            
-            <div class="space-y-3">
-                <input type="text" id="u-auth" class="w-full p-4 bg-white/5 border border-white/10 rounded-2xl outline-none focus:border-indigo-500 transition-all" placeholder="Kullanıcı adı">
-                <input type="password" id="p-auth" class="w-full p-4 bg-white/5 border border-white/10 rounded-2xl outline-none focus:border-indigo-500 transition-all" placeholder="Şifre">
-                <button onclick="handleLogin()" id="btn-main" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-2xl font-bold shadow-lg shadow-indigo-500/20 transition-all">Giriş Yap</button>
-                <button onclick="toggleRegister()" id="btn-toggle" class="text-xs text-gray-400 hover:text-white transition-all underline">Kayıt Ol</button>
+    <div id="scr-auth" class="screen screen-active p-8 justify-center">
+        <div class="text-center mb-10"><h1 class="text-4xl font-black italic text-indigo-500">MERMIGRAM V3</h1></div>
+        <div class="glass p-8 space-y-6">
+            <div class="flex p-1 bg-black/40 rounded-xl">
+                <button onclick="setM('login')" id="t-l" class="flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600 text-white">GİRİŞ</button>
+                <button onclick="setM('reg')" id="t-r" class="flex-1 py-3 rounded-lg font-black text-xs text-gray-500">KAYIT</button>
+            </div>
+            <div class="space-y-4">
+                <input type="text" id="u-n" class="input-box" placeholder="Kullanıcı Adı">
+                <input type="password" id="u-p" class="input-box" placeholder="Şifre">
+                <button onclick="doAuth()" class="btn-main">BAŞLAT</button>
             </div>
         </div>
-        <div class="insta-footer">ADMİN İNSTA : @NEMEXULTRA X @SOFİYA_3892</div>
     </div>
 
-    <div id="screen-list" class="hidden h-screen flex flex-col">
-        <div class="p-6 flex justify-between items-center glass">
-            <div>
-                <p class="text-xs text-gray-400">Hoş geldin,</p>
-                <div class="flex items-center gap-2">
-                    <h2 id="display-user" class="text-xl font-bold"></h2>
-                    <span id="adm-tag" class="hidden bg-red-500 text-[10px] px-2 py-0.5 rounded-full font-black">ADMIN</span>
+    <div id="scr-list" class="screen">
+        <div class="p-6 flex justify-between items-center border-b border-white/5 bg-black/20">
+            <div class="flex items-center gap-4">
+                <div id="m-pfp" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-black">?</div>
+                <div>
+                    <div class="flex items-center"><span id="m-nick" class="text-sm font-black text-white">...</span><div id="m-vip-container"></div></div>
+                    <p class="text-[8px] text-indigo-400 font-bold uppercase tracking-widest">Çevrimiçi</p>
                 </div>
             </div>
-            <button onclick="openModal('modal-create')" class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30"><i class="fas fa-plus"></i></button>
-        </div>
-        
-        <div id="chat-list" class="flex-1 overflow-y-auto p-4 space-y-4">
-            <div class="group-card glass p-5 rounded-2xl cursor-pointer" onclick="openChat('ana-grup', 'Ana Sohbet')">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-indigo-400">📢 Ana Sohbet</h3>
-                    <i class="fas fa-chevron-right text-gray-600"></i>
-                </div>
-                <p class="text-xs text-gray-500 mt-1">Global oda, herkes burada.</p>
+            <div class="flex gap-4">
+                <button onclick="showS('scr-vip')" class="text-amber-500 p-2"><i class="fas fa-gem text-xl"></i></button>
+                <button onclick="toggleMod('mod-g')" class="text-indigo-400 p-2"><i class="fas fa-plus-circle text-xl"></i></button>
             </div>
-            <div id="custom-groups" class="space-y-4"></div>
+        </div>
+        <div class="px-6 py-4">
+            <input type="text" id="g-search" onkeyup="searchG()" class="input-box !py-3 !text-sm" placeholder="Gizli @kod ile grup ara...">
+        </div>
+        <div id="g-list" class="flex-1 overflow-y-auto px-6 space-y-3 pb-20"></div>
+    </div>
+
+    <div id="scr-chat" class="screen">
+        <div class="p-4 flex items-center gap-4 bg-black/80 border-b border-white/5">
+            <button onclick="showS('scr-list')" class="p-2 text-white"><i class="fas fa-chevron-left text-xl"></i></button>
+            <div id="c-pfp" class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white uppercase text-xs">G</div>
+            <h3 id="c-name" class="font-bold text-sm flex-1 truncate uppercase text-white">Grup</h3>
+            <button onclick="toggleMod('mod-manage')" id="btn-adm" class="hidden p-2 text-indigo-400"><i class="fas fa-user-plus text-xl"></i></button>
+        </div>
+        <div id="m-box" class="flex-1 overflow-y-auto p-5 flex flex-col gap-4"></div>
+        <div id="chat-input-area" class="p-4 bg-black/95 flex items-center gap-3 border-t border-white/10">
+            <label class="w-10 h-10 flex items-center justify-center text-indigo-400 cursor-pointer">
+                <i class="fas fa-camera text-2xl"></i>
+                <input type="file" id="img-input" class="hidden" accept="image/*" onchange="sendImg(this)">
+            </label>
+            <input type="text" id="m-inp" placeholder="Mesaj yaz..." class="input-box !py-3 flex-1 text-sm border-none">
+            <button onclick="sendMsg()" class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
-    <div id="screen-chat" class="hidden fixed inset-0 z-[100] bg-[#0f172a] flex flex-col">
-        <div class="glass p-4 flex items-center gap-4">
-            <button onclick="backToList()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10"><i class="fas fa-arrow-left"></i></button>
-            <div class="flex-1">
-                <h3 id="chat-title" class="font-bold">Grup Adı</h3>
-                <p class="text-[10px] text-green-500 font-bold uppercase tracking-widest">Çevrimiçi</p>
-            </div>
-            <button id="adm-add-btn" class="hidden text-indigo-400 w-10 h-10" onclick="openModal('modal-add')"><i class="fas fa-user-plus text-lg"></i></button>
-        </div>
-        
-        <div class="messages-container" id="chat-box"></div>
-
-        <div class="input-area glass">
-            <label class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-2xl cursor-pointer hover:bg-white/10"><i class="fas fa-camera text-gray-400"></i><input type="file" class="hidden" onchange="sendImg(this)"></label>
-            <input type="text" id="m-inp" class="message-input" placeholder="Bir şeyler yaz...">
-            <button onclick="send()" class="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20"><i class="fas fa-paper-plane text-white"></i></button>
-        </div>
-    </div>
-
-    <div id="modal-create" class="hidden fixed inset-0 bg-black/90 z-[300] flex items-center justify-center p-6">
-        <div class="glass p-8 rounded-3xl w-full max-w-sm">
-            <h2 class="text-xl font-bold mb-6">Yeni Grup Oluştur</h2>
-            <input id="g-name" class="w-full p-4 bg-white/5 rounded-2xl mb-6 outline-none border border-white/10" placeholder="Grup ismi ne olsun?">
-            <div class="flex gap-3">
-                <button onclick="closeModal('modal-create')" class="flex-1 py-3 text-gray-400 font-bold">İptal</button>
-                <button onclick="createG()" class="flex-1 py-3 bg-indigo-600 rounded-2xl font-bold">Oluştur</button>
+    <div id="scr-vip" class="screen p-6">
+        <button onclick="showS('scr-list')" class="mb-6 text-gray-400 font-bold p-2"><i class="fas fa-arrow-left"></i> GERİ</button>
+        <div class="glass p-8 border-2 border-amber-500/50">
+            <h3 class="text-3xl font-black text-amber-500 mb-2 italic">GOLD VIP</h3>
+            <p id="vip-timer" class="text-[10px] text-green-500 font-bold mb-6 italic uppercase">Aktif Yetki</p>
+            <div class="space-y-4 text-sm">
+                <p><i class="fas fa-check text-green-500 mr-2"></i> Renkli İsim & Özel Rozet</p>
+                <p><i class="fas fa-check text-green-500 mr-2"></i> Fotoğraf Paylaşımı</p>
+                <p><i class="fas fa-check text-green-500 mr-2"></i> Sınırsız Grup Kurma</p>
             </div>
         </div>
     </div>
 
-    <div id="modal-add" class="hidden fixed inset-0 bg-black/90 z-[300] flex items-center justify-center p-6">
-        <div class="glass p-8 rounded-3xl w-full max-w-sm">
-            <h2 class="text-xl font-bold mb-6">Üye Davet Et</h2>
-            <input id="mem-name" class="w-full p-4 bg-white/5 rounded-2xl mb-6 outline-none border border-white/10" placeholder="Kullanıcı adı girin">
-            <button onclick="addM()" class="w-full py-4 bg-green-600 rounded-2xl font-bold">Ekle</button>
-            <button onclick="closeModal('modal-add')" class="w-full mt-4 text-gray-500">Kapat</button>
+    <div id="mod-g" class="hidden fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-6">
+        <div class="glass p-8 w-full max-w-sm space-y-4">
+            <input id="ng-n" class="input-box" placeholder="Grup Adı">
+            <input id="ng-h" class="input-box" placeholder="@gizli-kod">
+            <button onclick="createG()" class="btn-main">KUR</button>
+            <button onclick="toggleMod('mod-g')" class="w-full text-xs text-gray-500 py-2">İPTAL</button>
+        </div>
+    </div>
+    <div id="mod-manage" class="hidden fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-6">
+        <div class="glass p-8 w-full max-w-sm space-y-4">
+            <input id="add-u-name" class="input-box" placeholder="Kullanıcı Adı">
+            <button onclick="addUserToG()" class="btn-main">SİSTEME EKLE</button>
+            <button onclick="toggleMod('mod-manage')" class="w-full text-xs text-gray-500 py-2">KAPAT</button>
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, set, get, push, onValue, off, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+        const cfg = { apiKey: "AIzaSyDiFa6RjkuqdEbz8L9YsrBD1Be5shgAjUg", databaseURL: "https://plane-gr-default-rtdb.firebaseio.com", projectId: "plane-gr" };
+        const app = initializeApp(cfg); const db = getDatabase(app);
+        window.db = db; window.fRef = ref; window.fSet = set; window.fGet = get; window.fPush = push; window.fOn = onValue; window.fOff = off; window.fUpdate = update;
+    </script>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDiFa6RjkuqdEbz8L9YsrBD1Be5shgAjUg",
-            authDomain: "plane-gr.firebaseapp.com",
-            databaseURL: "https://plane-gr-default-rtdb.firebaseio.com",
-            projectId: "plane-gr"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        let me = "", isAdm = false, activeGid = "", myIp = "", mode = "login";
+        let me = "", mode = "login", isVip = false, vipUntil = "", vTitle = "VIP", lastGTime = 0, activeG = "";
 
-        fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>myIp=d.ip);
+        async function doAuth() {
+            const u = document.getElementById('u-n').value.trim().toLowerCase();
+            const p = document.getElementById('u-p').value;
+            if(!u || !p) return alert("Boş bırakma karsim!");
 
-        function toggleRegister() {
-            const btnMain = document.getElementById('btn-main');
-            const btnTog = document.getElementById('btn-toggle');
-            mode = (mode === "login") ? "reg" : "login";
-            btnMain.innerText = (mode === "login") ? "Giriş Yap" : "Kayıt Ol";
-            btnTog.innerText = (mode === "login") ? "Kayıt Ol" : "Giriş Yap";
-        }
-
-        function handleLogin() {
-            let u = document.getElementById('u-auth').value.trim().toUpperCase();
-            let p = document.getElementById('p-auth').value;
-            if(!u || !p) return;
-
-            if(u === "MENEX" && p === "ULTRA6312") { me=u; isAdm=true; startApp(); return; }
-
-            if(mode === "login") {
-                db.ref('users/'+u).once('value', s => {
-                    if(s.exists() && s.val().pass === p) { me=u; startApp(); }
-                    else alert("Hata!");
-                });
+            if(mode === 'login') {
+                const s = await fGet(fRef(db, 'users/' + u));
+                if(s.exists() && s.val().pass === p) {
+                    const d = s.val();
+                    me = u;
+                    isVip = d.vip && (!d.vipUntil || new Date(d.vipUntil) > new Date());
+                    vTitle = d.vipTitle || "VIP";
+                    vipUntil = d.vipUntil || "SINIRSIZ";
+                    lastGTime = d.lastG || 0;
+                    start();
+                } else alert("Hatalı Giriş!");
             } else {
-                db.ref('users/'+u).set({pass:p}).then(() => { alert("Kayıt Başarılı!"); toggleRegister(); });
+                await fSet(fRef(db, 'users/'+u), { pass:p, vip:false, lastG:0, vipUntil: "", vipTitle: "" });
+                await fSet(fRef(db, `groups/global/members/${u}`), true);
+                await fSet(fRef(db, `groups/aydinlatma/members/${u}`), true);
+                alert("Kayıt başarılı! Şimdi giriş yap."); setM('login');
             }
         }
 
-        function startApp() {
-            db.ref('security_logs/'+me).push({ ip:myIp, time:Date.now() });
-            document.getElementById('screen-login').classList.add('hidden');
-            document.getElementById('screen-list').classList.remove('hidden');
-            document.getElementById('display-user').innerText = me;
-            if(isAdm) {
-                document.getElementById('adm-tag').classList.remove('hidden');
-                document.getElementById('adm-add-btn').classList.remove('hidden');
+        function start() { 
+            showS('scr-list'); 
+            document.getElementById('m-nick').innerText = me; 
+            document.getElementById('m-pfp').innerText = me[0].toUpperCase();
+            if(isVip) {
+                document.getElementById('m-nick').classList.add('vip-name');
+                document.getElementById('m-vip-container').innerHTML = `<span class="vip-tag">${vTitle}</span>`;
+                document.getElementById('vip-timer').innerText = "VIP BİTİŞ: " + vipUntil;
             }
-            loadGroups();
+            loadG(); 
         }
 
-        function openChat(gid, name) {
-            activeGid = gid;
-            document.getElementById('screen-chat').classList.remove('hidden');
-            document.getElementById('chat-title').innerText = name;
-            loadMsgs(gid);
-        }
-
-        function backToList() {
-            db.ref('msgs/'+activeGid).off();
-            document.getElementById('screen-chat').classList.add('hidden');
-        }
-
-        function loadGroups() {
-            db.ref('groups').on('value', s => {
-                const div = document.getElementById('custom-groups'); div.innerHTML = "";
-                let i = 1;
-                s.forEach(g => {
-                    let card = document.createElement('div');
-                    card.className = "group-card glass p-5 rounded-2xl cursor-pointer";
-                    card.style.animationDelay = (i * 0.1) + "s";
-                    card.onclick = () => openChat(g.key, g.val().name);
-                    card.innerHTML = `<div class="flex justify-between items-center"><h3 class="font-bold text-white">${g.val().name}</h3><i class="fas fa-lock text-gray-700 text-xs"></i></div>`;
-                    div.appendChild(card);
-                    i++;
+        function loadG() {
+            fOn(fRef(db, 'groups'), (snap) => {
+                const list = document.getElementById('g-list'); list.innerHTML = "";
+                let gs = [];
+                snap.forEach(s => { if(s.val().members && s.val().members[me]) gs.push({id:s.key, ...s.val()}); });
+                // Global ve Aydınlatma Metnini en üste çekiyoruz
+                gs.sort((a,b) => (a.id === 'global' ? -1 : (a.id === 'aydinlatma' ? -1 : 1)));
+                gs.forEach(g => {
+                    const isGlobal = g.id === 'global';
+                    const isAyd = g.id === 'aydinlatma';
+                    list.innerHTML += `<div onclick="openC('${g.id}', '${g.name}')" class="p-5 glass flex items-center gap-4 active:scale-95 border-l-4 ${isGlobal?'border-green-500 bg-green-500/10':(isAyd?'border-amber-500 bg-amber-500/5':'border-indigo-600')}">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-900 flex items-center justify-center font-black">${isGlobal?'🌍':(isAyd?'📜':g.name[0])}</div>
+                        <div class="flex-1"><h4 class="font-bold text-sm text-white">${g.name}</h4><p class="text-[9px] opacity-50 uppercase">${g.handle}</p></div>
+                    </div>`;
                 });
             });
         }
 
-        function loadMsgs(gid) {
-            const box = document.getElementById('chat-box'); box.innerHTML = "";
-            db.ref('msgs/'+gid).on('child_added', s => {
-                let m = s.val(); let isMe = m.u === me;
-                let div = document.createElement('div');
-                div.className = `p-4 max-w-[85%] ${isMe?'msg-me':'msg-other'}`;
-                let content = m.t === 'img' ? `<img src="${m.d}" class="rounded-lg max-h-64 object-cover">` : `<div class="text-sm leading-relaxed">${m.d}</div>`;
-                div.innerHTML = `<div class="text-[10px] font-black opacity-40 mb-1 uppercase tracking-tighter">${m.u}</div>${content}`;
-                
-                if(isAdm) {
-                    div.onclick = () => {
-                        if(confirm("Bu içeriği illegal olarak raporla?")) {
-                            db.ref('reports').push({ suspect:m.u, msg:m.d, ip:myIp, time:Date.now() });
-                            alert("Emniyet loguna işlendi.");
-                        }
-                    };
-                }
-                box.appendChild(div);
+        function openC(id, name) {
+            activeG = id; showS('scr-chat'); document.getElementById('c-name').innerText = name;
+            document.getElementById('c-pfp').innerText = name[0];
+            const isAyd = id === 'aydinlatma';
+            document.getElementById('chat-input-area').style.display = isAyd ? 'none' : 'flex';
+            
+            fGet(fRef(db, `groups/${id}`)).then(s => {
+                if(s.exists() && (s.val().owner === me || isVip)) document.getElementById('btn-adm').classList.remove('hidden');
+                else document.getElementById('btn-adm').classList.add('hidden');
+            });
+
+            const box = document.getElementById('m-box'); fOff(fRef(db, 'msgs/' + id));
+            fOn(fRef(db, 'msgs/' + id), (snap) => {
+                box.innerHTML = "";
+                snap.forEach(mSnap => {
+                    const m = mSnap.val();
+                    const div = document.createElement('div');
+                    div.className = `p-3 rounded-2xl max-w-[85%] glass ${m.u===me?'self-end bg-indigo-600/40':'self-start'} ${m.vip?'vip-msg':''}`;
+                    if(m.u === 'SİSTEM') div.className = "p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-amber-500 text-xs";
+                    
+                    let cont = m.type === 'image' ? `<img src="${m.img}" class="img-msg">` : `<p class="text-sm text-white">${m.data}</p>`;
+                    let tag = m.vip ? `<span class="vip-tag">${m.vT || 'VIP'}</span>` : "";
+                    
+                    div.innerHTML = `<span class="text-[10px] font-black block mb-1 ${m.vip?'vip-name':'text-gray-500'}">${m.u.toUpperCase()}${tag}</span>${cont}`;
+                    box.appendChild(div);
+                });
                 box.scrollTop = box.scrollHeight;
             });
         }
 
-        function send() {
-            let i = document.getElementById('m-inp'); if(!i.value.trim()) return;
-            db.ref('msgs/'+activeGid).push({u:me, d:i.value, t:'text'}); i.value = "";
+        function sendMsg() {
+            const i = document.getElementById('m-inp'); if(!i.value.trim()) return;
+            fPush(fRef(db, 'msgs/'+activeG), { u:me, data:i.value, type:'text', t:Date.now(), vip:isVip, vT:vTitle });
+            i.value = "";
         }
 
         function sendImg(input) {
-            let f = input.files[0]; let r = new FileReader();
-            r.onload = e => db.ref('msgs/'+activeGid).push({u:me, d:e.target.result, t:'img'});
-            r.readAsDataURL(f);
+            if (input.files[0]) {
+                const r = new FileReader(); r.onload = e => fPush(fRef(db, 'msgs/'+activeG), { u:me, img:e.target.result, type:'image', t:Date.now(), vip:isVip, vT:vTitle });
+                r.readAsDataURL(input.files[0]);
+            }
         }
 
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function createG() { 
-            let n = document.getElementById('g-name').value; 
-            if(n) { db.ref('groups').push({name:n}); closeModal('modal-create'); } 
+        async function createG() {
+            const n = document.getElementById('ng-n').value; const h = document.getElementById('ng-h').value;
+            if(!n || !h) return alert("Doldur karsim!");
+            if(!isVip && (Date.now() - lastGTime < 30*24*60*60*1000)) return alert("Normal üyeler ayda 1 grup kurabilir!");
+            const newG = fPush(fRef(db, 'groups'));
+            await fSet(newG, { name: n, handle: h.startsWith('@')?h:'@'+h, owner: me, members: { [me]: true } });
+            await fUpdate(fRef(db, 'users/'+me), { lastG: Date.now() });
+            toggleMod('mod-g');
         }
-        function addM() { alert("Üye Sisteme Tanımlandı."); closeModal('modal-add'); }
-        document.getElementById('m-inp').onkeypress = e => { if(e.key==='Enter') send(); };
+
+        function searchG() {
+            const h = document.getElementById('g-search').value.trim();
+            if(h.startsWith('@') && h.length > 3) {
+                fGet(fRef(db, 'groups')).then(s => {
+                    s.forEach(snap => { if(snap.val().handle === h) { if(confirm(snap.val().name + " grubuna katıl?")) fSet(fRef(db, `groups/${snap.key}/members/${me}`), true); } });
+                });
+            }
+        }
+
+        function addUserToG() {
+            const u = document.getElementById('add-u-name').value.trim().toLowerCase();
+            fSet(fRef(db, `groups/${activeG}/members/${u}`), true).then(()=> { alert("Üye Eklendi!"); toggleMod('mod-manage'); });
+        }
+
+        function showS(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('screen-active')); document.getElementById(id).classList.add('screen-active'); }
+        function toggleMod(id) { document.getElementById(id).classList.toggle('hidden'); }
+        function setM(m) { mode = m; document.getElementById('t-l').className = m === 'login' ? 'flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600 text-white' : 'flex-1 py-3 rounded-lg font-black text-xs text-gray-500'; document.getElementById('t-r').className = m === 'reg' ? 'flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600 text-white' : 'flex-1 py-3 rounded-lg font-black text-xs text-gray-500'; }
     </script>
 </body>
-                                                                                                                                                                                               </html>
-            
+</html>
