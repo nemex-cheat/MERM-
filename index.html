@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mermigram V3 Final</title>
+    <title>Mermigram V5.1 - Business Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,128 +11,93 @@
         :root { --bg: #05070a; --glass: rgba(15, 20, 35, 0.98); --indigo: #6366f1; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: white; height: 100dvh; width: 100vw; overflow: hidden; position: fixed; }
-        
         .screen { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--bg); z-index: 10; }
         .screen-active { display: flex !important; z-index: 50 !important; }
-
         .glass { background: var(--glass); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; }
-        .input-box { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; width: 100%; color: white; outline: none; font-size: 16px; position: relative; z-index: 100; }
-        .btn-main { background: linear-gradient(135deg, var(--indigo) 0%, #7c3aed 100%); border-radius: 15px; padding: 16px; font-weight: 900; text-transform: uppercase; width: 100%; color: white; border: none; cursor: pointer; position: relative; z-index: 101; }
-
-        .vip-name { 
-            background: linear-gradient(to right, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6, #ef4444);
-            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: rainbow 3s linear infinite; font-weight: 900;
-        }
-
-        /* KUTUCUK BOŞ KALMA SORUNU İÇİN KESİN ÇÖZÜM */
-        .vip-tag { 
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            background: linear-gradient(135deg, #ffd700, #b45309) !important; 
-            color: #000 !important; 
-            padding: 0 6px !important;
-            border-radius: 4px !important; 
-            font-size: 10px !important; 
-            font-weight: 900 !important; 
-            margin-left: 6px !important; 
-            height: 18px !important; 
-            min-width: 30px !important; /* Boşluğu engeller */
-            vertical-align: middle !important; 
-            text-transform: uppercase !important;
-            line-height: normal !important;
-            box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
-        }
-
-        .vip-msg { border: 1px solid rgba(245, 158, 11, 0.4) !important; box-shadow: 0 0 15px rgba(245, 158, 11, 0.1); }
-        .img-msg { border-radius: 12px; max-width: 100%; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); display: block; }
+        .input-box { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; width: 100%; color: white; outline: none; font-size: 16px; }
+        .btn-main { background: linear-gradient(135deg, var(--indigo) 0%, #7c3aed 100%); border-radius: 15px; padding: 16px; font-weight: 900; text-transform: uppercase; width: 100%; color: white; border: none; cursor: pointer; }
+        .vip-name { background: linear-gradient(to right, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6, #ef4444); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow 3s linear infinite; font-weight: 900; }
+        .vip-tag { display: inline-flex !important; align-items: center !important; justify-content: center !important; background: linear-gradient(135deg, #ffd700, #b45309) !important; color: #000 !important; padding: 0 8px !important; border-radius: 4px !important; font-size: 10px !important; font-weight: 900 !important; margin-left: 6px !important; height: 18px !important; vertical-align: middle !important; text-transform: uppercase !important; }
         @keyframes rainbow { to { background-position: 200% center; } }
-        
-        button, label, [onclick] { pointer-events: auto !important; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="scr-auth" class="screen screen-active p-8 justify-center">
-        <div class="text-center mb-10"><h1 class="text-4xl font-black italic text-indigo-500">MERMIGRAM V3</h1></div>
+        <div class="text-center mb-10"><h1 class="text-4xl font-black italic text-indigo-500">MERMIGRAM V5.1</h1></div>
         <div class="glass p-8 space-y-6">
             <div class="flex p-1 bg-black/40 rounded-xl">
-                <button onclick="setM('login')" id="t-l" class="flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600 text-white">GİRİŞ</button>
+                <button onclick="setM('login')" id="t-l" class="flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600">GİRİŞ</button>
                 <button onclick="setM('reg')" id="t-r" class="flex-1 py-3 rounded-lg font-black text-xs text-gray-500">KAYIT</button>
             </div>
-            <div class="space-y-4">
-                <input type="text" id="u-n" class="input-box" placeholder="Kullanıcı Adı">
-                <input type="password" id="u-p" class="input-box" placeholder="Şifre">
-                <button onclick="doAuth()" class="btn-main">BAŞLAT</button>
-            </div>
+            <input type="text" id="u-n" class="input-box" placeholder="Kullanıcı Adı">
+            <input type="password" id="u-p" class="input-box" placeholder="Şifre">
+            <button onclick="doAuth()" class="btn-main">BAŞLAT</button>
         </div>
     </div>
 
     <div id="scr-list" class="screen">
-        <div class="p-6 flex justify-between items-center border-b border-white/5 bg-black/20">
+        <div class="p-6 flex justify-between items-center border-b border-white/5">
             <div class="flex items-center gap-4">
                 <div id="m-pfp" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-black">?</div>
                 <div>
-                    <div class="flex items-center"><span id="m-nick" class="text-sm font-black text-white">...</span><div id="m-vip-container"></div></div>
-                    <p class="text-[8px] text-indigo-400 font-bold uppercase tracking-widest">Çevrimiçi</p>
+                    <div class="flex items-center"><span id="m-nick" class="text-sm font-black">...</span><div id="m-vip-container"></div></div>
+                    <p class="text-[8px] text-indigo-400 font-bold uppercase">Çevrimiçi</p>
                 </div>
             </div>
             <div class="flex gap-4">
-                <button onclick="showS('scr-vip')" class="text-amber-500 p-2"><i class="fas fa-gem text-xl"></i></button>
-                <button onclick="toggleMod('mod-g')" class="text-indigo-400 p-2"><i class="fas fa-plus-circle text-xl"></i></button>
+                <button onclick="showS('scr-vip')" class="text-amber-500"><i class="fas fa-gem text-xl"></i></button>
+                <button onclick="toggleMod('mod-g')" class="text-indigo-400"><i class="fas fa-plus-circle text-xl"></i></button>
             </div>
         </div>
         <div class="px-6 py-4">
-            <input type="text" id="g-search" onkeyup="searchG()" class="input-box !py-3 !text-sm" placeholder="Grup aramak için @kod yazın...">
+            <div onclick="showS('scr-search')" class="input-box !py-3 !text-sm flex items-center gap-3 text-gray-500">
+                <i class="fas fa-search"></i> Grup ara veya @kod yaz...
+            </div>
         </div>
         <div id="g-list" class="flex-1 overflow-y-auto px-6 space-y-3 pb-20"></div>
+    </div>
+
+    <div id="scr-search" class="screen">
+        <div class="p-4 flex items-center gap-3 border-b border-white/5">
+            <button onclick="showS('scr-list')" class="p-2 text-white"><i class="fas fa-arrow-left"></i></button>
+            <input type="text" id="search-inp" onkeyup="realtimeSearch()" class="input-box !py-2 flex-1 text-sm" placeholder="Grup adı veya @kod...">
+        </div>
+        <div id="search-results" class="p-6 space-y-4 overflow-y-auto"></div>
     </div>
 
     <div id="scr-chat" class="screen">
         <div class="p-4 flex items-center gap-4 bg-black/80 border-b border-white/5">
             <button onclick="showS('scr-list')" class="p-2 text-white"><i class="fas fa-chevron-left text-xl"></i></button>
-            <div id="c-pfp" class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white uppercase text-xs">G</div>
-            <h3 id="c-name" class="font-bold text-sm flex-1 truncate uppercase text-white">Grup</h3>
+            <div id="c-pfp" class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold uppercase text-xs">G</div>
+            <h3 id="c-name" class="font-bold text-sm flex-1 truncate text-white">Grup</h3>
             <button onclick="toggleMod('mod-manage')" id="btn-adm" class="hidden p-2 text-indigo-400"><i class="fas fa-user-plus text-xl"></i></button>
         </div>
         <div id="m-box" class="flex-1 overflow-y-auto p-5 flex flex-col gap-4"></div>
-        <div id="chat-input-area" class="p-4 bg-black/95 flex items-center gap-3 border-t border-white/10">
-            <label class="w-10 h-10 flex items-center justify-center text-indigo-400 cursor-pointer">
-                <i class="fas fa-camera text-2xl"></i>
-                <input type="file" id="img-input" class="hidden" accept="image/*" onchange="sendImg(this)">
-            </label>
-            <input type="text" id="m-inp" placeholder="Mesaj yaz..." class="input-box !py-3 flex-1 text-sm border-none">
-            <button onclick="sendMsg()" class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-paper-plane"></i></button>
+        <div id="chat-control" class="p-4 bg-black/95 border-t border-white/10">
+            <div id="chat-input-area" class="flex items-center gap-3">
+                <label class="w-10 h-10 flex items-center justify-center text-indigo-400 cursor-pointer"><i class="fas fa-camera text-2xl"></i><input type="file" id="img-input" class="hidden" accept="image/*" onchange="sendImg(this)"></label>
+                <input type="text" id="m-inp" placeholder="Mesaj yaz..." class="input-box !py-3 flex-1 text-sm border-none">
+                <button onclick="sendMsg()" class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <div id="join-area" class="hidden">
+                <button onclick="joinActiveG()" class="btn-main !bg-green-600">SOHBETE KATIL</button>
+            </div>
         </div>
     </div>
 
     <div id="scr-vip" class="screen p-6">
         <button onclick="showS('scr-list')" class="mb-6 text-gray-400 font-bold p-2"><i class="fas fa-arrow-left"></i> GERİ</button>
-        <div class="glass p-8 border-2 border-amber-500/50">
-            <h3 class="text-3xl font-black text-amber-500 mb-2 italic">GOLD VIP</h3>
-            <p id="vip-timer" class="text-[10px] text-green-500 font-bold mb-6 italic uppercase">Karsim Yetkilerin Aktif</p>
-            <div class="space-y-4 text-sm">
-                <p><i class="fas fa-check text-green-500 mr-2"></i> Gökkuşağı İsim & Gold Rozet</p>
-                <p><i class="fas fa-check text-green-500 mr-2"></i> Fotoğraf Gönderme Yetkisi</p>
-                <p><i class="fas fa-check text-green-500 mr-2"></i> Özel Grup Kurma Özgürlüğü</p>
+        <div id="vip-status-box" class="glass p-8 border-2 border-amber-500/50">
             </div>
-        </div>
     </div>
 
     <div id="mod-g" class="hidden fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-6">
         <div class="glass p-8 w-full max-w-sm space-y-4">
             <input id="ng-n" class="input-box" placeholder="Grup Adı">
-            <input id="ng-h" class="input-box" placeholder="@gizli-kod">
+            <input id="ng-h" class="input-box" placeholder="@kod">
             <button onclick="createG()" class="btn-main">OLUŞTUR</button>
             <button onclick="toggleMod('mod-g')" class="w-full text-xs text-gray-500 py-2">İPTAL</button>
-        </div>
-    </div>
-    <div id="mod-manage" class="hidden fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-6">
-        <div class="glass p-8 w-full max-w-sm space-y-4">
-            <input id="add-u-name" class="input-box" placeholder="Kullanıcı Adı">
-            <button onclick="addUserToG()" class="btn-main">SİSTEME EKLE</button>
-            <button onclick="toggleMod('mod-manage')" class="w-full text-xs text-gray-500 py-2">KAPAT</button>
         </div>
     </div>
 
@@ -145,38 +110,45 @@
     </script>
 
     <script>
-        let me = "", mode = "login", isVip = false, vipUntil = "", vTitle = "VIP", lastGTime = 0, activeG = "";
+        let me = "", mode = "login", isVip = false, vTitle = "VIP", activeG = "";
 
         async function doAuth() {
             const u = document.getElementById('u-n').value.trim().toLowerCase();
             const p = document.getElementById('u-p').value;
-            if(!u || !p) return alert("Boş bırakma karsim!");
-
+            if(!u || !p) return alert("Eksik bilgi!");
+            const s = await fGet(fRef(db, 'users/' + u));
             if(mode === 'login') {
-                const s = await fGet(fRef(db, 'users/' + u));
                 if(s.exists() && s.val().pass === p) {
                     const d = s.val(); me = u;
                     isVip = d.vip && (!d.vipUntil || new Date(d.vipUntil) > new Date());
                     vTitle = d.vipTitle || "VIP";
-                    vipUntil = d.vipUntil || "SINIRSIZ";
-                    lastGTime = d.lastG || 0;
                     start();
-                } else alert("Yanlış giriş!");
+                } else alert("Hata!");
             } else {
                 await fSet(fRef(db, 'users/'+u), { pass:p, vip:false, lastG:0, vipUntil: "", vipTitle: "" });
                 await fSet(fRef(db, `groups/global/members/${u}`), true);
                 await fSet(fRef(db, `groups/aydinlatma/members/${u}`), true);
-                alert("Kayıt ok! Giriş yap."); setM('login');
+                alert("Kayıt ok!"); setM('login');
             }
         }
 
         function start() { 
             showS('scr-list'); 
-            document.getElementById('m-nick').innerText = me; 
+            document.getElementById('m-nick').innerText = me;
             document.getElementById('m-pfp').innerText = me[0].toUpperCase();
+            const vipStatus = document.getElementById('vip-status-box');
             if(isVip) {
                 document.getElementById('m-nick').classList.add('vip-name');
                 document.getElementById('m-vip-container').innerHTML = `<span class="vip-tag">${vTitle}</span>`;
+                vipStatus.innerHTML = `<h3 class="text-2xl font-black text-amber-500 mb-2 italic">YETKİN AKTİF</h3><p class="text-xs text-green-500 font-bold uppercase">Gold VIP Özelliklerin Açık</p>`;
+            } else {
+                // INSTAGRAM YÖNLENDİRMELİ BUTON
+                vipStatus.innerHTML = `
+                    <h3 class="text-2xl font-black text-white mb-2 italic">GOLD VIP AL</h3>
+                    <p class="text-sm mb-6 text-gray-400">Renkli isim ve sınırsız grup için mermi gibi yetki al.</p>
+                    <button onclick="window.location.href='https://instagram.com/nemexultra'" class="btn-main !bg-amber-600">
+                        <i class="fab fa-instagram mr-2"></i> 100 TL - SATIN AL
+                    </button>`;
             }
             loadG(); 
         }
@@ -184,11 +156,11 @@
         function loadG() {
             fOn(fRef(db, 'groups'), (snap) => {
                 const list = document.getElementById('g-list'); list.innerHTML = "";
-                let gs = [];
-                snap.forEach(s => { if(s.val().members && s.val().members[me]) gs.push({id:s.key, ...s.val()}); });
-                gs.sort((a,b) => (a.id === 'global' ? -1 : (a.id === 'aydinlatma' ? -1 : 1)));
-                gs.forEach(g => {
-                    list.innerHTML += `<div onclick="openC('${g.id}', '${g.name}')" class="p-5 glass flex items-center gap-4 active:scale-95 border-l-4 ${g.id==='global'?'border-green-500 bg-green-500/10':(g.id==='aydinlatma'?'border-amber-500':'border-indigo-600')}">
+                let userGroups = [];
+                snap.forEach(s => { if(s.val().members && s.val().members[me]) userGroups.push({id:s.key, ...s.val()}); });
+                userGroups.sort((a,b) => (a.id === 'global' ? -1 : (a.id === 'aydinlatma' ? -1 : 1)));
+                userGroups.forEach(g => {
+                    list.innerHTML += `<div onclick="openC('${g.id}', '${g.name}')" class="p-5 glass flex items-center gap-4 active:scale-95 border-l-4 ${g.id==='global'?'border-green-500 bg-green-500/10':(g.id==='aydinlatma'?'border-amber-500 bg-amber-500/5':'border-indigo-600')}">
                         <div class="w-10 h-10 rounded-lg bg-indigo-900 flex items-center justify-center font-black">${g.id==='global'?'🌍':(g.id==='aydinlatma'?'📜':g.name[0])}</div>
                         <div class="flex-1"><h4 class="font-bold text-sm text-white">${g.name}</h4><p class="text-[9px] opacity-50 uppercase">${g.handle}</p></div>
                     </div>`;
@@ -196,15 +168,40 @@
             });
         }
 
-        function openC(id, name) {
-            activeG = id; showS('scr-chat'); document.getElementById('c-name').innerText = name;
-            const isAyd = id === 'aydinlatma';
-            document.getElementById('chat-input-area').style.display = isAyd ? 'none' : 'flex';
-            
-            fGet(fRef(db, `groups/${id}`)).then(s => {
-                if(s.exists() && (s.val().owner === me || isVip)) document.getElementById('btn-adm').classList.remove('hidden');
-                else document.getElementById('btn-adm').classList.add('hidden');
+        function realtimeSearch() {
+            const h = document.getElementById('search-inp').value.trim().toLowerCase();
+            const res = document.getElementById('search-results');
+            if(h.length < 2) { res.innerHTML = `<p class="text-xs text-gray-500 text-center mt-10">Yazmaya başla...</p>`; return; }
+            fGet(fRef(db, 'groups')).then(snap => {
+                res.innerHTML = "";
+                snap.forEach(s => {
+                    const g = s.val();
+                    if(g.name.toLowerCase().includes(h) || (g.handle && g.handle.toLowerCase().includes(h))) {
+                        res.innerHTML += `<div onclick="openC('${s.key}', '${g.name}')" class="p-4 glass flex justify-between items-center mb-3">
+                            <div><h4 class="font-bold text-sm">${g.name}</h4><p class="text-[9px] text-indigo-400">${g.handle}</p></div>
+                            <i class="fas fa-chevron-right text-gray-600"></i>
+                        </div>`;
+                    }
+                });
             });
+        }
+
+        async function openC(id, name) {
+            activeG = id; showS('scr-chat'); document.getElementById('c-name').innerText = name;
+            document.getElementById('c-pfp').innerText = name[0];
+            const s = await fGet(fRef(db, `groups/${id}`));
+            const isMember = s.val().members && s.val().members[me];
+            
+            if(id === 'aydinlatma') {
+                document.getElementById('chat-input-area').classList.add('hidden');
+                document.getElementById('join-area').classList.add('hidden');
+            } else if(isMember || id === 'global') {
+                document.getElementById('chat-input-area').classList.remove('hidden');
+                document.getElementById('join-area').classList.add('hidden');
+            } else {
+                document.getElementById('chat-input-area').classList.add('hidden');
+                document.getElementById('join-area').classList.remove('hidden');
+            }
 
             const box = document.getElementById('m-box'); fOff(fRef(db, 'msgs/' + id));
             fOn(fRef(db, 'msgs/' + id), (snap) => {
@@ -213,16 +210,20 @@
                     const m = mSnap.val();
                     const div = document.createElement('div');
                     div.className = `p-3 rounded-2xl max-w-[85%] glass ${m.u===me?'self-end bg-indigo-600/40':'self-start'} ${m.vip?'vip-msg':''}`;
-                    if(m.u === 'SİSTEM') div.className = "p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-amber-500 text-xs text-center";
-                    
-                    let cont = m.type === 'image' ? `<img src="${m.img}" class="img-msg">` : `<p class="text-sm text-white">${m.data}</p>`;
+                    if(m.u === 'SİSTEM') div.className = "p-2 bg-white/5 rounded-lg text-gray-500 text-[10px] text-center w-full my-1";
+                    let cont = m.type === 'image' ? `<img src="${m.img}" class="w-full rounded-lg mt-2">` : `<p class="text-sm">${m.data}</p>`;
                     let tag = m.vip ? `<span class="vip-tag">${m.vT || 'VIP'}</span>` : "";
-                    
                     div.innerHTML = `<span class="text-[10px] font-black block mb-1 ${m.vip?'vip-name':'text-gray-500'}">${m.u.toUpperCase()}${tag}</span>${cont}`;
                     box.appendChild(div);
                 });
                 box.scrollTop = box.scrollHeight;
             });
+        }
+
+        async function joinActiveG() {
+            await fSet(fRef(db, `groups/${activeG}/members/${me}`), true);
+            await fPush(fRef(db, 'msgs/' + activeG), { u: 'SİSTEM', data: me.toUpperCase() + " SOHBETE KATILDI.", t: Date.now() });
+            openC(activeG, document.getElementById('c-name').innerText);
         }
 
         function sendMsg() {
@@ -238,39 +239,18 @@
             }
         }
 
-        // GRUP ARAMA FIX
-        function searchG() {
-            const h = document.getElementById('g-search').value.trim().toLowerCase();
-            if(h.startsWith('@') && h.length > 2) {
-                fGet(fRef(db, 'groups')).then(s => {
-                    s.forEach(snap => { 
-                        const g = snap.val();
-                        if(g.handle && g.handle.toLowerCase() === h) { 
-                            if(confirm(g.name + " grubuna katılmak istiyor musun?")) {
-                                fSet(fRef(db, `groups/${snap.key}/members/${me}`), true);
-                                document.getElementById('g-search').value = "";
-                            }
-                        } 
-                    });
-                });
-            }
-        }
-
         async function createG() {
-            const n = document.getElementById('ng-n').value; 
-            const h = document.getElementById('ng-h').value.trim();
-            if(!n || !h) return alert("Doldur karsim!");
-            if(!isVip && (Date.now() - lastGTime < 30*24*60*60*1000)) return alert("Ayda 1 grup hakkın var!");
-            
+            const n = document.getElementById('ng-n').value; const h = document.getElementById('ng-h').value.trim();
+            if(!n || !h) return alert("Doldur!");
             const newG = fPush(fRef(db, 'groups'));
             await fSet(newG, { name: n, handle: h.startsWith('@')?h:'@'+h, owner: me, members: { [me]: true } });
-            await fUpdate(fRef(db, 'users/'+me), { lastG: Date.now() });
             toggleMod('mod-g');
         }
 
         function showS(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('screen-active')); document.getElementById(id).classList.add('screen-active'); }
         function toggleMod(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function setM(m) { mode = m; document.getElementById('t-l').className = m === 'login' ? 'flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600 text-white' : 'flex-1 py-3 rounded-lg font-black text-xs text-gray-500'; document.getElementById('t-r').className = m === 'reg' ? 'flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600 text-white' : 'flex-1 py-3 rounded-lg font-black text-xs text-gray-500'; }
+        function setM(m) { mode = m; document.getElementById('t-l').className = m === 'login' ? 'flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600' : 'flex-1 py-3 rounded-lg font-black text-xs text-gray-500'; }
     </script>
 </body>
-</html>
+                </html>
+        
