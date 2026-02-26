@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mermigram V5.1 - Business Edition</title>
+    <title>Mermigram V5.3 - Final Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,18 +17,19 @@
         .input-box { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; width: 100%; color: white; outline: none; font-size: 16px; }
         .btn-main { background: linear-gradient(135deg, var(--indigo) 0%, #7c3aed 100%); border-radius: 15px; padding: 16px; font-weight: 900; text-transform: uppercase; width: 100%; color: white; border: none; cursor: pointer; }
         .vip-name { background: linear-gradient(to right, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6, #ef4444); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rainbow 3s linear infinite; font-weight: 900; }
-        .vip-tag { display: inline-flex !important; align-items: center !important; justify-content: center !important; background: linear-gradient(135deg, #ffd700, #b45309) !important; color: #000 !important; padding: 0 8px !important; border-radius: 4px !important; font-size: 10px !important; font-weight: 900 !important; margin-left: 6px !important; height: 18px !important; vertical-align: middle !important; text-transform: uppercase !important; }
-        @keyframes rainbow { to { background-position: 200% center; } }
+        .pfp-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .gif-thumb { width: 70px; height: 70px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; }
+        .gif-thumb:hover { border-color: var(--indigo); transform: scale(1.1); }
     </style>
 </head>
 <body>
 
     <div id="scr-auth" class="screen screen-active p-8 justify-center">
-        <div class="text-center mb-10"><h1 class="text-4xl font-black italic text-indigo-500">MERMIGRAM V5.1</h1></div>
+        <div class="text-center mb-10"><h1 class="text-4xl font-black italic text-indigo-500">MERMIGRAM V5.3</h1></div>
         <div class="glass p-8 space-y-6">
             <div class="flex p-1 bg-black/40 rounded-xl">
                 <button onclick="setM('login')" id="t-l" class="flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600">GİRİŞ</button>
-                <button onclick="setM('reg')" id="t-r" class="flex-1 py-3 rounded-lg font-black text-xs text-gray-500">KAYIT</button>
+                <button onclick="setM('reg')" id="t-r" class="flex-1 py-3 rounded-lg font-black text-xs text-gray-500">KAYIT OL</button>
             </div>
             <input type="text" id="u-n" class="input-box" placeholder="Kullanıcı Adı">
             <input type="password" id="u-p" class="input-box" placeholder="Şifre">
@@ -38,11 +39,11 @@
 
     <div id="scr-list" class="screen">
         <div class="p-6 flex justify-between items-center border-b border-white/5">
-            <div class="flex items-center gap-4">
-                <div id="m-pfp" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-black">?</div>
+            <div class="flex items-center gap-4 cursor-pointer" onclick="showS('scr-settings')">
+                <div id="m-pfp" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-black overflow-hidden">?</div>
                 <div>
-                    <div class="flex items-center"><span id="m-nick" class="text-sm font-black">...</span><div id="m-vip-container"></div></div>
-                    <p class="text-[8px] text-indigo-400 font-bold uppercase">Çevrimiçi</p>
+                    <span id="m-nick" class="text-sm font-black">...</span>
+                    <p class="text-[8px] text-indigo-400 font-bold uppercase">Profil Ayarları</p>
                 </div>
             </div>
             <div class="flex gap-4">
@@ -50,12 +51,41 @@
                 <button onclick="toggleMod('mod-g')" class="text-indigo-400"><i class="fas fa-plus-circle text-xl"></i></button>
             </div>
         </div>
+        
         <div class="px-6 py-4">
-            <div onclick="showS('scr-search')" class="input-box !py-3 !text-sm flex items-center gap-3 text-gray-500">
+            <div onclick="showS('scr-search')" class="input-box !py-3 !text-sm flex items-center gap-3 text-gray-400 cursor-pointer">
                 <i class="fas fa-search"></i> Grup ara veya @kod yaz...
             </div>
         </div>
-        <div id="g-list" class="flex-1 overflow-y-auto px-6 space-y-3 pb-20"></div>
+
+        <div id="g-list" class="flex-1 overflow-y-auto px-6 space-y-3 pb-20">
+            </div>
+    </div>
+
+    <div id="scr-chat" class="screen">
+        <div class="p-4 flex items-center gap-4 bg-black/80 border-b border-white/5">
+            <button onclick="showS('scr-list')" class="p-2 text-white"><i class="fas fa-chevron-left text-xl"></i></button>
+            <div id="c-pfp" class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold uppercase text-xs">G</div>
+            <h3 id="c-name" class="font-bold text-sm flex-1 truncate text-white uppercase">Sohbet</h3>
+        </div>
+        
+        <div id="m-box" class="flex-1 overflow-y-auto p-5 flex flex-col gap-4"></div>
+
+        <div id="gif-panel" class="hidden p-4 bg-black border-t border-white/10 flex gap-4 overflow-x-auto">
+            <img onclick="selectGif('https://media.giphy.com/media/3o7TKVUn7iM8FMEU24/giphy.gif')" src="https://media.giphy.com/media/3o7TKVUn7iM8FMEU24/giphy.gif" class="gif-thumb">
+            <img onclick="selectGif('https://media.giphy.com/media/mlvseq9nOeZh6/giphy.gif')" src="https://media.giphy.com/media/mlvseq9nOeZh6/giphy.gif" class="gif-thumb">
+            <img onclick="selectGif('https://media.giphy.com/media/26n6WywWMrK5YV_dC/giphy.gif')" src="https://media.giphy.com/media/26n6WywWMrK5YV_dC/giphy.gif" class="gif-thumb">
+            <img onclick="selectGif('https://media.giphy.com/media/l41lTfWp2W510OThS/giphy.gif')" src="https://media.giphy.com/media/l41lTfWp2W510OThS/giphy.gif" class="gif-thumb">
+        </div>
+
+        <div class="p-4 bg-black/95 border-t border-white/10">
+            <div class="flex items-center gap-3">
+                <label class="text-indigo-400 cursor-pointer"><i class="fas fa-camera text-2xl"></i><input type="file" class="hidden" accept="image/*" onchange="sendImg(this)"></label>
+                <button onclick="toggleMod('gif-panel')" class="text-amber-500"><i class="fas fa-bolt text-2xl"></i></button>
+                <input type="text" id="m-inp" placeholder="Mesaj..." class="input-box !py-3 flex-1 text-sm">
+                <button onclick="sendMsg()" class="w-12 h-12 bg-indigo-600 rounded-xl text-white"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
     </div>
 
     <div id="scr-search" class="screen">
@@ -63,41 +93,38 @@
             <button onclick="showS('scr-list')" class="p-2 text-white"><i class="fas fa-arrow-left"></i></button>
             <input type="text" id="search-inp" onkeyup="realtimeSearch()" class="input-box !py-2 flex-1 text-sm" placeholder="Grup adı veya @kod...">
         </div>
-        <div id="search-results" class="p-6 space-y-4 overflow-y-auto"></div>
+        <div id="search-results" class="p-6 space-y-4"></div>
     </div>
 
-    <div id="scr-chat" class="screen">
-        <div class="p-4 flex items-center gap-4 bg-black/80 border-b border-white/5">
-            <button onclick="showS('scr-list')" class="p-2 text-white"><i class="fas fa-chevron-left text-xl"></i></button>
-            <div id="c-pfp" class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold uppercase text-xs">G</div>
-            <h3 id="c-name" class="font-bold text-sm flex-1 truncate text-white">Grup</h3>
-            <button onclick="toggleMod('mod-manage')" id="btn-adm" class="hidden p-2 text-indigo-400"><i class="fas fa-user-plus text-xl"></i></button>
-        </div>
-        <div id="m-box" class="flex-1 overflow-y-auto p-5 flex flex-col gap-4"></div>
-        <div id="chat-control" class="p-4 bg-black/95 border-t border-white/10">
-            <div id="chat-input-area" class="flex items-center gap-3">
-                <label class="w-10 h-10 flex items-center justify-center text-indigo-400 cursor-pointer"><i class="fas fa-camera text-2xl"></i><input type="file" id="img-input" class="hidden" accept="image/*" onchange="sendImg(this)"></label>
-                <input type="text" id="m-inp" placeholder="Mesaj yaz..." class="input-box !py-3 flex-1 text-sm border-none">
-                <button onclick="sendMsg()" class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-paper-plane"></i></button>
+    <div id="scr-settings" class="screen p-8">
+        <button onclick="showS('scr-list')" class="mb-8 text-gray-400 font-bold"><i class="fas fa-arrow-left mr-2"></i> GERİ</button>
+        <div class="glass p-8 text-center space-y-6">
+            <div class="relative w-24 h-24 mx-auto">
+                <div id="set-pfp-preview" class="w-full h-full rounded-full bg-indigo-600 flex items-center justify-center font-black text-2xl overflow-hidden">?</div>
+                <label class="absolute bottom-0 right-0 bg-white text-black w-8 h-8 rounded-full flex items-center justify-center cursor-pointer shadow-lg">
+                    <i class="fas fa-camera text-xs"></i><input type="file" class="hidden" onchange="updatePfp(this)">
+                </label>
             </div>
-            <div id="join-area" class="hidden">
-                <button onclick="joinActiveG()" class="btn-main !bg-green-600">SOHBETE KATIL</button>
-            </div>
+            <input type="text" id="set-nick-input" class="input-box text-center" placeholder="Yeni Nick">
+            <button onclick="saveProfile()" class="btn-main">GÜNCELLE</button>
         </div>
     </div>
 
     <div id="scr-vip" class="screen p-6">
-        <button onclick="showS('scr-list')" class="mb-6 text-gray-400 font-bold p-2"><i class="fas fa-arrow-left"></i> GERİ</button>
-        <div id="vip-status-box" class="glass p-8 border-2 border-amber-500/50">
-            </div>
+        <button onclick="showS('scr-list')" class="mb-6 text-gray-400"><i class="fas fa-arrow-left"></i> GERİ</button>
+        <div class="glass p-8 border-2 border-amber-500 text-center space-y-4">
+            <h2 class="text-2xl font-black text-amber-500">VIP ÜYELİK</h2>
+            <p id="vip-status" class="text-sm opacity-70">VIP Durumu: Bekleniyor...</p>
+            <button onclick="buyVip()" class="btn-main !from-amber-500 !to-orange-600">SATIN AL</button>
+        </div>
     </div>
 
-    <div id="mod-g" class="hidden fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-6">
+    <div id="mod-g" class="hidden fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center p-6">
         <div class="glass p-8 w-full max-w-sm space-y-4">
             <input id="ng-n" class="input-box" placeholder="Grup Adı">
             <input id="ng-h" class="input-box" placeholder="@kod">
             <button onclick="createG()" class="btn-main">OLUŞTUR</button>
-            <button onclick="toggleMod('mod-g')" class="w-full text-xs text-gray-500 py-2">İPTAL</button>
+            <button onclick="toggleMod('mod-g')" class="w-full text-xs opacity-50">İPTAL</button>
         </div>
     </div>
 
@@ -110,7 +137,13 @@
     </script>
 
     <script>
-        let me = "", mode = "login", isVip = false, vTitle = "VIP", activeG = "";
+        let me = "", mode = "login", isVip = false, activeG = "", myData = {};
+
+        function setM(m) { 
+            mode = m;
+            document.getElementById('t-l').className = m === 'login' ? 'flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600' : 'flex-1 py-3 rounded-lg font-black text-xs text-gray-500';
+            document.getElementById('t-r').className = m === 'reg' ? 'flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600' : 'flex-1 py-3 rounded-lg font-black text-xs text-gray-500';
+        }
 
         async function doAuth() {
             const u = document.getElementById('u-n').value.trim().toLowerCase();
@@ -119,138 +152,146 @@
             const s = await fGet(fRef(db, 'users/' + u));
             if(mode === 'login') {
                 if(s.exists() && s.val().pass === p) {
-                    const d = s.val(); me = u;
-                    isVip = d.vip && (!d.vipUntil || new Date(d.vipUntil) > new Date());
-                    vTitle = d.vipTitle || "VIP";
+                    myData = s.val(); me = u;
+                    isVip = myData.vip || false;
                     start();
                 } else alert("Hata!");
             } else {
-                await fSet(fRef(db, 'users/'+u), { pass:p, vip:false, lastG:0, vipUntil: "", vipTitle: "" });
-                await fSet(fRef(db, `groups/global/members/${u}`), true);
-                await fSet(fRef(db, `groups/aydinlatma/members/${u}`), true);
+                await fSet(fRef(db, 'users/'+u), { pass:p, vip:false, pp:"", nick:u });
                 alert("Kayıt ok!"); setM('login');
             }
         }
 
         function start() { 
             showS('scr-list'); 
-            document.getElementById('m-nick').innerText = me;
-            document.getElementById('m-pfp').innerText = me[0].toUpperCase();
-            const vipStatus = document.getElementById('vip-status-box');
-            if(isVip) {
-                document.getElementById('m-nick').classList.add('vip-name');
-                document.getElementById('m-vip-container').innerHTML = `<span class="vip-tag">${vTitle}</span>`;
-                vipStatus.innerHTML = `<h3 class="text-2xl font-black text-amber-500 mb-2 italic">YETKİN AKTİF</h3><p class="text-xs text-green-500 font-bold uppercase">Gold VIP Özelliklerin Açık</p>`;
-            } else {
-                // INSTAGRAM YÖNLENDİRMELİ BUTON
-                vipStatus.innerHTML = `
-                    <h3 class="text-2xl font-black text-white mb-2 italic">GOLD VIP AL</h3>
-                    <p class="text-sm mb-6 text-gray-400">Renkli isim ve sınırsız grup için mermi gibi yetki al.</p>
-                    <button onclick="window.location.href='https://instagram.com/nemexultra'" class="btn-main !bg-amber-600">
-                        <i class="fab fa-instagram mr-2"></i> 100 TL - SATIN AL
-                    </button>`;
-            }
+            document.getElementById('m-nick').innerText = myData.nick || me;
+            updatePfpDisplay(myData.pp, me);
             loadG(); 
         }
 
-        function loadG() {
-            fOn(fRef(db, 'groups'), (snap) => {
-                const list = document.getElementById('g-list'); list.innerHTML = "";
-                let userGroups = [];
-                snap.forEach(s => { if(s.val().members && s.val().members[me]) userGroups.push({id:s.key, ...s.val()}); });
-                userGroups.sort((a,b) => (a.id === 'global' ? -1 : (a.id === 'aydinlatma' ? -1 : 1)));
-                userGroups.forEach(g => {
-                    list.innerHTML += `<div onclick="openC('${g.id}', '${g.name}')" class="p-5 glass flex items-center gap-4 active:scale-95 border-l-4 ${g.id==='global'?'border-green-500 bg-green-500/10':(g.id==='aydinlatma'?'border-amber-500 bg-amber-500/5':'border-indigo-600')}">
-                        <div class="w-10 h-10 rounded-lg bg-indigo-900 flex items-center justify-center font-black">${g.id==='global'?'🌍':(g.id==='aydinlatma'?'📜':g.name[0])}</div>
-                        <div class="flex-1"><h4 class="font-bold text-sm text-white">${g.name}</h4><p class="text-[9px] opacity-50 uppercase">${g.handle}</p></div>
-                    </div>`;
-                });
-            });
+        function updatePfpDisplay(url, name) {
+            const content = url ? `<img src="${url}" class="pfp-img">` : name[0].toUpperCase();
+            document.getElementById('m-pfp').innerHTML = content;
+            document.getElementById('set-pfp-preview').innerHTML = content;
         }
 
-        function realtimeSearch() {
-            const h = document.getElementById('search-inp').value.trim().toLowerCase();
-            const res = document.getElementById('search-results');
-            if(h.length < 2) { res.innerHTML = `<p class="text-xs text-gray-500 text-center mt-10">Yazmaya başla...</p>`; return; }
-            fGet(fRef(db, 'groups')).then(snap => {
-                res.innerHTML = "";
-                snap.forEach(s => {
+        async function updatePfp(input) {
+            if(input.files[0]) {
+                const r = new FileReader(); r.onload = async e => {
+                    const base = e.target.result;
+                    await fUpdate(fRef(db, 'users/'+me), { pp: base });
+                    myData.pp = base; updatePfpDisplay(base, me);
+                };
+                r.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function loadG() {
+            // Global ve Aydınlatma Metni Grupları (GÜNCELLENDİ)
+            const globals = [
+                { id: 'global', name: 'Global Sohbet', handle: '@global' },
+                { id: 'policy', name: 'Aydınlatma Metni', handle: '@policy' }
+            ];
+            
+            fOn(fRef(db, 'groups'), (snap) => {
+                const list = document.getElementById('g-list'); list.innerHTML = "";
+                
+                // Önce sabit grupları ekle
+                globals.forEach(g => {
+                    list.innerHTML += `<div onclick="openC('${g.id}', '${g.name}')" class="p-5 glass flex items-center gap-4 active:scale-95 border-l-4 border-green-500">
+                        <div class="w-10 h-10 rounded-lg bg-green-900 flex items-center justify-center font-black">#</div>
+                        <div class="flex-1"><h4 class="font-bold text-sm">${g.name}</h4><p class="text-[9px] opacity-50">${g.handle}</p></div>
+                    </div>`;
+                });
+
+                // Sonra kullanıcının üye olduğu grupları ekle
+                snap.forEach(s => { 
                     const g = s.val();
-                    if(g.name.toLowerCase().includes(h) || (g.handle && g.handle.toLowerCase().includes(h))) {
-                        res.innerHTML += `<div onclick="openC('${s.key}', '${g.name}')" class="p-4 glass flex justify-between items-center mb-3">
-                            <div><h4 class="font-bold text-sm">${g.name}</h4><p class="text-[9px] text-indigo-400">${g.handle}</p></div>
-                            <i class="fas fa-chevron-right text-gray-600"></i>
+                    if(g.members && g.members[me]) {
+                        list.innerHTML += `<div onclick="openC('${s.key}', '${g.name}')" class="p-5 glass flex items-center gap-4 active:scale-95 border-l-4 border-indigo-600">
+                            <div class="w-10 h-10 rounded-lg bg-indigo-900 flex items-center justify-center font-black">${g.name[0]}</div>
+                            <div class="flex-1"><h4 class="font-bold text-sm">${g.name}</h4><p class="text-[9px] opacity-50">${g.handle}</p></div>
                         </div>`;
                     }
                 });
             });
         }
 
-        async function openC(id, name) {
+        function openC(id, name) {
             activeG = id; showS('scr-chat'); document.getElementById('c-name').innerText = name;
-            document.getElementById('c-pfp').innerText = name[0];
-            const s = await fGet(fRef(db, `groups/${id}`));
-            const isMember = s.val().members && s.val().members[me];
-            
-            if(id === 'aydinlatma') {
-                document.getElementById('chat-input-area').classList.add('hidden');
-                document.getElementById('join-area').classList.add('hidden');
-            } else if(isMember || id === 'global') {
-                document.getElementById('chat-input-area').classList.remove('hidden');
-                document.getElementById('join-area').classList.add('hidden');
-            } else {
-                document.getElementById('chat-input-area').classList.add('hidden');
-                document.getElementById('join-area').classList.remove('hidden');
-            }
-
             const box = document.getElementById('m-box'); fOff(fRef(db, 'msgs/' + id));
             fOn(fRef(db, 'msgs/' + id), (snap) => {
                 box.innerHTML = "";
                 snap.forEach(mSnap => {
                     const m = mSnap.val();
                     const div = document.createElement('div');
-                    div.className = `p-3 rounded-2xl max-w-[85%] glass ${m.u===me?'self-end bg-indigo-600/40':'self-start'} ${m.vip?'vip-msg':''}`;
-                    if(m.u === 'SİSTEM') div.className = "p-2 bg-white/5 rounded-lg text-gray-500 text-[10px] text-center w-full my-1";
-                    let cont = m.type === 'image' ? `<img src="${m.img}" class="w-full rounded-lg mt-2">` : `<p class="text-sm">${m.data}</p>`;
-                    let tag = m.vip ? `<span class="vip-tag">${m.vT || 'VIP'}</span>` : "";
-                    div.innerHTML = `<span class="text-[10px] font-black block mb-1 ${m.vip?'vip-name':'text-gray-500'}">${m.u.toUpperCase()}${tag}</span>${cont}`;
+                    div.className = `flex gap-3 max-w-[85%] ${m.u===me?'flex-row-reverse self-end':'flex-row self-start'}`;
+                    
+                    // Fotoğraf düzeltmesi
+                    const pfpCont = `<div class="w-8 h-8 rounded-full bg-indigo-800 flex-shrink-0 overflow-hidden flex items-center justify-center text-[10px] font-black">${m.p ? `<img src="${m.p}" class="w-full h-full object-cover">` : m.u[0].toUpperCase()}</div>`;
+                    
+                    const msgCont = `<div class="p-3 glass rounded-2xl ${m.u===me?'bg-indigo-600/40':''}">
+                        <span class="text-[9px] font-black block mb-1 ${m.vip?'vip-name':'text-gray-400'}">${m.u.toUpperCase()}</span>
+                        ${(m.type==='image'||m.type==='gif') ? `<img src="${m.img}" class="w-full rounded-lg mt-1">` : `<p class="text-sm">${m.data}</p>`}
+                    </div>`;
+                    
+                    div.innerHTML = pfpCont + msgCont;
                     box.appendChild(div);
                 });
                 box.scrollTop = box.scrollHeight;
             });
         }
 
-        async function joinActiveG() {
-            await fSet(fRef(db, `groups/${activeG}/members/${me}`), true);
-            await fPush(fRef(db, 'msgs/' + activeG), { u: 'SİSTEM', data: me.toUpperCase() + " SOHBETE KATILDI.", t: Date.now() });
-            openC(activeG, document.getElementById('c-name').innerText);
+        function selectGif(url) {
+            if(!isVip) return alert("Sadece VIP Üyeler!");
+            fPush(fRef(db, 'msgs/'+activeG), { u:me, p:myData.pp||"", img:url, type:'gif', t:Date.now(), vip:isVip });
+            toggleMod('gif-panel');
         }
 
         function sendMsg() {
             const i = document.getElementById('m-inp'); if(!i.value.trim()) return;
-            fPush(fRef(db, 'msgs/'+activeG), { u:me, data:i.value, type:'text', t:Date.now(), vip:isVip, vT:vTitle });
+            fPush(fRef(db, 'msgs/'+activeG), { u:me, p:myData.pp||"", data:i.value, type:'text', t:Date.now(), vip:isVip });
             i.value = "";
         }
 
         function sendImg(input) {
             if (input.files[0]) {
-                const r = new FileReader(); r.onload = e => fPush(fRef(db, 'msgs/'+activeG), { u:me, img:e.target.result, type:'image', t:Date.now(), vip:isVip, vT:vTitle });
+                const r = new FileReader(); r.onload = e => fPush(fRef(db, 'msgs/'+activeG), { u:me, p:myData.pp||"", img:e.target.result, type:'image', t:Date.now(), vip:isVip });
                 r.readAsDataURL(input.files[0]);
             }
         }
 
         async function createG() {
-            const n = document.getElementById('ng-n').value; const h = document.getElementById('ng-h').value.trim();
-            if(!n || !h) return alert("Doldur!");
-            const newG = fPush(fRef(db, 'groups'));
-            await fSet(newG, { name: n, handle: h.startsWith('@')?h:'@'+h, owner: me, members: { [me]: true } });
-            toggleMod('mod-g');
+            const n = document.getElementById('ng-n').value, h = document.getElementById('ng-h').value.toLowerCase();
+            if(!n || !h.startsWith('@')) return alert("Grup adı ve @kod lazım!");
+            await fSet(fRef(db, 'groups/'+h.replace('@','')), { name:n, handle:h, members:{ [me]:true } });
+            toggleMod('mod-g'); alert("Grup Hazır!");
+        }
+
+        function realtimeSearch() {
+            const val = document.getElementById('search-inp').value.trim().toLowerCase();
+            const res = document.getElementById('search-results'); res.innerHTML = "";
+            if(val.length < 2) return;
+            fGet(fRef(db, 'groups')).then(snap => {
+                snap.forEach(s => {
+                    const g = s.val();
+                    if(g.name.toLowerCase().includes(val) || g.handle.includes(val)) {
+                        res.innerHTML += `<div onclick="joinG('${s.key}')" class="p-4 glass flex justify-between items-center">
+                            <div><h4 class="font-bold">${g.name}</h4><p class="text-xs opacity-50">${g.handle}</p></div>
+                            <button class="text-indigo-400 font-black">KATIL</button>
+                        </div>`;
+                    }
+                });
+            });
+        }
+
+        async function joinG(id) {
+            await fUpdate(fRef(db, `groups/${id}/members`), { [me]: true });
+            alert("Gruba katıldın!"); showS('scr-list');
         }
 
         function showS(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('screen-active')); document.getElementById(id).classList.add('screen-active'); }
         function toggleMod(id) { document.getElementById(id).classList.toggle('hidden'); }
-        function setM(m) { mode = m; document.getElementById('t-l').className = m === 'login' ? 'flex-1 py-3 rounded-lg font-black text-xs bg-indigo-600' : 'flex-1 py-3 rounded-lg font-black text-xs text-gray-500'; }
     </script>
 </body>
-                </html>
-        
+</html>
