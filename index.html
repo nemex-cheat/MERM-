@@ -2,648 +2,105 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MERMİGRAM - SOHBET PLATFORMU</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MERMİAİ - Official Interface</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Plus+Jakarta+Sans:wght@400;800&display=swap');
-
-        :root {
-            --mermi-black: #000000;
-            --mermi-accent: #ffcc00; /* Mermi Sarısı */
-            --mermi-gray: #0c0c0c;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-
         body {
-            background-color: var(--mermi-black);
-            color: #ffffff;
-            height: 100vh; width: 100vw;
-            overflow: hidden; position: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-
-        /* EKRAN YÖNETİMİ - BOŞ EKRAN FIX */
-        .mermi-screen {
-            position: fixed; inset: 0;
-            display: none; flex-direction: column;
-            background: var(--mermi-black);
-            z-index: 10;
+        .chat-container {
+            width: 90%;
+            max-width: 800px;
+            background: #1e293b;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-        .mermi-screen.active { display: flex !important; }
-
-        .mermi-font { font-family: 'Black Ops One', cursive; }
-
-        /* MAVİ TIK EFEKTİ */
-        .mavi-tik {
-            color: #00aaff;
-            font-size: 14px;
-            margin-left: 5px;
-            filter: drop-shadow(0 0 5px rgba(0,170,255,0.4));
+        .header {
+            padding: 20px;
+            background: #334155;
+            text-align: center;
+            border-bottom: 2px solid #3b82f6;
         }
+        .header h1 { margin: 0; font-size: 24px; color: #3b82f6; }
+        .header p { margin: 5px 0 0; font-size: 12px; opacity: 0.7; }
 
-        /* VIP GÖKKUŞAĞI İSİM */
-        .vip-rainbow {
-            background: linear-gradient(90deg, #ff0000, #ffcc00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rainbowFlow 5s ease infinite;
-            font-weight: 900 !important;
+        .chat-box {
+            height: 400px;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #334155;
         }
-
-        @keyframes rainbowFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .input-area {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
         }
-
-        /* MESAJ BALONLARI */
-        .bubble {
-            max-width: 85%; padding: 12px;
-            border-radius: 20px; background: #111;
-            border: 1px solid rgba(255,255,255,0.05);
+        input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: #334155;
+            color: white;
+            outline: none;
         }
-        .sent .bubble { background: #1a1a1a; border-bottom-right-radius: 2px; }
-        .received .bubble { border-bottom-left-radius: 2px; }
-
-        .mermi-btn { transition: 0.2s; cursor: pointer; }
-        .mermi-btn:active { transform: scale(0.9); }
-
-        /* MODALLAR */
-        .mermi-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            z-index: 1000; display: none; align-items: center; justify-content: center;
+        button {
+            padding: 10px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .mermi-modal.active { display: flex; }
-
-        /* SCROLLBAR GİZLEME */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        button:hover { background: #2563eb; }
     </style>
 </head>
+<body>
 
-<body class="bg-black text-white">
-    <div id="mermi-root">
+<div class="chat-container">
+    <div class="header">
+        <h1>MERMİAİ</h1>
+        <p>Created by NEMEXULTRA & sofiya_3892</p>
+    </div>
+    
+    <div class="chat-box" id="chatBox">
+        <p><strong>MERMİAİ:</strong> Merhaba! Ben MERMİAİ. Size nasıl yardımcı olabilirim?</p>
+    </div>
 
-        <section id="scrAuth" class="mermi-screen active items-center justify-center p-6">
-            <div class="w-full max-w-sm text-center">
-                <div class="mb-10">
-                    <div class="w-24 h-24 bg-yellow-500 rounded-[35px] mx-auto flex items-center justify-center shadow-[0_0_50px_rgba(255,204,0,0.2)]">
-                        <i class="fas fa-bolt text-5xl text-black"></i>
-                    </div>
-                    <h1 class="mermi-font text-4xl mt-6 tracking-widest text-white uppercase">MERMİ<span class="text-yellow-500">GRAM</span></h1>
-                    <p class="text-gray-600 text-[9px] font-black uppercase tracking-[5px] mt-2">Sohbet Platformu</p>
-                </div>
-
-                <div id="loginBox" class="space-y-4">
-                    <input type="text" id="inName" class="w-full bg-[#0c0c0c] border border-white/5 p-5 rounded-2xl outline-none focus:border-yellow-500 text-white" placeholder="Kullanıcı Adı">
-                    <input type="password" id="inPass" class="w-full bg-[#0c0c0c] border border-white/5 p-5 rounded-2xl outline-none focus:border-yellow-500 text-white" placeholder="Erişim Şifresi">
-                    <button onclick="window.mAuth('login')" class="mermi-btn w-full bg-yellow-500 text-black font-black py-5 rounded-2xl shadow-xl">SİSTEME BAĞLAN</button>
-                    <button onclick="window.toggleAuth(true)" class="text-gray-700 text-[10px] font-bold uppercase mt-4 block mx-auto">Yeni Hesap Oluştur</button>
-                </div>
-
-                <div id="regBox" class="space-y-4 hidden">
-                    <input type="text" id="reName" class="w-full bg-[#0c0c0c] border border-white/5 p-5 rounded-2xl outline-none focus:border-green-500 text-white" placeholder="Adınız Soyadınız">
-                    <input type="password" id="rePass" class="w-full bg-[#0c0c0c] border border-white/5 p-5 rounded-2xl outline-none focus:border-green-500 text-white" placeholder="Şifre Belirle">
-                    <button onclick="window.mAuth('reg')" class="mermi-btn w-full bg-green-600 text-white font-black py-5 rounded-2xl shadow-xl">KAYDI TAMAMLA</button>
-                    <button onclick="window.toggleAuth(false)" class="text-gray-700 text-[10px] font-bold uppercase mt-4 block mx-auto">Giriş Ekranına Dön</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="scrMain" class="mermi-screen">
-            <header class="h-16 border-b border-white/5 flex items-center px-5 justify-between bg-black">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-black shadow-lg shadow-yellow-500/10">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h2 class="mermi-font text-lg text-white uppercase tracking-wider">MERMİ<span class="text-yellow-500">GRAM</span></h2>
-                </div>
-                <div class="flex items-center gap-4">
-                    <button onclick="window.openMod('modCreate')" class="mermi-btn text-xl text-white"><i class="fas fa-plus-square"></i></button>
-                    <div onclick="window.openMod('modProfile')" class="w-9 h-9 rounded-full border border-white/10 overflow-hidden bg-[#111]" id="topPP"></div>
-                </div>
-            </header>
-
-            <div id="listArea" class="flex-1 overflow-y-auto pb-20 no-scrollbar">
-                <div class="px-5 py-4 bg-[#050505] border-b border-white/5">
-                    <span class="text-[9px] font-black text-yellow-500 uppercase tracking-[4px]">Aktif Operasyonlar</span>
-                </div>
-
-                <div onclick="window.mOpenChat('global', 'MERMİGRAM GLOBAL')" class="flex items-center p-5 border-b border-white/5 active:bg-white/5 transition-all">
-                    <div class="w-14 h-14 rounded-2xl bg-yellow-500 flex items-center justify-center text-2xl mr-4 shadow-xl">
-                        <i class="fas fa-globe-americas text-black"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between mb-1">
-                            <h3 class="font-extrabold text-white text-sm uppercase">Global Terminal</h3>
-                            <span class="text-[8px] font-black text-yellow-500">CANLI</span>
-                        </div>
-                        <p class="text-xs text-gray-500 italic">Bütün mermiciler burada.</p>
-                    </div>
-                </div>
-
-                <div onclick="window.showAydinlatma()" class="flex items-center p-5 border-b border-white/5 bg-yellow-500/5 active:bg-yellow-500/10 transition-all">
-                    <div class="w-14 h-14 rounded-2xl bg-[#0c0c0c] border border-yellow-500/20 flex items-center justify-center text-xl mr-4">
-                        <i class="fas fa-file-shield text-yellow-500"></i>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-yellow-500 text-xs uppercase">Aydınlatma Metni 📜</h3>
-                        <p class="text-[9px] text-gray-500">Yasal haklar ve kullanım kuralları.</p>
-                    </div>
-                </div>
-
-                <div id="dynGroups"></div>
-            </div>
-
-            <nav class="fixed bottom-0 left-0 right-0 h-16 bg-[#080808] border-t border-white/10 flex items-center justify-around z-50">
-                <button onclick="window.mShowScreen('scrMain')" class="mermi-btn text-2xl text-yellow-500"><i class="fas fa-home"></i></button>
-                <button onclick="window.mSearchRadar()" class="mermi-btn text-2xl text-gray-600"><i class="fas fa-magnifying-glass"></i></button>
-                <button onclick="window.openMod('modVip')" class="mermi-btn text-2xl text-yellow-500"><i class="fas fa-crown"></i></button>
-                <button onclick="window.openMod('modProfile')" class="mermi-btn text-2xl text-gray-600"><i class="fas fa-user-shield"></i></button>
-            </nav>
-        </section>
-        <section id="scrChat" class="mermi-screen">
-            <header class="h-16 border-b border-white/5 flex items-center px-2 justify-between bg-black z-50">
-                <div class="flex items-center gap-1">
-                    <button onclick="window.mShowScreen('scrMain')" class="w-10 h-10 flex items-center justify-center text-xl text-yellow-500">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <div class="flex items-center gap-3">
-                        <div id="chatPP" class="w-10 h-10 rounded-full bg-[#0c0c0c] border border-white/5 overflow-hidden flex items-center justify-center">
-                            <i class="fas fa-bolt text-yellow-500 text-[10px]"></i>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-1">
-                                <h3 id="chatTitle" class="text-xs font-black uppercase tracking-tighter">OPERASYON ODASI</h3>
-                                <div id="chatBlueCheck" class="mavi-tik hidden"><i class="fas fa-check-circle"></i></div>
-                            </div>
-                            <p class="text-[7px] text-green-500 font-bold tracking-[3px] uppercase">Şifreli Bağlantı</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 pr-3">
-                    <button class="text-gray-700"><i class="fas fa-phone-slash"></i></button>
-                    <button class="text-gray-700"><i class="fas fa-video-slash"></i></button>
-                </div>
-            </header>
-
-            <div id="msgArea" class="flex-1 overflow-y-auto p-4 space-y-4 bg-black flex flex-col no-scrollbar">
-                </div>
-
-            <div id="writePanel" class="p-4 bg-black border-t border-white/5">
-                <div class="bg-[#0c0c0c] rounded-2xl px-4 py-1 flex items-center gap-3 border border-white/10 shadow-inner">
-                    <button onclick="document.getElementById('fileInp').click()" class="text-lg text-gray-500 hover:text-yellow-500">
-                        <i class="fas fa-paperclip"></i>
-                    </button>
-                    <input type="file" id="fileInp" class="hidden" accept="image/*" onchange="window.mHandleFile(this)">
-                    
-                    <input type="text" id="msgInp" class="flex-1 bg-transparent border-none outline-none text-xs text-white py-4" placeholder="Mesajını fırlat...">
-                    
-                    <button id="sendBtn" onclick="window.mSendMsg()" class="w-10 h-10 bg-yellow-500 rounded-xl text-black flex items-center justify-center active:scale-90 transition shadow-lg">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Mesajınızı yazın...">
+        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Gönder</button>
+    </div>
+</div>
 
 <script>
-    /* MERMİGRAM V25 CORE SYSTEM */
-    const firebaseConfig = {
-        apiKey: "AIzaSyDiFa6RjkuqdEbz8L9YsrBD1Be5shgAjUg",
-        authDomain: "plane-gr.firebaseapp.com",
-        databaseURL: "https://plane-gr-default-rtdb.firebaseio.com",
-        projectId: "plane-gr",
-        storageBucket: "plane-gr.firebasestorage.app",
-        messagingSenderId: "764208760476",
-        appId: "1:764208760476:web:19f6aa746f6270ad568f59"
-    };
-
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    let me = null;
-    let curC = null;
-
-    // EKRAN MOTORU
-    window.mShowScreen = (id) => {
-        document.querySelectorAll('.mermi-screen').forEach(s => s.classList.remove('active'));
-        const target = document.getElementById(id);
-        if(target) {
-            target.classList.add('active');
-            gsap.fromTo(target, {opacity: 0}, {opacity: 1, duration: 0.4});
-        }
-    };
-
-    // VIP KONTROLÜ (NURULLAH'IN İSTEDİĞİ FIX)
-    // Bu fonksiyon artık Firebase'den gelen gerçek VIP durumuna göre çalışır.
-    function checkVipStatus(userData) {
-        if(userData.vip === true) {
-            return {
-                style: 'vip-rainbow',
-                tick: true
-            };
-        } else {
-            return {
-                style: 'text-gray-500',
-                tick: false
-            };
-        }
-    }
-
-    // MESAJLARI DİNLEME
-    window.mOpenChat = function(id, title) {
-        curC = id;
-        window.mShowScreen('scrChat');
-        document.getElementById('chatTitle').textContent = title;
-        const area = document.getElementById('msgArea');
-        area.innerHTML = '';
-
-        db.ref('messages/' + id).off();
-        db.ref('messages/' + id).limitToLast(50).on('value', s => {
-            if(curC !== id) return;
-            area.innerHTML = '';
-            s.forEach(child => {
-                const m = child.val();
-                const isMe = m.uid === me.id;
-                
-                // VIP Durumunu Veriden Çek (Gerçek Zamanlı)
-                const v = { style: m.vip ? 'vip-rainbow' : 'text-gray-500', tick: m.blueCheck };
-                
-                area.innerHTML += `
-                    <div class="msg-row flex w-full mb-3 ${isMe ? 'justify-end' : 'justify-start'}">
-                        <div class="bubble ${isMe ? 'sent' : 'received'}">
-                            <div class="flex items-center gap-1 mb-1">
-                                <span class="text-[8px] font-black uppercase ${v.style}">${m.sender}</span>
-                                ${v.tick ? '<i class="fas fa-check-circle mavi-tik"></i>' : ''}
-                            </div>
-                            <div class="text-content">
-                                ${m.type === 'image' ? `<img src="${m.url}" class="rounded-lg mb-2 max-w-full">` : ''}
-                                <p class="text-[12px] text-gray-200">${m.text || ''}</p>
-                            </div>
-                        </div>
-                    </div>`;
-            });
-            area.scrollTop = area.scrollHeight;
-        });
-    };
-</script>
-
-<script>
-    // RADAR ARAMA (@KULLANICI VE GRUP ARAMA)
-    window.mSearchRadar = () => {
-        const query = prompt("Mermi Radarı: Grup ismi veya @kullanıcı yazın:").toLowerCase();
-        if(!query) return;
-
-        if(query.startsWith('@')) {
-            alert("SİSTEM: " + query + " adlı kullanıcı takip ediliyor...");
-        } else {
-            db.ref('groups').once('value', s => {
-                let found = false;
-                s.forEach(c => {
-                    if(c.val().name.toLowerCase().includes(query)) {
-                        window.mOpenChat(c.key, c.val().name);
-                        found = true;
-                    }
-                });
-                if(!found) alert("Hata: Hedef grup bulunamadı!");
-            });
-        }
-    };
-
-    // VIP SATIN ALMA (SADECE TALEP GÖNDERİR, AKTİF ETMEZ)
-    window.mBuyVipRequest = () => {
-        alert("VIP Talebiniz Alındı Nurullah! Ödeme onayından sonra yöneticiler Firebase üzerinden yetkini verecek.");
-        window.closeMod('modVip');
-    };
-
-    // AYDINLATMA METNİ
-    window.showAydinlatma = () => {
-        alert(`MERMİGRAM AYDINLATMA METNİ 📜\n\n1. Tüm operasyonlar şifrelidir.\n2. Yasadışı paylaşım yapmak yasaktır.\n3. VIP yetkisi sadece yönetici onayıyla verilir.\n4. Mermigram bir yaşam tarzıdır.`);
-    };
-</script>
-
-        <div id="modVip" class="mermi-modal" onclick="if(event.target==this) window.closeMod('modVip')">
-            <div class="w-[90%] max-w-[380px] bg-[#0c0c0c] border border-yellow-500/30 rounded-[40px] p-8 relative overflow-hidden">
-                <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-yellow-500 rounded-full mx-auto flex items-center justify-center text-3xl text-black shadow-lg mb-4">
-                        <i class="fas fa-crown"></i>
-                    </div>
-                    <h2 class="mermi-font text-2xl text-white uppercase">MERMİ <span class="text-yellow-500">VIP</span></h2>
-                    <p class="text-gray-500 text-[9px] font-black uppercase tracking-widest mt-1">Yetki Talebi Oluştur</p>
-                </div>
-
-                <div class="space-y-4 mb-8">
-                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5">
-                        <i class="fas fa-check-circle text-yellow-500"></i>
-                        <span class="text-[11px] font-bold text-gray-300 uppercase">Gökkuşağı İsim Rengi</span>
-                    </div>
-                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5">
-                        <i class="fas fa-certificate text-blue-500"></i>
-                        <span class="text-[11px] font-bold text-gray-300 uppercase">Resmi Mavi Tık Onayı</span>
-                    </div>
-                </div>
-
-                <a href="https://instagram.com/nemexultra" target="_blank" class="block w-full bg-yellow-500 text-black text-center font-black py-4 rounded-2xl shadow-xl active:scale-95 transition uppercase italic text-sm">
-                    SATIN ALMAK İÇİN YAZ
-                </a>
-                
-                <button onclick="window.closeMod('modVip')" class="w-full text-gray-700 text-[10px] font-bold uppercase mt-6 tracking-widest">Kapat</button>
-            </div>
-        </div>
-
-        <div id="modCreate" class="mermi-modal" onclick="if(event.target==this) window.closeMod('modCreate')">
-            <div class="w-[90%] max-w-[400px] bg-[#0a0a0a] border border-white/10 rounded-[45px] p-8 shadow-2xl">
-                <h2 class="mermi-font text-2xl text-white mb-8 text-center uppercase tracking-tighter">YENİ <span class="text-yellow-500">GRUP</span> KUR</h2>
-                
-                <div class="space-y-6">
-                    <div class="flex flex-col items-center">
-                        <div id="groupPPBtn" onclick="document.getElementById('groupFile').click()" class="w-20 h-20 rounded-3xl bg-[#111] border-2 border-dashed border-gray-800 flex items-center justify-center cursor-pointer overflow-hidden">
-                            <i class="fas fa-users text-2xl text-gray-700"></i>
-                        </div>
-                        <input type="file" id="groupFile" class="hidden" accept="image/*" onchange="window.mHandleGroupImg(this)">
-                    </div>
-
-                    <input type="text" id="groupName" class="w-full bg-[#0c0c0c] border border-white/5 p-5 rounded-2xl outline-none focus:border-yellow-500 text-white font-bold text-sm" placeholder="Gr
-                                      <button onclick="window.mCreateGroup()" class="mermi-btn w-full bg-yellow-500 text-black font-black py-5 rounded-2xl shadow-lg uppercase italic">
-                        GRUP OLUŞTUR
-                    </button>
-                </div>
-            </div>
-        </div>
-
-<script>
-    // GRUP OLUŞTURMA (OTO-ALIM FIXLENDİ)
-    window.mCreateGroup = async function() {
-        const name = document.getElementById('groupName').value.trim();
-        if(!name) return alert("Grup ismi boş olamaz!");
-
-        const newGid = db.ref('groups').push().key;
-        const groupData = {
-            name: name,
-            creator: me.id,
-            icon: window.tempGroupIcon || "",
-            // Üye listesine sadece kuran kişiyi ekle
-            members: { [me.id]: true },
-            time: Date.now()
-        };
-
-        await db.ref('groups/' + newGid).set(groupData);
-        alert("SİSTEM: Grup başarıyla kuruldu. Sadece sen üyesisin!");
-        window.closeMod('modCreate');
-    };
-
-    // GRUP LİSTELEME (SADECE ÜYESİ OLDUĞUN GRUPLARI GÖSTERİR)
-    function loadGroups() {
-        const dynGroups = document.getElementById('dynGroups');
-        db.ref('groups').on('value', snapshot => {
-            dynGroups.innerHTML = '';
-            if(!snapshot.exists()) return;
-
-            snapshot.forEach(child => {
-                const g = child.val();
-                const gid = child.key;
-                
-                // FIX: Eğer kullanıcı grubun üyesi değilse listede gösterme
-                if(g.members && g.members[me.id]) {
-                    const icon = g.icon ? `<img src="${g.icon}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center bg-[#111] text-yellow-500 font-black text-xl">${g.name[0]}</div>`;
-                    
-                    dynGroups.innerHTML += `
-                        <div onclick="window.mOpenChat('${gid}', '${g.name}')" class="flex items-center p-5 border-b border-white/5 active:bg-white/5 transition-all">
-                            <div class="w-14 h-14 rounded-2xl overflow-hidden mr-4 border border-white/10 shadow-lg">${icon}</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold text-white text-xs uppercase italic tracking-tighter">${g.name}</h3>
-                                <p class="text-[9px] text-gray-700 mt-1 uppercase font-black">Operasyon Aktif</p>
-                            </div>
-                        </div>`;
-                }
-            });
-        });
-    }
-</script>
-
-        <div id="modProfile" class="mermi-modal" onclick="if(event.target==this) window.closeMod('modProfile')">
-            <div class="w-[90%] max-w-[400px] bg-[#0a0a0a] border border-white/5 rounded-[45px] p-8 shadow-[0_0_100px_rgba(0,0,0,1)]">
-                <div class="flex flex-col items-center mb-8">
-                    <div id="profPP" onclick="document.getElementById('profFile').click()" class="w-24 h-24 rounded-full bg-[#111] border-2 border-yellow-500 p-1 cursor-pointer overflow-hidden flex items-center justify-center shadow-lg shadow-yellow-500/10">
-                        <i class="fas fa-camera text-2xl text-yellow-500"></i>
-                    </div>
-                    <input type="file" id="profFile" class="hidden" accept="image/*" onchange="window.mUpdatePP(this)">
-                    <h2 class="mermi-font text-xl mt-4 tracking-tighter uppercase text-white">Profil <span class="text-yellow-500">Merkezi</span></h2>
-                </div>
-
-                <div class="space-y-5">
-                    <div class="input-group">
-                        <label class="text-[8px] font-black text-yellow-500 uppercase tracking-[4px] ml-4 mb-2 block">Kod Adın</label>
-                        <input type="text" id="profName" class="w-full bg-[#0c0c0c] border border-white/5 p-4 rounded-2xl outline-none focus:border-yellow-500 text-white font-bold text-sm">
-                    </div>
-
-                    <div class="input-group">
-                        <label class="text-[8px] font-black text-yellow-500 uppercase tracking-[4px] ml-4 mb-2 block">Durum Notu</label>
-                        <textarea id="profBio" class="w-full bg-[#0c0c0c] border border-white/5 p-4 rounded-2xl outline-none focus:border-yellow-500 text-white text-xs h-20 resize-none" placeholder="Mermigram Operatörü..."></textarea>
-                    </div>
-
-                    <button onclick="window.mSaveProfile()" class="mermi-btn w-full bg-white text-black font-black py-5 rounded-2xl shadow-xl uppercase italic text-sm">
-                        VERİLERİ GÜNCELLE
-                    </button>
-                    
-                    <button onclick="window.closeMod('modProfile')" class="w-full text-gray-800 text-[10px] font-bold uppercase tracking-[3px]">Geri Dön</button>
-                </div>
-            </div>
-        </div>
-
-<script>
-    // PROFİL VERİLERİNİ EKRANA BASMA
-    function updateUI() {
-        if(!me) return;
+    function sendMessage() {
+        const input = document.getElementById('userInput');
+        const chatBox = document.getElementById('chatBox');
         
-        const ava = me.avatar ? `<img src="${me.avatar}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center bg-yellow-500 text-black font-black text-sm">${me.name[0]}</div>`;
-        
-        document.getElementById('topPP').innerHTML = ava;
-        document.getElementById('profPP').innerHTML = ava;
-        document.getElementById('profName').value = me.name;
-        document.getElementById('profBio').value = me.bio || "";
+        if(input.value.trim() !== "") {
+            const userMsg = document.createElement('p');
+            userMsg.innerHTML = `<strong>Siz:</strong> ${input.value}`;
+            chatBox.appendChild(userMsg);
+            
+            // Buraya API bağlantısı gelecek
+            input.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
     }
-
-    // PROFİL GÜNCELLEME
-    window.mSaveProfile = async function() {
-        const n = document.getElementById('profName').value.trim();
-        const b = document.getElementById('profBio').value.trim();
-        if(!n) return;
-
-        await db.ref('users/' + me.id).update({ name: n, bio: b });
-        me.name = n; me.bio = b;
-        updateUI();
-        window.closeMod('modProfile');
-        alert("SİSTEM: Kimlik verileri güncellendi.");
-    };
-
-    // PROFİL FOTOĞRAFI YÜKLEME
-    window.mUpdatePP = (input) => {
-        const file = input.files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            const base64 = e.target.result;
-            await db.ref('users/' + me.id).update({ avatar: base64 });
-            me.avatar = base64;
-            updateUI();
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // GRUP RESMİ ÖNİZLEME
-    window.mHandleGroupImg = (input) => {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            window.tempGroupIcon = e.target.result;
-            document.getElementById('groupPPBtn').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-        };
-        reader.readAsDataURL(file);
-    };
 </script>
 
-<script>
-    // MESAJI FIRLAT (SEND)
-    window.mSendMsg = async function() {
-        const inp = document.getElementById('msgInp');
-        const txt = inp.value.trim();
-        if(!txt && !window.tempFile) return;
-
-        // VIP ve Mavi Tık durumunu anlık olarak kullanıcı verisinden al
-        const msgData = {
-            uid: me.id,
-            sender: me.name,
-            text: txt,
-            time: Date.now(),
-            vip: me.vip || false, // Firebase'de true ise gökkuşağı olur
-            blueCheck: me.blueCheck || false, // Firebase'de true ise mavi tık gelir
-            type: window.tempFile ? 'image' : 'text',
-            url: window.tempFile || ""
-        };
-
-        await db.ref('messages/' + curC).push(msgData);
-        inp.value = "";
-        window.tempFile = null;
-        document.getElementById('sendBtn').classList.remove('shadow-[0_0_20px_rgba(255,204,0,0.5)]');
-    };
-
-    // DOSYA EKLEME (CHAT)
-    window.mHandleFile = (input) => {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            window.tempFile = e.target.result;
-            window.mSendMsg(); // Dosya seçilince otomatik fırlat
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // Enter Tuşu Dinleyici
-    document.getElementById('msgInp')?.addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') window.mSendMsg();
-    });
-</script>
-
-<script>
-    // GİRİŞ VE KAYIT MANTIĞI
-    window.mAuth = async function(type) {
-        if(type === 'login') {
-            const name = document.getElementById('inName').value.trim();
-            const pass = document.getElementById('inPass').value.trim();
-            if(!name || !pass) return alert("Alanları doldur!");
-
-            db.ref('users').orderByChild('name').equalTo(name).once('value', s => {
-                let found = false;
-                s.forEach(c => {
-                    if(c.val().password === pass) {
-                        me = {id: c.key, ...c.val()};
-                        found = true;
-                        window.mStartApp();
-                    }
-                });
-                if(!found) alert("Mermi Hedefi Bulunamadı (Hatalı Giriş)!");
-            });
-        } else {
-            const name = document.getElementById('reName').value.trim();
-            const pass = document.getElementById('rePass').value.trim();
-            if(!name || pass.length < 4) return alert("Geçersiz bilgi!");
-
-            // Yeni mermici kaydı
-            const newUser = db.ref('users').push();
-            const data = { 
-                name, 
-                password: pass, 
-                vip: false, 
-                blueCheck: false, 
-                avatar: "", 
-                bio: "Mermigram Operatörü" 
-            };
-            await newUser.set(data);
-            me = {id: newUser.key, ...data};
-            window.mStartApp();
-        }
-    };
-
-    // AUTH EKRANI GEÇİŞİ
-    window.toggleAuth = (showReg) => {
-        if(showReg) {
-            document.getElementById('loginBox').classList.add('hidden');
-            document.getElementById('regBox').classList.remove('hidden');
-        } else {
-            document.getElementById('regBox').classList.add('hidden');
-            document.getElementById('loginBox').classList.remove('hidden');
-        }
-    };
-
-    // UYGULAMAYI BAŞLAT
-    window.mStartApp = () => {
-        window.mShowScreen('scrMain');
-        updateUI();
-        loadGroups();
-        console.log("Sistem Ateşlendi!");
-    };
-</script>
-
-<script>
-    // MODAL YÖNETİMİ (GSAP DESTEKLİ)
-    window.openMod = (id) => {
-        const modal = document.getElementById(id);
-        if(modal) {
-            modal.classList.add('active');
-            gsap.fromTo(modal.querySelector('div'), 
-                { scale: 0.8, opacity: 0 }, 
-                { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" }
-            );
-        }
-    };
-
-    window.closeMod = (id) => {
-        const modal = document.getElementById(id);
-        if(modal) {
-            gsap.to(modal.querySelector('div'), { 
-                scale: 0.8, 
-                opacity: 0, 
-                duration: 0.2, 
-                onComplete: () => modal.classList.remove('active') 
-            });
-        }
-    };
-
-    // SİSTEM MESAJI
-    window.onload = () => {
-        console.log("%c MERMİGRAM V24 %c BY NEMEXULTRA ", 
-            "background:#ffcc00; color:#000; font-weight:bold; padding:5px;", 
-            "background:#000; color:#fff; font-weight:bold; padding:5px;");
-    };
-</script>
-
-    </div> </body>
+</body>
 </html>
