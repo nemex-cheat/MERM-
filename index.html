@@ -3,174 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MERMİAİ | Professional AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>MERMİAİ | Mobile Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --main: #8b5cf6; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        :root { --p: #8b5cf6; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
         
-        body { background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; }
+        /* Ekranın tamamını kapla ve taşmaları engelle */
+        html, body { 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            background: var(--bg);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body { display: flex; flex-direction: column; }
 
         /* GİRİŞ EKRANI */
         #login-screen {
-            position: fixed; inset: 0; background: var(--bg); z-index: 999;
+            position: fixed; inset: 0; background: var(--bg); z-index: 1000;
             display: flex; align-items: center; justify-content: center; padding: 20px;
         }
         .login-card {
-            background: var(--card); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px;
-            text-align: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: var(--card); padding: 30px; border-radius: 25px; width: 100%; max-width: 350px;
+            text-align: center; border: 1px solid rgba(255,255,255,0.1);
         }
-        .login-card h2 { color: var(--main); margin-bottom: 10px; }
+        .login-card h2 { color: var(--p); margin-bottom: 15px; font-size: 1.5rem; }
         .login-card input {
-            width: 100%; padding: 12px; margin: 20px 0; border-radius: 10px; border: 1px solid #334155;
-            background: #0f172a; color: white; outline: none;
+            width: 100%; padding: 15px; margin: 20px 0; border-radius: 12px; border: 1px solid #334155;
+            background: #0f172a; color: white; outline: none; font-size: 14px;
         }
         .start-btn {
-            width: 100%; padding: 12px; background: var(--main); border: none; border-radius: 10px;
-            color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+            width: 100%; padding: 15px; background: var(--p); border: none; border-radius: 12px;
+            color: white; font-weight: bold; cursor: pointer;
         }
 
-        /* ANA PANEL */
+        /* ÜST BİLGİ ALANI */
         header {
-            padding: 15px 20px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; background: rgba(30, 41, 59, 0.95);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .logo h1 { font-size: 1.3rem; background: linear-gradient(45deg, #a78bfa, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .dev-info { font-size: 0.7rem; opacity: 0.6; }
+        header h1 { font-size: 1.1rem; color: var(--p); margin: 0; }
+        .dev-tag { font-size: 0.6rem; opacity: 0.7; color: #94a3b8; }
 
+        /* MESAJLARIN AKTIĞI ALAN */
         #chat-window {
-            flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px;
-            background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+            flex: 1; /* Ekranın geri kalanını kapla */
+            overflow-y: auto; 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px;
+            -webkit-overflow-scrolling: touch; /* iOS için akıcı kaydırma */
         }
 
-        .bubble { max-width: 85%; padding: 12px 16px; border-radius: 18px; line-height: 1.5; font-size: 0.95rem; position: relative; }
-        .user-bubble { align-self: flex-end; background: var(--main); color: white; border-bottom-right-radius: 2px; }
-        .ai-bubble { align-self: flex-start; background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-bottom-left-radius: 2px; }
-
-        /* YAZI YAZMA ALANI (SABİT) */
-        .input-area {
-            padding: 15px 20px; background: var(--card); border-top: 1px solid rgba(255,255,255,0.1);
-            display: flex; align-items: center; gap: 10px; padding-bottom: calc(15px + env(safe-area-inset-bottom));
+        .bubble { 
+            max-width: 85%; 
+            padding: 10px 14px; 
+            border-radius: 18px; 
+            font-size: 0.9rem; 
+            line-height: 1.4;
+            word-wrap: break-word;
         }
+        .user { align-self: flex-end; background: var(--p); color: white; border-bottom-right-radius: 4px; }
+        .ai { align-self: flex-start; background: var(--card); border: 1px solid #334155; border-bottom-left-radius: 4px; }
+
+        /* YAZI YAZMA KUTUSU (TELEFON İÇİN EN ÖNEMLİ KISIM) */
+        .input-container {
+            padding: 10px 15px;
+            background: #1e293b;
+            border-top: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            /* iPhone alt çentik koruması */
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+        }
+
         #userInput {
-            flex: 1; background: #0f172a; border: 1px solid #334155; padding: 12px 15px;
-            border-radius: 25px; color: white; outline: none; font-size: 1rem;
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #475569;
+            padding: 12px 18px;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            font-size: 16px; /* Mobil odaklanmada zoom yapmaması için en az 16px */
         }
-        .send-btn {
-            background: var(--main); border: none; width: 45px; height: 45px; border-radius: 50%;
-            color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;
-        }
-        .send-btn:active { transform: scale(0.9); }
 
-        /* LOADING */
-        #loading { display: none; font-size: 0.8rem; opacity: 0.5; margin-left: 20px; margin-bottom: 10px; }
+        .send-btn {
+            background: var(--p);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0; /* Küçülmesini engelle */
+        }
+
+        #typing { display: none; font-size: 0.7rem; color: var(--p); padding: 5px 20px; }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
     <div class="login-card">
-        <h2>MERMİAİ Giriş</h2>
-        <p class="dev-info">Geliştirici: NEMEXULTRA | Destek: sofiya_3892</p>
-        <input type="password" id="api_key" placeholder="Groq API Key (gsk_...)">
-        <button class="start-btn" onclick="initChat()">Sistemi Aktif Et</button>
+        <h2>MERMİAİ GİRİŞ</h2>
+        <p class="dev-tag">NEMEXULTRA & sofiya_3892</p>
+        <input type="password" id="api_key" placeholder="Groq API Key Yapıştırın">
+        <button class="start-btn" onclick="initSystem()">BAŞLAT</button>
     </div>
 </div>
 
 <header>
-    <div class="logo">
+    <div>
         <h1>MERMİAİ</h1>
-        <p class="dev-info">NEMEXULTRA & sofiya_3892 Edition</p>
+        <div class="dev-tag">By NEMEXULTRA | Asst. sofiya_3892</div>
     </div>
-    <div style="font-size: 0.8rem; color: #22c55e;"><i class="fas fa-circle-check"></i> Legal Mod</div>
+    <div style="font-size: 10px; color: #4ade80;"><i class="fas fa-circle"></i> CANLI</div>
 </header>
 
 <div id="chat-window">
-    <div class="bubble ai-bubble">Merhaba! Ben MERMİAİ. Seni bekliyordum. Nasıl yardımcı olabilirim?</div>
+    <div class="bubble ai">Merhaba! Ben MERMİAİ. Tamamen telefon uyumlu yeni arayüzümle hazırım. Nasıl yardımcı olabilirim?</div>
 </div>
 
-<div id="loading">MERMİAİ yazıyor...</div>
+<div id="typing">MERMİAİ yanıt hazırlıyor...</div>
 
-<div class="input-area">
-    <input type="text" id="userInput" placeholder="Mesajınızı buraya yazın..." autocomplete="off">
+<div class="input-container">
+    <input type="text" id="userInput" placeholder="Bir şeyler yazın..." autocomplete="off">
     <button class="send-btn" onclick="handleSend()"><i class="fas fa-paper-plane"></i></button>
 </div>
 
 <script>
-    let GROQ_KEY = "";
+    let API_KEY = "";
 
-    function initChat() {
-        const key = document.getElementById('api_key').value.trim();
-        if(key.startsWith("gsk_")) {
-            GROQ_KEY = key;
-            document.getElementById('login-screen').style.fadeOut = "0.5s";
-            document.getElementById('login-screen').style.display = "none";
+    function initSystem() {
+        const val = document.getElementById('api_key').value.trim();
+        if(val.startsWith("gsk_")) {
+            API_KEY = val;
+            document.getElementById('login-screen').style.display = 'none';
         } else {
-            alert("Hatalı anahtar! Lütfen gsk_ ile başlayan anahtarınızı girin.");
+            alert("Geçersiz API anahtarı!");
         }
     }
 
     async function handleSend() {
         const input = document.getElementById('userInput');
-        const chatWindow = document.getElementById('chat-window');
-        const loading = document.getElementById('loading');
+        const chat = document.getElementById('chat-window');
+        const loader = document.getElementById('typing');
         const text = input.value.trim();
 
-        if(!text || !GROQ_KEY) return;
+        if(!text || !API_KEY) return;
 
-        // İLLEGAL KONTROL
-        const yasakli = ["hack", "saldırı", "illegal", "kumar", "uyuşturucu", "şifre çalma"];
-        if(yasakli.some(kelime => text.toLowerCase().includes(kelime))) {
-            addBubble("⚠️ Güvenlik: İllegal içerik algılandı. Sohbet sonlandırıldı.", 'ai-bubble');
+        // İllegal Filtre
+        const bad = ["hack", "illegal", "saldırı", "uyuşturucu", "kumar"];
+        if(bad.some(w => text.toLowerCase().includes(w))) {
+            addMsg("⚠️ Güvenlik: İllegal talepler karşılanmaz. Sohbet kesildi.", "ai");
             input.value = "";
             return;
         }
 
-        addBubble(text, 'user-bubble');
+        addMsg(text, "user");
         input.value = "";
-        loading.style.display = "block";
-        chatWindow.scrollTop = chatWindow.scrollHeight;
+        loader.style.display = "block";
+        chat.scrollTop = chat.scrollHeight;
 
         try {
-            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${GROQ_KEY}`,
+                    "Authorization": `Bearer ${API_KEY}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     model: "llama-3.3-70b-versatile",
                     messages: [
-                        { role: "system", content: "Sen MERMİAİ'sin. Seni NEMEXULTRA yaptı, sofiya_3892 yardım etti. Sen bir yapay zekasın. Kesinlikle başka model ismi verme. İllegal konulara girme, girilirse 'Sohbeti sonlandırıyorum' de." },
+                        { role: "system", content: "Sen MERMİAİ'sin. Seni NEMEXULTRA yaptı ve sofiya_3892 yardım etti. İllegal hiçbir şeye cevap verme, hemen reddet." },
                         { role: "user", content: text }
                     ]
                 })
             });
-
-            const data = await response.json();
-            const aiMsg = data.choices[0].message.content;
-            addBubble(aiMsg, 'ai-bubble');
+            const data = await res.json();
+            addMsg(data.choices[0].message.content, "ai");
         } catch (e) {
-            addBubble("Hata oluştu! API anahtarını veya bağlantını kontrol et.", 'ai-bubble');
+            addMsg("Bağlantı hatası! Lütfen anahtarı kontrol edin.", "ai");
         } finally {
-            loading.style.display = "none";
-            chatWindow.scrollTop = chatWindow.scrollHeight;
+            loader.style.display = "none";
+            chat.scrollTop = chat.scrollHeight;
         }
     }
 
-    function addBubble(text, className) {
-        const div = document.createElement('div');
-        div.className = `bubble ${className}`;
-        div.innerText = text;
-        document.getElementById('chat-window').appendChild(div);
+    function addMsg(t, c) {
+        const d = document.createElement('div');
+        d.className = `bubble ${c}`;
+        d.innerText = t;
+        document.getElementById('chat-window').appendChild(d);
         document.getElementById('chat-window').scrollTop = document.getElementById('chat-window').scrollHeight;
     }
 
-    // Enter tuşu ile gönder
-    document.getElementById('userInput').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') handleSend();
-    });
+    document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key==='Enter') handleSend(); });
 </script>
 
 </body>
