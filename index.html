@@ -3,195 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sadece Senin İçin... ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Sadece Senin İçin | Canım Bacım</title>
     <style>
-        :root {
-            --bg: #0b0d17;
-            --primary: #ff3366;
-            --secondary: #ff85a2;
-            --glass: rgba(255, 255, 255, 0.08);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background-color: var(--bg);
-            background: radial-gradient(circle at center, #1a1c2c 0%, #0b0d17 100%);
-            font-family: 'Montserrat', sans-serif;
-            height: 100vh;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
             overflow: hidden;
-            color: white;
         }
 
-        /* Giriş Ekranı (Overlay) */
-        #loader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: 1s ease;
-        }
-
-        .loader-btn {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .loader-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 30px var(--primary); }
-
-        /* Ana Kart */
-        .main-card {
-            width: 90%;
-            max-width: 450px;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 40px;
-            padding: 40px;
+        .container {
             text-align: center;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
-            display: none; /* İlk başta gizli */
-            animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            animation: fadeIn 2s ease-in-out;
+            max-width: 80%;
         }
 
-        @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .profile-img {
-            width: 100px; height: 100px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            margin: -90px auto 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2.5rem;
-            border: 5px solid var(--bg);
-            box-shadow: 0 10px 20px rgba(255,51,102,0.3);
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ff0055;
+            text-shadow: 0 0 10px #ff0055;
         }
 
-        h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--secondary); margin-bottom: 10px; }
-        
-        .tab-nav { display: flex; gap: 10px; margin: 25px 0; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 20px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: none; color: #999; cursor: pointer; font-size: 0.9rem; border-radius: 15px; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: white; }
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
 
-        .content { min-height: 150px; font-size: 0.95rem; line-height: 1.6; color: #ccc; }
+        .heart {
+            font-size: 5rem;
+            color: #ff0055;
+            animation: beat 1s infinite alternate;
+        }
 
-        /* Instagram Butonu */
-        .insta-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 25px;
-            background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);
-            padding: 10px 25px;
-            border-radius: 30px;
-            color: white;
-            text-decoration: none;
+        .signature {
+            font-style: italic;
             font-weight: bold;
-            font-size: 0.9rem;
-            transition: 0.3s;
+            color: #00d2ff;
         }
-        .insta-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(253, 29, 29, 0.4); }
 
-        /* Arka Plan Kalp Yağmuru */
-        .heart-float { position: absolute; pointer-events: none; animation: floatUp 6s linear infinite; }
-        @keyframes floatUp { from { transform: translateY(100vh) scale(0); opacity: 1; } to { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+        @keyframes beat {
+            to { transform: scale(1.2); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Arka plan yıldızları için küçük bir efekt */
+        .stars {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <h2 style="margin-bottom: 20px; font-family: 'Dancing Script'; font-size: 2rem;">Bacikom İçin Küçük Bir Sürpriz...</h2>
-        <button class="loader-btn" onclick="startExperience()">Hediye Kutusunu Aç ✨</button>
+    <div class="container">
+        <div class="heart">❤️</div>
+        <h1>Canım Bacıma...</h1>
+        <p>
+            Bu dünya bazen karanlık olabilir, bazen gereksiz insanlar canını sıkabilir.<br>
+            Ama unutma ki; arkanda her zaman seni koruyan, sana değer veren bir abin/kardeşin var.<br><br>
+            <strong>Sen benim aynı kandan olmayan ama ruhu canımdan olan bacımsın.</strong><br>
+            Kuduranlar kudurmaya devam etsin, biz her zaman dimdik ayaktayız.
+        </p>
+        <p class="signature">Her zaman yanındayım...</p>
     </div>
 
-    <div class="main-card" id="mainCard">
-        <div class="profile-img"><i class="fas fa-crown"></i></div>
-        <h1>Bacikom!</h1>
-        
-        <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab(0)">Kalbimden</button>
-            <button class="tab-btn" onclick="switchTab(1)">Biz</button>
-            <button class="tab-btn" onclick="switchTab(2)">Dileğim</button>
-        </div>
-
-        <div class="content" id="tabContent">
-            Seninle aynı yaşta olmak, aynı dünyayı paylaşmak harika. Sen sadece bir "bacı" değil, en karanlık günlerin bile ışığısın! 🌟
-        </div>
-
-        <a href="https://instagram.com/sofiya_3892" target="_blank" class="insta-tag insta-btn">
-            <i class="fab fa-instagram"></i> @sofiya_3892
-        </a>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        const texts = [
-            "Seninle aynı yaşta olmak, aynı dünyayı paylaşmak harika. Sen sadece bir 'bacı' değil, en karanlık günlerin bile ışığısın! 🌟",
-            "Aramızdaki bağ asla kopmayacak. Her güldüğümüzde, her dertleştiğimizde bu bağ daha da güçleniyor. İyi ki hayatımdasın! 🌸",
-            "Diliyorum ki yüzündeki o muhteşem gülümseme hiç solmasın. Sen her şeyin en iyisini hak ediyorsun Baciko! 💎"
-        ];
-
-        function startExperience() {
-            document.getElementById('loader').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('mainCard').style.display = 'block';
-                fireworks();
-                spawnHearts();
-            }, 1000);
-        }
-
-        function switchTab(index) {
-            const content = document.getElementById('tabContent');
-            const btns = document.querySelectorAll('.tab-btn');
-            
-            content.style.opacity = '0';
-            setTimeout(() => {
-                content.innerText = texts[index];
-                content.style.opacity = '1';
-                btns.forEach((b, i) => b.classList.toggle('active', i === index));
-            }, 200);
-            
-            if(index === 2) fireworks();
-        }
-
-        function fireworks() {
-            var end = Date.now() + (2 * 1000);
-            (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff3366', '#ffffff'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff3366', '#ffffff'] });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-        }
-
-        function spawnHearts() {
-            setInterval(() => {
-                const heart = document.createElement('i');
-                heart.className = 'fas fa-heart heart-float';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.color = 'rgba(255, 51, 102, 0.3)';
-                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 6000);
-            }, 300);
+        // Rastgele yıldız oluşturma
+        for (let i = 0; i < 100; i++) {
+            let star = document.createElement('div');
+            star.className = 'stars';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            document.body.appendChild(star);
         }
     </script>
 </body>
