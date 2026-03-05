@@ -2,109 +2,150 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sadece Senin İçin | Canım Bacım</title>
+    <title>Canım Bacıkoma Özel 🌟</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
             color: white;
+            font-family: 'Arial', sans-serif;
             overflow: hidden;
         }
 
-        .container {
-            text-align: center;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            animation: fadeIn 2s ease-in-out;
-            max-width: 80%;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: #ff0055;
-            text-shadow: 0 0 10px #ff0055;
-        }
-
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .heart {
-            font-size: 5rem;
-            color: #ff0055;
-            animation: beat 1s infinite alternate;
-        }
-
-        .signature {
-            font-style: italic;
-            font-weight: bold;
-            color: #00d2ff;
-        }
-
-        @keyframes beat {
-            to { transform: scale(1.2); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Arka plan yıldızları için küçük bir efekt */
-        .stars {
+        #canvas-stars {
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px white;
-            animation: twinkle 3s infinite ease-in-out;
+            top: 0;
+            left: 0;
+            z-index: -1;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+        .main-box {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 50px;
+            border-radius: 30px;
+            border: 2px solid #ff0055;
+            box-shadow: 0 0 30px #ff0055;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .magic-btn {
+            background: #ff0055;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px #ff0055;
+            margin-top: 20px;
+        }
+
+        .magic-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px #ff0055;
+        }
+
+        #message-area {
+            font-size: 1.8rem;
+            font-weight: bold;
+            height: 60px;
+            margin-bottom: 20px;
+            color: #00d2ff;
+            text-shadow: 0 0 5px #00d2ff;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #ff0055;
+            font-size: 20px;
+            animation: float 4s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="heart">❤️</div>
-        <h1>Canım Bacıma...</h1>
-        <p>
-            Bu dünya bazen karanlık olabilir, bazen gereksiz insanlar canını sıkabilir.<br>
-            Ama unutma ki; arkanda her zaman seni koruyan, sana değer veren bir abin/kardeşin var.<br><br>
-            <strong>Sen benim aynı kandan olmayan ama ruhu canımdan olan bacımsın.</strong><br>
-            Kuduranlar kudurmaya devam etsin, biz her zaman dimdik ayaktayız.
-        </p>
-        <p class="signature">Her zaman yanındayım...</p>
+    <canvas id="canvas-stars"></canvas>
+
+    <div class="main-box">
+        <div id="message-area">Hoş Geldin Canım Bacım! ✨</div>
+        <p>Seni üzenleri boşver, senin değerin çok büyük.</p>
+        <button class="magic-btn" onclick="nextMessage()">Sürprizi Gör 🎁</button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        // Rastgele yıldız oluşturma
-        for (let i = 0; i < 100; i++) {
-            let star = document.createElement('div');
-            star.className = 'stars';
-            star.style.top = Math.random() * 100 + 'vh';
-            star.style.left = Math.random() * 100 + 'vw';
-            star.style.animationDelay = Math.random() * 3 + 's';
-            document.body.appendChild(star);
+        const messages = [
+            "Kimsenin seni üzmesine izin verme! 💪",
+            "Sen benim için çok değerlisin, unutma! 💎",
+            "Gereksiz insanlar sadece gürültü yapar. 🔇",
+            "Her zaman senin yanındayım güzel bacikom. ✨",
+            "Şimdi arkana yaslan ve izle... 🎉"
+        ];
+
+        let currentMsg = 0;
+        const msgArea = document.getElementById('message-area');
+
+        function nextMessage() {
+            if (currentMsg < messages.length) {
+                msgArea.innerHTML = messages[currentMsg];
+                currentMsg++;
+                createHearts();
+            } else {
+                msgArea.innerHTML = "Seni Çok Seviyorum Canim bacım! ❤️";
+                fireConfetti();
+            }
         }
+
+        function createHearts() {
+            for(let i=0; i<10; i++) {
+                let heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }
+        }
+
+        function fireConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff0055', '#00d2ff', '#ffffff']
+            });
+        }
+
+        // Arka plan yıldızları için basit animasyon
+        const canvas = document.getElementById('canvas-stars');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            for(let i=0; i<100; i++) {
+                ctx.beginPath();
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, 1, 0, Math.PI*2);
+                ctx.fill();
+            }
+        }
+        setInterval(drawStars, 1000);
     </script>
 </body>
 </html>
