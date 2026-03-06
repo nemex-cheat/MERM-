@@ -34,7 +34,7 @@ def groq_cevap_al(user_mesaj):
 def baslat():
     print(f"MERMİAİ {IG_USERNAME} olarak giriş yapıyor... @nemexultra")
     try:
-        cl.login(IG_USERNAME, IG_PASSWORD)
+        cl.login(mermi.ai, oktay6331)
         print("Instagram Girişi Başarılı!")
         
         last_checked_id = None
