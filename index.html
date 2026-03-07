@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>8 Mart Dünya Kadınlar Günün Kutlu Olsun ✨</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a0033; /* Derin mor, kadınlar günü teması */
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        .card {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 60px;
+            border-radius: 40px;
+            border: 2px solid #ffcc00; /* Altın sarısı detaylar */
+            box-shadow: 0 0 50px rgba(255, 204, 0, 0.3);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #ffcc00;
+            text-shadow: 0 0 20px #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #e0b0ff;
+            margin-bottom: 30px;
+        }
+
+        .btn-surprise {
+            background: linear-gradient(45deg, #ff0055, #ffcc00);
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: 0.4s;
+        }
+
+        .btn-surprise:hover {
+            transform: scale(1.1) rotate(-3deg);
+            box-shadow: 0 15px 30px rgba(255, 204, 0, 0.5);
+        }
+
+        /* Çiçek efekti */
+        .flower {
+            position: absolute;
+            font-size: 30px;
+            animation: fall 5s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Dünyanın En Güçlü Bacısına...</h2>
+        <h1>8 MART</h1>
+        <h2 style="color: #ffcc00;">Dünya Kadınlar Günün Kutlu Olsun! ✨</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px;">
+            Kimsenin seni üzmesine, ışığını söndürmesine izin verme.<br>
+            Sen her zaman çok kıymetlisin...
+        </p>
+        <button class="btn-surprise" onclick="celebrate()">Hediye Patlat! 🎊</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        // Sayfa açıldığında çiçekler yağsın
+        function createFlowers() {
+            const flowers = ['🌸', '✨', '💐', '💜', '🌼'];
+            setInterval(() => {
+                let flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(flower);
+                setTimeout(() => flower.remove(), 5000);
+            }, 300);
+        }
+        createFlowers();
+
+        function celebrate() {
+            // Havai fişek etkisi
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+
+            alert("Canım Bacım, Kadınlar Günün Kutlu Olsun! Daima Yanındayım!");
+        }
+    </script>
+</body>
+</html>
+
