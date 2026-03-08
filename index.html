@@ -2,76 +2,82 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canım Bacıma Özel | @NEMEXULTRA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Instagram | @NEMEXULTRA</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="particles-js"></div>
+    <nav class="insta-nav">
+        <div class="nav-container">
+            <div class="logo">Instagram</div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Ara...">
+            </div>
+            <div class="nav-icons">
+                <i class="far fa-heart"></i>
+                <i class="far fa-paper-plane"></i>
+            </div>
+        </div>
+    </nav>
 
-    <div class="wrapper">
+    <main class="profile-page" id="profilePage">
         
-        <header id="welcome-section">
-            <div class="profile-circle animate-pulse">
-                <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/profil.jpg" alt="Bacıko">
+        <header class="profile-header">
+            <div class="pp-container">
+                <img src="profil.jpg" alt="PP" class="profile-pic">
             </div>
-            <h1 class="main-title">Canım Bacım ✨</h1>
-            <p class="intro-text">Seni Çok seviyorum canim Bacikom 🤩</p>
-            
-            <div class="button-group">
-                <button id="surpriseBtn" class="glow-btn">
-                    <i class="fas fa-heart"></i> SÜRPRİZ İSTERMİYDİN ☺️
-                </button>
-            </div>
+            <section class="profile-info">
+                <div class="user-row">
+                    <h2 id="usernameDisplay">sofiya_3892</h2>
+                    <button class="edit-btn">Takip Et</button>
+                    <i class="fas fa-cog"></i>
+                </div>
+                
+                <div class="stats-row">
+                    <span><strong>5</strong> gönderi</span>
+                    <span><strong>81.2M</strong> takipçi</span>
+                    <span><strong>1</strong> takip</span>
+                </div>
+
+                <div class="bio-row">
+                    <span class="full-name">Canım Bacım ✨</span>
+                    <p class="bio-text">CANİM BACİŞİM >3 İYKİ VARSİN MUAAHHH</p>
+                </div>
+            </section>
         </header>
 
-        <section class="gallery-section">
-            <div class="section-divider">
-                <span></span>
-                <h2>BACİŞ'İN ALBÜMÜ</h2>
-                <span></span>
-            </div>
-            
-            <div class="photo-grid">
-                <div class="photo-card" data-aos="fade-up">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" alt="Foto 1">
-                    <div class="photo-label">Gülümsediğin Her An ✨</div>
-                </div>
-                
-                <div class="photo-card" data-aos="fade-up" data-aos-delay="100">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" alt="Foto 2">
-                    <div class="photo-label">En Güzel Hatıra ❤️</div>
-                </div>
-                
-                <div class="photo-card" data-aos="fade-up" data-aos-delay="200">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" alt="Foto 3">
-                    <div class="photo-label">Bacıların En İyisi ❤️</div>
-                </div>
-                
-                <div class="photo-card" data-aos="fade-up" data-aos-delay="300">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" alt="Foto 4">
-                    <div class="photo-label">Her zaman yanındayım baciş ✨</div>
-                </div>
-            </div>
-        </section>
+        <div class="highlights">
+            <div class="highlight-item"><div class="circle"></div><span>Baciş</span></div>
+            <div class="highlight-item"><div class="circle"></div><span>Bestie</span></div>
+            <div class="highlight-item"><div class="circle"></div><span>Hatıra</span></div>
+        </div>
 
-        <footer class="footer-note">
-            <p>@sofiya_3892 için özel olarak @NEMEXULTRA tarafindan tasarlandi (baskasi icin degil).</p>
-        </footer>
+        <div class="post-tabs">
+            <div class="tab active"><i class="fas fa-th"></i> GÖNDERİLER</div>
+            <div class="tab"><i class="fas fa-id-badge"></i> ETİKETLENENLER</div>
+        </div>
 
+        <section class="posts-grid">
+            <div class="post"><img src="foto1.jpg"></div>
+            <div class="post"><img src="foto2.jpg"></div>
+            <div class="post"><img src="foto3.jpg"></div>
+            <div class="post"><img src="foto4.jpg"></div>
+            <div class="post"><img src="foto1.jpg"></div> </section>
+
+    </main>
+
+    <div id="searchPlaceholder" class="placeholder-screen">
+        <p>Aramak istediğiniz hesabı yazın...</p>
     </div>
 
-    <audio id="bgMusic" crossorigin="anonymous">
-        <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
+    <audio id="bgMusic" loop>
+        <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/geemini" type="audio/mpeg">
     </audio>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
