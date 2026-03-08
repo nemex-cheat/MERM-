@@ -2,149 +2,181 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>güzeller güzeli Baciş'ime ✨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Güzeller Güzeli Baciş'ime ✨ | @NEMEXULTRA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #ff0077;
+            --secondary: #ffcc00;
+            --bg: #0f001a;
+        }
+
         body {
             margin: 0;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #1a0033; /* Derin mor, kadınlar günü teması */
+            background: var(--bg);
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
             color: white;
         }
 
+        /* Arka Plan Yıldız Animasyonu */
+        .stars {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            z-index: -1;
+        }
+
         .card {
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 60px;
-            border-radius: 40px;
-            border: 2px solid #ffcc00; /* Altın sarısı detaylar */
-            box-shadow: 0 0 50px rgba(255, 204, 0, 0.3);
-            backdrop-filter: blur(15px);
-            z-index: 100;
-            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 50px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            box-shadow: 0 0 40px rgba(255, 0, 119, 0.2);
+            backdrop-filter: blur(20px);
+            z-index: 10;
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 2s ease-out;
         }
 
         h1 {
-            font-size: 3.5rem;
-            color: #ffcc00;
-            text-shadow: 0 0 20px #ffcc00;
-            margin-bottom: 10px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: var(--secondary);
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
+            margin: 0;
         }
 
         h2 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #e0b0ff;
-            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 30px 0;
+            opacity: 0.9;
         }
 
         .btn-surprise {
-            background: linear-gradient(45deg, #ff0055, #ffcc00);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             border: none;
-            padding: 20px 40px;
-            font-size: 1.4rem;
-            font-weight: bold;
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            font-weight: 600;
             color: white;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transition: 0.4s;
-            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(255, 0, 119, 0.4);
+            text-transform: uppercase;
         }
 
         .btn-surprise:hover {
-            transform: scale(1.1) rotate(-3deg);
+            transform: scale(1.1);
             box-shadow: 0 15px 30px rgba(255, 204, 0, 0.5);
         }
 
-        /* Ses Oynatıcı Stili */
-        audio {
-            display: block;
-            margin: 20px auto 0;
-            filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%); /* Siyah tema uyumu */
-            opacity: 0.6;
-        }
+        .btn-surprise:active { transform: scale(0.95); }
 
-        /* Çiçek efekti */
         .flower {
             position: absolute;
-            font-size: 30px;
-            animation: fall 5s linear infinite;
-            z-index: 1;
+            pointer-events: none;
+            z-index: 5;
+            animation: fall linear forwards;
         }
 
         @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Müzik çalar gizli */
+        #mermiaiSong { display: none; }
     </style>
 </head>
 <body>
 
+    <div class="stars"></div>
+
     <div class="card">
-        <h2>Dünyanın En Güçlü Bacısına...</h2>
-        <h1>8 MART</h1>
-        <h2 style="color: #ffcc00;">Dünya Kadınlar Günün Kutlu Olsun! ✨</h2>
-        <p style="font-size: 1.2rem; margin-bottom: 30px;">
-            Kimsenin seni üzmesine, ışığını söndürmesine izin verme.<br>
-            Sen her zaman çok kıymetlisin...
-        </p>
-        <button class="btn-surprise" id="playBtn" onclick="celebrate()">Hediye Patlat! 🎊</button>
+        <h2>Dünyanın En Güçlü Kadınına</h2>
+        <h1>8 Mart</h1>
+        <h2 style="color: var(--secondary); margin-top: 10px;">Dünya Kadınlar Günün Kutlu Olsun ✨</h2>
         
-        <audio id="mermiaiSong">
-            <source src="gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
-            Tarayıcın sesi desteklemiyor.
+        <p>
+            Her adımın bir çiçek, her gülüşün bir güneş olsun.<br>
+            Işığın hiç sönmesin, sen her şeyin en güzeline layıksın.<br>
+            <strong>Daima yanındayım canım bacım!</strong>
+        </p>
+
+        <button class="btn-surprise" onclick="startCelebration()">Hediye Patlat! 🎁</button>
+        
+        <audio id="mermiaiSong" crossorigin="anonymous">
+            <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
         </audio>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        function createFlowers() {
-            const flowers = ['🌸', '✨', '💐', '💜', '🌼'];
-            setInterval(() => {
-                let flower = document.createElement('div');
-                flower.className = 'flower';
-                flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
-                flower.style.left = Math.random() * 100 + 'vw';
-                flower.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                document.body.appendChild(flower);
-                setTimeout(() => flower.remove(), 5000);
-            }, 300);
+        // Arka planda süzülen çiçekler
+        function createFlower() {
+            const symbols = ['🌸', '✨', '💐', '💜', '🌼', '🌹'];
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            flower.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.top = '-50px';
+            flower.style.fontSize = Math.random() * 20 + 20 + 'px';
+            flower.style.animationDuration = Math.random() * 3 + 4 + 's';
+            flower.style.opacity = Math.random();
+            document.body.appendChild(flower);
+            
+            setTimeout(() => flower.remove(), 7000);
         }
-        createFlowers();
 
-        function celebrate() {
-            // Şarkıyı başlat
-            var audio = document.getElementById("mermiaiSong");
-            audio.play();
+        setInterval(createFlower, 400);
 
-            // Havai fişek etkisi
-            var duration = 5 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+        function startCelebration() {
+            // Müzik mermi gibi başlasın
+            const audio = document.getElementById("mermiaiSong");
+            audio.play().catch(() => console.log("Müzik için etkileşim bekleniyor..."));
 
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
+            // Efsane Konfeti Efekti
+            const duration = 15 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
 
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
 
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
 
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                const particleCount = 50 * (timeLeft / duration);
+                confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }});
+                confetti({...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }});
             }, 250);
 
+            // Özel Mesaj
             setTimeout(() => {
-                alert("Canım Bacım, Kadınlar Günün Kutlu Olsun! Daima Yanındayım! - @NEMEXULTRA");
-            }, 500);
+                alert("Canım Bacım, Kadınlar Günün Kutlu Olsun! Seninle her zaman gurur duyuyorum. ❤️ - @NEMEXULTRA");
+            }, 1000);
         }
     </script>
 </body>
