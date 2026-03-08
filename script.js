@@ -49,3 +49,9 @@ posts.forEach(post => {
         console.log("Gönderi beğenildi karsim!");
     });
 });
+
+const msgBtn = document.querySelector('.fa-paper-plane');
+msgBtn.addEventListener('click', () => {
+    alert("Baciş'ten Mesaj Var: CANİM BACİŞİM >3 İYKİ VARSİN MUAAHHH ✨");
+    // İstersen buraya daha profesyonel bir modal (pencere) da yapabiliriz
+});
