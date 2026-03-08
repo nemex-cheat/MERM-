@@ -52,11 +52,20 @@
             cursor: pointer;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             transition: 0.4s;
+            margin-bottom: 20px;
         }
 
         .btn-surprise:hover {
             transform: scale(1.1) rotate(-3deg);
             box-shadow: 0 15px 30px rgba(255, 204, 0, 0.5);
+        }
+
+        /* Ses Oynatıcı Stili */
+        audio {
+            display: block;
+            margin: 20px auto 0;
+            filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%); /* Siyah tema uyumu */
+            opacity: 0.6;
         }
 
         /* Çiçek efekti */
@@ -83,12 +92,16 @@
             Kimsenin seni üzmesine, ışığını söndürmesine izin verme.<br>
             Sen her zaman çok kıymetlisin...
         </p>
-        <button class="btn-surprise" onclick="celebrate()">Hediye Patlat! 🎊</button>
+        <button class="btn-surprise" id="playBtn" onclick="celebrate()">Hediye Patlat! 🎊</button>
+        
+        <audio id="mermiaiSong">
+            <source src="gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
+            Tarayıcın sesi desteklemiyor.
+        </audio>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        // Sayfa açıldığında çiçekler yağsın
         function createFlowers() {
             const flowers = ['🌸', '✨', '💐', '💜', '🌼'];
             setInterval(() => {
@@ -104,6 +117,10 @@
         createFlowers();
 
         function celebrate() {
+            // Şarkıyı başlat
+            var audio = document.getElementById("mermiaiSong");
+            audio.play();
+
             // Havai fişek etkisi
             var duration = 5 * 1000;
             var animationEnd = Date.now() + duration;
@@ -125,9 +142,10 @@
                 confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
             }, 250);
 
-            alert("Canım Bacım, Kadınlar Günün Kutlu Olsun! Daima Yanındayım!");
+            setTimeout(() => {
+                alert("Canım Bacım, Kadınlar Günün Kutlu Olsun! Daima Yanındayım! - @NEMEXULTRA");
+            }, 500);
         }
     </script>
 </body>
 </html>
-
