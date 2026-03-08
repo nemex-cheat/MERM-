@@ -1,178 +1,164 @@
-/* Temel Ayarlar */
+/* Genel Ayarlar */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-    background: #0f0c29; /* Koyu modern arka plan */
-    background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+    background-color: #000; /* Tam Instagram Siyahı */
     color: #fff;
-    font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
 }
 
-.wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Karşılama Alanı */
-header {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.profile-circle {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    border: 4px solid #ff0077;
-    overflow: hidden;
-    margin-bottom: 25px;
-    box-shadow: 0 0 30px rgba(255, 0, 119, 0.5);
-}
-
-.profile-circle img {
+/* Navigasyon Barı */
+.insta-nav {
+    background-color: #000;
+    border-bottom: 1px solid #262626;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    z-index: 1000;
 }
 
-.main-title {
-    font-family: 'Dancing Script', cursive;
-    font-size: 4.5rem;
-    color: #ffcc00;
-    text-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
-    margin-bottom: 10px;
+.nav-container {
+    max-width: 975px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.intro-text {
-    font-size: 1.2rem;
-    max-width: 600px;
-    opacity: 0.8;
-    line-height: 1.6;
+.logo {
+    font-family: 'Dancing Script', cursive; /* Instagram yazı tipi benzeri */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.search-box {
+    background-color: #262626;
+    border-radius: 8px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 5px;
+    outline: none;
+}
+
+.nav-icons i {
+    font-size: 22px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+/* Profil Sayfası Düzeni */
+.profile-page {
+    margin-top: 80px;
+    max-width: 935px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    display: none; /* Arama yapılana kadar gizli */
+}
+
+.profile-header {
+    display: flex;
     margin-bottom: 40px;
 }
 
-/* Mermi Buton */
-.glow-btn {
-    background: linear-gradient(45deg, #ff0077, #ffcc00);
-    border: none;
-    padding: 20px 50px;
-    font-size: 1.3rem;
-    font-weight: 900;
-    color: white;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 30px rgba(255, 0, 119, 0.4);
-    text-transform: uppercase;
+.pp-container {
+    flex: 1;
     display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.glow-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 15px 40px rgba(255, 204, 0, 0.5);
-}
-
-/* Baciko Albümü Tasarımı */
-.gallery-section {
-    padding: 100px 0;
-}
-
-.section-divider {
-    display: flex;
-    align-items: center;
     justify-content: center;
+}
+
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #262626;
+    padding: 3px;
+}
+
+.profile-info {
+    flex: 2;
+}
+
+.user-row {
+    display: flex;
+    align-items: center;
     gap: 20px;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
 }
 
-.section-divider span {
-    height: 2px;
-    width: 100px;
-    background: linear-gradient(to right, transparent, #ffcc00);
+.user-row h2 { font-weight: 300; font-size: 28px; }
+
+.edit-btn {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.section-divider h2 {
-    font-size: 2.5rem;
-    letter-spacing: 5px;
-    color: #ffcc00;
+.stats-row {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 20px;
 }
 
-.photo-grid {
+.full-name { font-weight: 600; }
+.bio-text { margin-top: 5px; color: #efefef; }
+
+/* Gönderi Izgarası (Grid) */
+.posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 20px;
 }
 
-.photo-card {
-    position: relative;
-    border-radius: 25px;
+.post {
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    height: 350px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: 0.5s ease;
+    cursor: pointer;
+    background-color: #262626;
 }
 
-.photo-card img {
+.post img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: 0.5s ease;
+    transition: 0.3s;
 }
 
-.photo-label {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.9));
-    font-weight: bold;
-    font-size: 1.1rem;
-    transform: translateY(100%);
-    transition: 0.5s ease;
+.post img:hover { filter: brightness(0.7); }
+
+/* Arama Placeholder Ekranı */
+.placeholder-screen {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #8e8e8e;
+    font-size: 18px;
 }
 
-.photo-card:hover {
-    transform: translateY(-15px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .profile-pic { width: 80px; height: 80px; }
+    .user-row { flex-direction: column; align-items: flex-start; }
+    .stats-row { gap: 20px; font-size: 14px; }
+    .posts-grid { gap: 3px; }
 }
-
-.photo-card:hover img {
-    transform: scale(1.1);
-}
-
-.photo-card:hover .photo-label {
-    transform: translateY(0);
-}
-
-/* Alt Bilgi */
-.footer-note {
-    text-align: center;
-    padding: 50px 0;
-    opacity: 0.5;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-}
-
-/* Animasyonlar */
-.animate-pulse {
-    animation: pulse-glow 3s infinite;
-}
-
-@keyframes pulse-glow {
-    0% { box-shadow: 0 0 20px rgba(255, 0, 119, 0.3); }
-    50% { box-shadow: 0 0 40px rgba(255, 0, 119, 0.7); }
-    100% { box-shadow: 0 0 20px rgba(255, 0, 119, 0.3); }
-  }
