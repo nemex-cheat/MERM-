@@ -3,181 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Güzeller Güzeli Baciş'ime ✨ | @NEMEXULTRA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #ff0077;
-            --secondary: #ffcc00;
-            --bg: #0f001a;
-        }
-
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: var(--bg);
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            color: white;
-        }
-
-        /* Arka Plan Yıldız Animasyonu */
-        .stars {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
-            z-index: -1;
-        }
-
-        .card {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 50px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 204, 0, 0.3);
-            box-shadow: 0 0 40px rgba(255, 0, 119, 0.2);
-            backdrop-filter: blur(20px);
-            z-index: 10;
-            max-width: 500px;
-            width: 90%;
-            animation: fadeIn 2s ease-out;
-        }
-
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 4rem;
-            color: var(--secondary);
-            text-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
-            margin: 0;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            color: #e0b0ff;
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin: 30px 0;
-            opacity: 0.9;
-        }
-
-        .btn-surprise {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border: none;
-            padding: 18px 45px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(255, 0, 119, 0.4);
-            text-transform: uppercase;
-        }
-
-        .btn-surprise:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 30px rgba(255, 204, 0, 0.5);
-        }
-
-        .btn-surprise:active { transform: scale(0.95); }
-
-        .flower {
-            position: absolute;
-            pointer-events: none;
-            z-index: 5;
-            animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Müzik çalar gizli */
-        #mermiaiSong { display: none; }
-    </style>
+    <title>Canım Bacıma Özel | @NEMEXULTRA</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
 
-    <div class="stars"></div>
-
-    <div class="card">
-        <h2>Dünyanın En Güçlü Kadınına</h2>
-        <h1>8 Mart</h1>
-        <h2 style="color: var(--secondary); margin-top: 10px;">Dünya Kadınlar Günün Kutlu Olsun ✨</h2>
-        
-        <p>
-            Her adımın bir çiçek, her gülüşün bir güneş olsun.<br>
-            Işığın hiç sönmesin, sen her şeyin en güzeline layıksın.<br>
-            <strong>Daima yanındayım canım bacım!</strong>
-        </p>
-
-        <button class="btn-surprise" onclick="startCelebration()">Hediye Patlat! 🎁</button>
-        
-        <audio id="mermiaiSong" crossorigin="anonymous">
-            <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
-        </audio>
+    <div id="loader">
+        <div class="spinner"></div>
     </div>
 
+    <div class="background-overlay"></div>
+    <div class="bg-image"></div>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <div class="date-badge animate-float">8 MART 2026</div>
+                <h1 class="glitch-text">DÜNYA KADINLAR GÜNÜ</h1>
+                <p class="subtitle">Senin ışığın hiç sönmesin canım bacım.</p>
+                <div class="action-box">
+                    <button id="surpriseBtn" class="mermi-btn">
+                        <i class="fas fa-gift"></i> HEDİYE PATLAT
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="album-header" data-aos="fade-up">
+            <div class="line"></div>
+            <h2>BACİKO ALBÜMÜ</h2>
+            <div class="line"></div>
+        </section>
+
+        <section class="gallery-container">
+            <div class="gallery-grid" id="photoGallery">
+                <div class="photo-item" data-aos="zoom-in">
+                    <img src="img/foto1.jpg" alt="Bacıko">
+                    <div class="overlay"><span>Sonsuz Sevgi ✨</span></div>
+                </div>
+                <div class="photo-item" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="img/foto2.jpg" alt="Bacıko">
+                    <div class="overlay"><span>En Güçlü Kadın 💪</span></div>
+                </div>
+                <div class="photo-item" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="img/foto3.jpg" alt="Bacıko">
+                    <div class="overlay"><span>Canım Bacım ❤️</span></div>
+                </div>
+                <div class="photo-item" data-aos="zoom-in" data-aos-delay="300">
+                    <img src="img/foto4.jpg" alt="Bacıko">
+                    <div class="overlay"><span>Işığın Hiç Sönmesin 🌟</span></div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Daima Yanındayım. @NEMEXULTRA</p>
+        </footer>
+    </main>
+
+    <audio id="mermiSong" crossorigin="anonymous">
+        <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script>
-        // Arka planda süzülen çiçekler
-        function createFlower() {
-            const symbols = ['🌸', '✨', '💐', '💜', '🌼', '🌹'];
-            const flower = document.createElement('div');
-            flower.className = 'flower';
-            flower.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-            flower.style.left = Math.random() * 100 + 'vw';
-            flower.style.top = '-50px';
-            flower.style.fontSize = Math.random() * 20 + 20 + 'px';
-            flower.style.animationDuration = Math.random() * 3 + 4 + 's';
-            flower.style.opacity = Math.random();
-            document.body.appendChild(flower);
-            
-            setTimeout(() => flower.remove(), 7000);
-        }
-
-        setInterval(createFlower, 400);
-
-        function startCelebration() {
-            // Müzik mermi gibi başlasın
-            const audio = document.getElementById("mermiaiSong");
-            audio.play().catch(() => console.log("Müzik için etkileşim bekleniyor..."));
-
-            // Efsane Konfeti Efekti
-            const duration = 15 * 1000;
-            const animationEnd = Date.now() + duration;
-            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
-
-            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-
-            const interval = setInterval(function() {
-                const timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-
-                const particleCount = 50 * (timeLeft / duration);
-                confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }});
-                confetti({...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }});
-            }, 250);
-
-            // Özel Mesaj
-            setTimeout(() => {
-                alert("Canım Bacım, Kadınlar Günün Kutlu Olsun! Seninle her zaman gurur duyuyorum. ❤️ - @NEMEXULTRA");
-            }, 1000);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
