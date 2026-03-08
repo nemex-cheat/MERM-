@@ -27,3 +27,25 @@ searchInput.addEventListener('input', (e) => {
 });
 
 // Fotoğraflara çift tıklayınca kalp efekti (Daha sonra ekleyeceğiz)
+
+// Fotoğraflara Beğeni Efekti
+const posts = document.querySelectorAll('.post');
+
+posts.forEach(post => {
+    post.addEventListener('dblclick', function(e) {
+        // Kalp elementi oluştur
+        const heart = document.createElement('i');
+        heart.classList.add('fas', 'fa-heart', 'like-animation');
+        
+        // Tıklanan yere yerleştir
+        this.appendChild(heart);
+        
+        // 1 saniye sonra kalbi kaldır
+        setTimeout(() => {
+            heart.remove();
+        }, 1000);
+        
+        // Beğeni sesi veya konfeti de eklenebilir
+        console.log("Gönderi beğenildi karsim!");
+    });
+});
