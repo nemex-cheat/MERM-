@@ -5,66 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canım Bacıma Özel | @NEMEXULTRA</title>
     
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="loader">
-        <div class="spinner"></div>
+    <div id="particles-js"></div>
+
+    <div class="wrapper">
+        
+        <header id="welcome-section">
+            <div class="profile-circle animate-pulse">
+                <img src="img/profil.jpg" alt="Bacıko">
+            </div>
+            <h1 class="main-title">Canım Bacım ✨</h1>
+            <p class="intro-text">Seninle her zaman gurur duyuyorum. Her günün bu site kadar parlak olsun!</p>
+            
+            <div class="button-group">
+                <button id="surpriseBtn" class="glow-btn">
+                    <i class="fas fa-heart"></i> SÜRPRİZİ PATLAT
+                </button>
+            </div>
+        </header>
+
+        <section class="gallery-section">
+            <div class="section-divider">
+                <span></span>
+                <h2>BACİKO ALBÜMÜ</h2>
+                <span></span>
+            </div>
+            
+            <div class="photo-grid">
+                <div class="photo-card" data-aos="fade-up">
+                    <img src="img/foto1.jpg" alt="Foto 1">
+                    <div class="photo-label">Gülümsediğin Her An ✨</div>
+                </div>
+                <div class="photo-card" data-aos="fade-up" data-aos-delay="100">
+                    <img src="img/foto2.jpg" alt="Foto 2">
+                    <div class="photo-label">En Güzel Hatıra ❤️</div>
+                </div>
+                <div class="photo-card" data-aos="fade-up" data-aos-delay="200">
+                    <img src="img/foto3.jpg" alt="Foto 3">
+                    <div class="photo-label">Bacıların En İyisi 💪</div>
+                </div>
+                <div class="photo-card" data-aos="fade-up" data-aos-delay="300">
+                    <img src="img/foto4.jpg" alt="Foto 4">
+                    <div class="photo-label">Daima Yanındayım 🌟</div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer-note">
+            <p>Senin için @NEMEXULTRA tarafından özel olarak hazırlandı.</p>
+        </footer>
+
     </div>
 
-    <div class="background-overlay"></div>
-    <div class="bg-image"></div>
-
-    <main>
-        <section id="hero">
-            <div class="hero-content">
-                <div class="date-badge animate-float">8 MART 2026</div>
-                <h1 class="glitch-text">DÜNYA KADINLAR GÜNÜ</h1>
-                <p class="subtitle">Senin ışığın hiç sönmesin canım bacım.</p>
-                <div class="action-box">
-                    <button id="surpriseBtn" class="mermi-btn">
-                        <i class="fas fa-gift"></i> HEDİYE PATLAT
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <section id="album-header" data-aos="fade-up">
-            <div class="line"></div>
-            <h2>BACİKO ALBÜMÜ</h2>
-            <div class="line"></div>
-        </section>
-
-        <section class="gallery-container">
-            <div class="gallery-grid" id="photoGallery">
-                <div class="photo-item" data-aos="zoom-in">
-                    <img src="img/foto1.jpg" alt="Bacıko">
-                    <div class="overlay"><span>Sonsuz Sevgi ✨</span></div>
-                </div>
-                <div class="photo-item" data-aos="zoom-in" data-aos-delay="100">
-                    <img src="img/foto2.jpg" alt="Bacıko">
-                    <div class="overlay"><span>En Güçlü Kadın 💪</span></div>
-                </div>
-                <div class="photo-item" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="img/foto3.jpg" alt="Bacıko">
-                    <div class="overlay"><span>Canım Bacım ❤️</span></div>
-                </div>
-                <div class="photo-item" data-aos="zoom-in" data-aos-delay="300">
-                    <img src="img/foto4.jpg" alt="Bacıko">
-                    <div class="overlay"><span>Işığın Hiç Sönmesin 🌟</span></div>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <p>Daima Yanındayım. @NEMEXULTRA</p>
-        </footer>
-    </main>
-
-    <audio id="mermiSong" crossorigin="anonymous">
+    <audio id="bgMusic" crossorigin="anonymous">
         <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
     </audio>
 
