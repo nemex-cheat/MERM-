@@ -4,122 +4,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Canım Bacıma Özel | @NEMEXULTRA</title>
+    
+    <title>Bacişim | Digital Universe v4.0</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,800;1,300&family=Dancing+Script:wght@700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Kritik hata önleyici stil: Preloader için */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #111, #000);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+        }
+        .loader-glow {
+            width: 100px;
+            height: 100px;
+            background: #ff2d75;
+            filter: blur(50px);
+            border-radius: 50%;
+            position: absolute;
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.5); opacity: 0.8; }
+        }
+    </style>
 </head>
 <body>
 
     <div id="preloader">
-        <div class="loader-content">
-            <div class="heart-spinner">❤️</div>
-            <p>Bacişimin Dünyası Yükleniyor...</p>
-        </div>
+        <div class="loader-glow"></div>
+        <div class="heart-spinner animate__animated animate__heartBeat animate__infinite">❤️</div>
+        <p style="color: white; margin-top: 20px; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 10px;">
+            @NEMEXULTRA INITIALIZING...
+        </p>
     </div>
 
     <div class="background-wrapper">
-        <div id="stars"></div>
+        <canvas id="meteor-canvas"></canvas>
         <div id="floating-hearts"></div>
     </div>
 
-    <div class="app-container">
+        <div class="app-container">
         
-        <header class="main-header">
+        <header class="main-header animate__animated animate__fadeInDown">
             <div class="profile-section">
                 <div class="avatar-wrapper">
                     <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/profil.jpg" alt="Bacişim" class="profile-img">
                     <div class="pulse-ring"></div>
+                    <div class="online-indicator"></div>
                 </div>
-                <h1 class="glow-text">Bacişim</h1>
-                <p class="status-tag"><i class="fas fa-circle"></i> Çevrimiçi (Sonsuza Kadar)</p>
+                <h1 class="glow-text animate__animated animate__zoomIn">Bacişim</h1>
+                <p class="status-tag">
+                    <span class="active-dot"></span> 
+                    Çevrimiçi (Sonsuza Kadar)
+                </p>
             </div>
         </header>
 
-        <section class="quote-section">
+        <section class="quote-section animate__animated animate__fadeIn">
             <div class="glass-card quote-card">
+                <div class="card-glow"></div>
                 <i class="fas fa-quote-left icon-quote"></i>
-                <p id="dynamic-quote">Yükleniyor...</p>
+                <p id="dynamic-quote">"Mesafeler sadece yollar içindir, kalpler hep yan yana."</p>
                 <div class="card-footer">
-                    <span>— Senin erkekbacin</span>
+                    <div class="divider"></div>
+                    <span>— Senin Erkekbacın</span>
                 </div>
             </div>
         </section>
 
         <nav class="action-menu">
             <div class="menu-grid">
-                <div class="menu-item" onclick="openModule('gallery')">
-                    <div class="menu-icon icon-pink"><i class="fas fa-images"></i></div>
-                    <span>Galeri</span>
+                <div class="menu-item glass-button animate__animated animate__fadeInLeft" onclick="openModule('gallery')">
+                    <div class="item-inner">
+                        <div class="menu-icon icon-pink"><i class="fas fa-images"></i></div>
+                        <span>Galeri</span>
+                    </div>
                 </div>
-                <div class="menu-item" onclick="openModule('game')">
-                    <div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div>
-                    <span>Oyun</span>
+
+                <div class="menu-item glass-button animate__animated animate__fadeInUp" onclick="openModule('game')">
+                    <div class="item-inner">
+                        <div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div>
+                        <span>Oyun</span>
+                    </div>
                 </div>
-                <div class="menu-item" onclick="openModule('music')">
-                    <div class="menu-icon icon-blue"><i class="fas fa-music"></i></div>
-                    <span>Müzik</span>
+
+                <div class="menu-item glass-button animate__animated animate__fadeInRight" id="main-music-btn" onclick="toggleMusic()">
+                    <div class="item-inner">
+                        <div class="menu-icon icon-blue" id="music-icon-container">
+                            <i class="fas fa-music" id="music-icon"></i>
+                        </div>
+                        <span>Müzik</span>
+                    </div>
                 </div>
             </div>
         </nav>
 
-        <footer class="ultra-footer">
-            <div class="credits-box">
-                <div class="dev-info">
-                    <span class="label">DEVELOPED BY</span>
-                    <span class="name">@NEMEXULTRA</span>
-                </div>
-                <div class="target-info">
-                    <span class="label">EXCLUSIVE FOR</span>
-                    <span class="name">@SOF_Aİ_2672</span>
-                </div>
-                <div class="divider-line"></div>
-                <div class="supporter-info">
-                    <span class="label">SPECIAL THANKS TO (CAN DOSTUM)</span>
-                    <span class="name">@FOFRİCX</span>
-                </div>
+        <div class="extra-panel animate__animated animate__slideInUp">
+            <div class="mini-card glass-card">
+                <p><i class="fas fa-heart" style="color:#ff2d75;"></i> Bugün çok güzelsin!</p>
             </div>
-        </footer>
-    </div>
+        </div>
 
-    <div id="module-gallery" class="full-screen-module">
+    </div> <div id="module-gallery" class="full-screen-module">
         <div class="module-header">
-            <button class="back-btn" onclick="closeModule('gallery')"><i class="fas fa-chevron-left"></i> Geri</button>
-            <h2>Bacişimin Albümü</h2>
+            <button class="back-btn" onclick="closeModule('gallery')">
+                <i class="fas fa-arrow-left"></i> Geri
+            </button>
+            <h2 class="module-title">Bacişimin Albümü</h2>
         </div>
-        <div class="gallery-container">
-            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" onclick="zoomImage(this)"></div>
-            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" onclick="zoomImage(this)"></div>
-            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" onclick="zoomImage(this)"></div>
-            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" onclick="zoomImage(this)"></div>
+        <div class="gallery-scroll-area">
+            <div class="gallery-container" id="gallery-grid">
+                </div>
         </div>
     </div>
 
-<audio id="bg-music" loop>
-    <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
-    Tarayıcın müzik desteği sağlamıyor.
-</audio>
-
-<div id="music-control" onclick="toggleMusic()">
-    <i id="music-icon" class="fas fa-music"></i>
-</div>
-    
     <div id="module-game" class="full-screen-module">
         <div class="module-header">
-            <button class="back-btn" onclick="closeModule('game')"><i class="fas fa-chevron-left"></i> Geri</button>
-            <h2>Bacişimi Tanı</h2>
+            <button class="back-btn" onclick="closeModule('game')">
+                <i class="fas fa-arrow-left"></i> Geri
+            </button>
+            <h2 class="module-title">3D Bilgi Yarışması</h2>
         </div>
-        <div class="game-content">
-            <div id="game-zone">
-                <p>Hazır mısın? Bacişin hakkında sorular başlıyor...</p>
-                <button class="start-game-btn" onclick="startGame()">OYUNU BAŞLAT</button>
+        <div class="game-wrapper" id="game-zone">
             </div>
+    </div>
+
+        <div id="module-message" class="full-screen-module">
+        <div class="module-header">
+            <button class="back-btn" onclick="closeModule('message')">
+                <i class="fas fa-arrow-left"></i> Geri
+            </button>
+            <h2 class="module-title">Gizli Not</h2>
+        </div>
+        <div class="message-content glass-card">
+            <i class="fas fa-envelope-open-heart pulse-icon"></i>
+            <p>Burası sadece bize özel bir alan bacişim. Her zaman yanındayım!</p>
         </div>
     </div>
 
+    <footer class="ultra-footer animate__animated animate__fadeInUp">
+        <div class="footer-glow-line"></div>
+        <div class="credits-wrapper">
+            <div class="credit-item">
+                <span class="label">ENGINEERED BY</span>
+                <span class="name">@NEMEXULTRA</span>
+            </div>
+            
+            <div class="credit-item">
+                <span class="label">EXCLUSIVE FOR</span>
+                <span class="name">@SOF_Aİ_2672</span>
+            </div>
+
+            <div class="divider-diamond"><i class="fas fa-gem"></i></div>
+
+            <div class="credit-item">
+                <span class="label">SPECIAL THANKS TO</span>
+                <span class="name">@FOFRİCX (CAN DOSTUM)</span>
+            </div>
+        </div>
+        
+        <div class="system-version">SYSTEM VERSION: 4.0.2672-STABLE</div>
+    </footer>
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
+        Tarayıcın bu ses formatını desteklemiyor.
+    </audio>
+
     <script src="script.js"></script>
+
+    <script>
+        console.log("%c@NEMEXULTRA SYSTEM READY", "color: #ff2d75; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #ff2d75;");
+        console.log("%cThis project is dedicated to @SOF_Aİ_2672", "color: #00d2ff; font-style: italic;");
+    </script>
+
 </body>
 </html>
