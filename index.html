@@ -2,81 +2,114 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Instagram | @NEMEXULTRA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canım Bacıma Özel | @NEMEXULTRA</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav class="insta-nav">
-        <div class="nav-container">
-            <div class="logo">Instagram</div>
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Ara...">
-            </div>
-            <div class="nav-icons">
-                <i class="far fa-heart"></i>
-                <i class="far fa-paper-plane"></i>
-            </div>
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="heart-spinner">❤️</div>
+            <p>Bacişimin Dünyası Yükleniyor...</p>
         </div>
-    </nav>
-
-    <main class="profile-page" id="profilePage">
-        
-        <header class="profile-header">
-            <div class="pp-container">
-                <img src="profil.jpg" alt="PP" class="profile-pic">
-            </div>
-            <section class="profile-info">
-                <div class="user-row">
-                    <h2 id="usernameDisplay">sofiya_3892</h2>
-                    <button class="edit-btn">Takip Et</button>
-                    <i class="fas fa-cog"></i>
-                </div>
-                
-                <div class="stats-row">
-                    <span><strong>5</strong> gönderi</span>
-                    <span><strong>81.2M</strong> takipçi</span>
-                    <span><strong>1</strong> takip</span>
-                </div>
-
-                <div class="bio-row">
-                    <span class="full-name">Canım Bacım ✨</span>
-                    <p class="bio-text">CANİM BACİŞİM >3 İYKİ VARSİN MUAAHHH</p>
-                </div>
-            </section>
-        </header>
-
-        <div class="highlights">
-            <div class="highlight-item"><div class="circle"></div><span>Baciş</span></div>
-            <div class="highlight-item"><div class="circle"></div><span>Bestie</span></div>
-            <div class="highlight-item"><div class="circle"></div><span>Hatıra</span></div>
-        </div>
-
-        <div class="post-tabs">
-            <div class="tab active"><i class="fas fa-th"></i> GÖNDERİLER</div>
-            <div class="tab"><i class="fas fa-id-badge"></i> ETİKETLENENLER</div>
-        </div>
-
-        <section class="posts-grid">
-            <div class="post"><img src="foto1.jpg"></div>
-            <div class="post"><img src="foto2.jpg"></div>
-            <div class="post"><img src="foto3.jpg"></div>
-            <div class="post"><img src="foto4.jpg"></div>
-            <div class="post"><img src="foto1.jpg"></div> </section>
-
-    </main>
-
-    <div id="searchPlaceholder" class="placeholder-screen">
-        <p>Aramak istediğiniz hesabı yazın...</p>
     </div>
 
-    <audio id="bgMusic" loop>
-        <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/geemini" type="audio/mpeg">
-    </audio>
+    <div class="background-wrapper">
+        <div id="stars"></div>
+        <div id="floating-hearts"></div>
+    </div>
+
+    <div class="app-container">
+        
+        <header class="main-header">
+            <div class="profile-section">
+                <div class="avatar-wrapper">
+                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" alt="Bacişim" class="profile-img">
+                    <div class="pulse-ring"></div>
+                </div>
+                <h1 class="glow-text">Bacişim</h1>
+                <p class="status-tag"><i class="fas fa-circle"></i> Çevrimiçi (Sonsuza Kadar)</p>
+            </div>
+        </header>
+
+        <section class="quote-section">
+            <div class="glass-card quote-card">
+                <i class="fas fa-quote-left icon-quote"></i>
+                <p id="dynamic-quote">Yükleniyor...</p>
+                <div class="card-footer">
+                    <span>— Senin Abin / Kardeşin</span>
+                </div>
+            </div>
+        </section>
+
+        <nav class="action-menu">
+            <div class="menu-grid">
+                <div class="menu-item" onclick="openModule('gallery')">
+                    <div class="menu-icon icon-pink"><i class="fas fa-images"></i></div>
+                    <span>Galeri</span>
+                </div>
+                <div class="menu-item" onclick="openModule('game')">
+                    <div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div>
+                    <span>Oyun</span>
+                </div>
+                <div class="menu-item" onclick="openModule('music')">
+                    <div class="menu-icon icon-blue"><i class="fas fa-music"></i></div>
+                    <span>Müzik</span>
+                </div>
+            </div>
+        </nav>
+
+        <footer class="ultra-footer">
+            <div class="credits-box">
+                <div class="dev-info">
+                    <span class="label">DEVELOPED BY</span>
+                    <span class="name">@NEMEXULTRA</span>
+                </div>
+                <div class="target-info">
+                    <span class="label">EXCLUSIVE FOR</span>
+                    <span class="name">@SOF_Aİ_2672</span>
+                </div>
+                <div class="divider-line"></div>
+                <div class="supporter-info">
+                    <span class="label">SPECIAL THANKS TO (CAN DOSTUM)</span>
+                    <span class="name">@FOFRİC</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="module-gallery" class="full-screen-module">
+        <div class="module-header">
+            <button class="back-btn" onclick="closeModule('gallery')"><i class="fas fa-chevron-left"></i> Geri</button>
+            <h2>Bacişimin Albümü</h2>
+        </div>
+        <div class="gallery-container">
+            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" onclick="zoomImage(this)"></div>
+            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" onclick="zoomImage(this)"></div>
+            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" onclick="zoomImage(this)"></div>
+            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" onclick="zoomImage(this)"></div>
+        </div>
+    </div>
+
+    <div id="module-game" class="full-screen-module">
+        <div class="module-header">
+            <button class="back-btn" onclick="closeModule('game')"><i class="fas fa-chevron-left"></i> Geri</button>
+            <h2>Bacişimi Tanı</h2>
+        </div>
+        <div class="game-content">
+            <div id="game-zone">
+                <p>Hazır mısın? Bacişin hakkında sorular başlıyor...</p>
+                <button class="start-game-btn" onclick="startGame()">OYUNU BAŞLAT</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
