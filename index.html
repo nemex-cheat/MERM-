@@ -4,21 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
     <title>Bacişim | Digital Universe v4.0</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,800;1,300&family=Dancing+Script:wght@700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Kritik hata önleyici stil: Preloader için */
         #preloader {
             position: fixed;
             top: 0; left: 0;
@@ -60,20 +55,16 @@
         <div id="floating-hearts"></div>
     </div>
 
-        <div class="app-container">
-        
+    <div class="app-container">
         <header class="main-header animate__animated animate__fadeInDown">
             <div class="profile-section">
                 <div class="avatar-wrapper">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/profil.jpg" alt="Bacişim" class="profile-img">
+                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/profil.jpg" alt="Bacişim" class="profile-img" onerror="this.src='https://via.placeholder.com/150?text=Profil+Resmi'">
                     <div class="pulse-ring"></div>
                     <div class="online-indicator"></div>
                 </div>
                 <h1 class="glow-text animate__animated animate__zoomIn">Bacişim</h1>
-                <p class="status-tag">
-                    <span class="active-dot"></span> 
-                    Çevrimiçi (Sonsuza Kadar)
-                </p>
+                <p class="status-tag"><span class="active-dot"></span> Çevrimiçi (Sonsuza Kadar)</p>
             </div>
         </header>
 
@@ -97,14 +88,12 @@
                         <span>Galeri</span>
                     </div>
                 </div>
-
                 <div class="menu-item glass-button animate__animated animate__fadeInUp" onclick="openModule('game')">
                     <div class="item-inner">
                         <div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div>
                         <span>Oyun</span>
                     </div>
                 </div>
-
                 <div class="menu-item glass-button animate__animated animate__fadeInRight" id="main-music-btn" onclick="toggleMusic()">
                     <div class="item-inner">
                         <div class="menu-icon icon-blue" id="music-icon-container">
@@ -121,36 +110,29 @@
                 <p><i class="fas fa-heart" style="color:#ff2d75;"></i> Bugün çok güzelsin!</p>
             </div>
         </div>
+    </div>
 
-    </div> <div id="module-gallery" class="full-screen-module">
+    <div id="module-gallery" class="full-screen-module">
         <div class="module-header">
-            <button class="back-btn" onclick="closeModule('gallery')">
-                <i class="fas fa-arrow-left"></i> Geri
-            </button>
+            <button class="back-btn" onclick="closeModule('gallery')"><i class="fas fa-arrow-left"></i> Geri</button>
             <h2 class="module-title">Bacişimin Albümü</h2>
         </div>
         <div class="gallery-scroll-area">
-            <div class="gallery-container" id="gallery-grid">
-                </div>
+            <div class="gallery-container" id="gallery-grid"></div>
         </div>
     </div>
 
     <div id="module-game" class="full-screen-module">
         <div class="module-header">
-            <button class="back-btn" onclick="closeModule('game')">
-                <i class="fas fa-arrow-left"></i> Geri
-            </button>
+            <button class="back-btn" onclick="closeModule('game')"><i class="fas fa-arrow-left"></i> Geri</button>
             <h2 class="module-title">3D Bilgi Yarışması</h2>
         </div>
-        <div class="game-wrapper" id="game-zone">
-            </div>
+        <div class="game-wrapper" id="game-zone"></div>
     </div>
 
-        <div id="module-message" class="full-screen-module">
+    <div id="module-message" class="full-screen-module">
         <div class="module-header">
-            <button class="back-btn" onclick="closeModule('message')">
-                <i class="fas fa-arrow-left"></i> Geri
-            </button>
+            <button class="back-btn" onclick="closeModule('message')"><i class="fas fa-arrow-left"></i> Geri</button>
             <h2 class="module-title">Gizli Not</h2>
         </div>
         <div class="message-content glass-card">
@@ -162,52 +144,21 @@
     <footer class="ultra-footer animate__animated animate__fadeInUp">
         <div class="footer-glow-line"></div>
         <div class="credits-wrapper">
-            <div class="credit-item">
-                <span class="label">ENGINEERED BY</span>
-                <span class="name">@NEMEXULTRA</span>
-            </div>
-            
-            <div class="credit-item">
-                <span class="label">EXCLUSIVE FOR</span>
-                <span class="name">@SOF_Aİ_2672</span>
-            </div>
-
+            <div class="credit-item"><span class="label">ENGINEERED BY</span><span class="name">@NEMEXULTRA</span></div>
+            <div class="credit-item"><span class="label">EXCLUSIVE FOR</span><span class="name">@SOF_Aİ_2672</span></div>
             <div class="divider-diamond"><i class="fas fa-gem"></i></div>
-
-            <div class="credit-item">
-                <span class="label">SPECIAL THANKS TO</span>
-                <span class="name">@FOFRİCX (CAN DOSTUM)</span>
-            </div>
+            <div class="credit-item"><span class="label">SPECIAL THANKS TO</span><span class="name">@FOFRİCX (CAN DOSTUM)</span></div>
         </div>
-
-<div class="avatar-wrapper">
-    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/profil.jpg" 
-         alt="Bacişim" 
-         class="profile-img" 
-         onerror="this.src='https://via.placeholder.com/150?text=Profil+Yok'">
-    <div class="pulse-ring"></div>
-</div>
-
-<audio id="bg-music" loop preload="auto">
-    <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
-    Tarayıcın bu sesi desteklemiyor knk.
-</audio>
-        
-        
         <div class="system-version">SYSTEM VERSION: 4.0.2672-STABLE</div>
     </footer>
 
     <audio id="bg-music" loop preload="auto">
         <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
-        Tarayıcın bu ses formatını desteklemiyor.
     </audio>
 
     <script src="script.js"></script>
-
     <script>
-        console.log("%c@NEMEXULTRA SYSTEM READY", "color: #ff2d75; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px #ff2d75;");
-        console.log("%cThis project is dedicated to @SOF_Aİ_2672", "color: #00d2ff; font-style: italic;");
+        console.log("%c@NEMEXULTRA SYSTEM READY", "color: #ff2d75; font-size: 20px; font-weight: bold;");
     </script>
-
 </body>
 </html>
