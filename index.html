@@ -26,16 +26,31 @@
             z-index: 999999;
         }
         .loader-glow {
-            width: 100px; height: 100px; background: #ff2d75;
-            filter: blur(50px); border-radius: 50%; position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #ff2d75;
+            filter: blur(50px);
+            border-radius: 50%;
+            position: absolute;
             animation: pulse-glow 2s infinite;
         }
         @keyframes pulse-glow {
             0%, 100% { transform: scale(1); opacity: 0.5; }
             50% { transform: scale(1.5); opacity: 0.8; }
         }
-        /* Galeri için basit ekleme */
-        .gallery-item img { width: 100%; border-radius: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        /* Galeri resimlerini sığdırmak için küçük bir fix */
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .gallery-item img:hover {
+            border-color: #ff2d75;
+            transform: scale(1.02);
+        }
     </style>
 </head>
 <body>
@@ -43,7 +58,9 @@
     <div id="preloader">
         <div class="loader-glow"></div>
         <div class="heart-spinner animate__animated animate__heartBeat animate__infinite">❤️</div>
-        <p style="color: white; margin-top: 20px; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 10px;">@NEMEXULTRA INITIALIZING...</p>
+        <p style="color: white; margin-top: 20px; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 10px;">
+            @NEMEXULTRA INITIALIZING...
+        </p>
     </div>
 
     <div class="background-wrapper">
@@ -60,7 +77,10 @@
                     <div class="online-indicator"></div>
                 </div>
                 <h1 class="glow-text animate__animated animate__zoomIn">Bacişim</h1>
-                <p class="status-tag"><span class="active-dot"></span> Çevrimiçi (Sonsuza Kadar)</p>
+                <p class="status-tag">
+                    <span class="active-dot"></span> 
+                    Çevrimiçi (Sonsuza Kadar)
+                </p>
             </div>
         </header>
 
@@ -69,20 +89,36 @@
                 <div class="card-glow"></div>
                 <i class="fas fa-quote-left icon-quote"></i>
                 <p id="dynamic-quote">"Mesafeler sadece yollar içindir, kalpler hep yan yana."</p>
-                <div class="card-footer"><div class="divider"></div><span>— Senin Erkekbacın</span></div>
+                <div class="card-footer">
+                    <div class="divider"></div>
+                    <span>— NEMEXULTRA</span>
+                </div>
             </div>
         </section>
 
         <nav class="action-menu">
             <div class="menu-grid">
                 <div class="menu-item glass-button animate__animated animate__fadeInLeft" onclick="openModule('gallery')">
-                    <div class="item-inner"><div class="menu-icon icon-pink"><i class="fas fa-images"></i></div><span>Galeri</span></div>
+                    <div class="item-inner">
+                        <div class="menu-icon icon-pink"><i class="fas fa-images"></i></div>
+                        <span>Galeri</span>
+                    </div>
                 </div>
+
                 <div class="menu-item glass-button animate__animated animate__fadeInUp" onclick="openModule('game')">
-                    <div class="item-inner"><div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div><span>Oyun</span></div>
+                    <div class="item-inner">
+                        <div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div>
+                        <span>Oyun</span>
+                    </div>
                 </div>
+
                 <div class="menu-item glass-button animate__animated animate__fadeInRight" id="main-music-btn" onclick="toggleMusic()">
-                    <div class="item-inner"><div class="menu-icon icon-blue" id="music-icon-container"><i class="fas fa-music" id="music-icon"></i></div><span>Müzik</span></div>
+                    <div class="item-inner">
+                        <div class="menu-icon icon-blue" id="music-icon-container">
+                            <i class="fas fa-music" id="music-icon"></i>
+                        </div>
+                        <span>Müzik</span>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -96,15 +132,17 @@
 
     <div id="module-gallery" class="full-screen-module">
         <div class="module-header">
-            <button class="back-btn" onclick="closeModule('gallery')"><i class="fas fa-arrow-left"></i> Geri</button>
+            <button class="back-btn" onclick="closeModule('gallery')">
+                <i class="fas fa-arrow-left"></i> Geri
+            </button>
             <h2 class="module-title">Bacişimin Albümü</h2>
         </div>
         <div class="gallery-scroll-area">
             <div class="gallery-container" id="gallery-grid" style="padding: 20px;">
-                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" alt="Anı 1"></div>
-                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" alt="Anı 2"></div>
-                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" alt="Anı 3"></div>
-                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" alt="Anı 4"></div>
+                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" alt="Bacişim Anı 1"></div>
+                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" alt="Bacişim Anı 2"></div>
+                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" alt="Bacişim Anı 3"></div>
+                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" alt="Bacişim Anı 4"></div>
             </div>
         </div>
     </div>
@@ -145,5 +183,5 @@
 
     <script src="script.js"></script>
 </body>
-                    </html>
-                
+                        </html>
+                    
