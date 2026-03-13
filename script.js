@@ -104,7 +104,7 @@ function zoomImage(imgElement) {
         imgElement.style.transform = 'scale(1)';
         // Gerçek bir pro-zoom sistemi için alert yerine modal kullanılabilir
         // Şimdilik bacişine özel bir mesaj verelim
-        alert("Bacişimin Güzelliği Maşallah! ❤️");
+        alert("Bacişimin Güzelliği Yakiyo! ❤️");
     }, 100);
 }
 
@@ -165,3 +165,28 @@ console.log(`
  %c @NEMEXULTRA %c SİSTEM ÇALIŞIYOR 
 `, "background: #ff2d75; color: white; font-weight: bold; padding: 5px;", "background: #000; color: #00d2ff; padding: 5px;");
                 
+// Müzik Elemanlarını Seçiyoruz
+const audio = document.getElementById('bg-music');
+const musicBtn = document.getElementById('music-control');
+const musicIcon = document.getElementById('music-icon');
+let isPlaying = false;
+
+// Müziği Başlatma/Durdurma Fonksiyonu
+function toggleMusic() {
+    if (isPlaying) {
+        audio.pause();
+        musicIcon.classList.remove('music-playing'); // Dönme efektini kaldır
+        isPlaying = false;
+        console.log("Müzik Durduruldu");
+    } else {
+        // Tarayıcı izinleri için oynatma sözü (promise)
+        audio.play().then(() => {
+            musicIcon.classList.add('music-playing'); // CSS'deki dönme efektini ekle
+            isPlaying = true;
+            console.log("Müzik Çalıyor");
+        }).catch(error => {
+            console.log("Müzik çalınamadı: ", error);
+            alert("Lütfen önce sayfaya bir yere dokun, sonra müziği başlat!");
+        });
+    }
+}
