@@ -1,121 +1,145 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Canım Bacıma Özel | @NEMEXULTRA</title>
+/**
+ * PROJECT: MERM- (Bacişime Özel Digital Hatıra)
+ * DEVELOPER: @NEMEXULTRA (nemex-cheat)
+ * TARGET: @SOF_Aİ_2672
+ * CREDITS: @FOFRİC (CANDOSTUM)
+ * CORE: JavaScript Logic Engine
+ */
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+// 1. AYARLAR (CONFIG)
+const SETTINGS = {
+    username: "nemex-cheat",
+    repo: "MERM-",
+    audioFile: "gemini_generated_media_f0acc49d.mp3",
+    quotes: [
+        "Aynı kanda olmasak da, ruhumuz bir. İyi ki varsın bacım...",
+        "Her zaman arkanda, her zaman yanındayım.",
+        "Mesafeler sadece yollar içindir, kalpler hep yan yana.",
+        "Senin gibi bir bacıya sahip olduğum için dünyanın en şanslı insanıyım.",
+        "Hayatın tüm renkleri seninle daha parlak ✨"
+    ]
+};
+
+// 2. SİSTEM BAŞLATICI (INITIALIZER)
+window.addEventListener('DOMContentLoaded', () => {
+    console.log("Sistem Başlatıldı: @NEMEXULTRA Projesi");
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    // Rastgele sözü ayarla
+    initQuotes();
     
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    // Arka plan kalplerini başlat
+    createHearts();
 
-    <div id="preloader">
-        <div class="loader-content">
-            <div class="heart-spinner">❤️</div>
-            <p>Bacişimin Dünyası Yükleniyor...</p>
-        </div>
-    </div>
+    // Ön yükleyiciyi (Preloader) kaldır
+    setTimeout(() => {
+        const loader = document.getElementById('preloader');
+        if(loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 800);
+        }
+    }, 2000);
+});
 
-    <div class="background-wrapper">
-        <div id="stars"></div>
-        <div id="floating-hearts"></div>
-    </div>
+// 3. DİNAMİK SÖZ MOTORU
+function initQuotes() {
+    const qElement = document.getElementById('dynamic-quote');
+    if (qElement) {
+        const randomQuote = SETTINGS.quotes[Math.floor(Math.random() * SETTINGS.quotes.length)];
+        qElement.innerText = randomQuote;
+    }
+}
 
-    <div class="app-container">
+// 4. ARKA PLAN EFEKT MOTORU (Yüzen Kalpler)
+function createHearts() {
+    const bg = document.getElementById('floating-hearts');
+    if (!bg) return;
+
+    setInterval(() => {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.innerHTML = '❤️';
         
-        <header class="main-header">
-            <div class="profile-section">
-                <div class="avatar-wrapper">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/profil.jpg" alt="Bacişim" class="profile-img">
-                    <div class="pulse-ring"></div>
-                </div>
-                <h1 class="glow-text">Bacişim</h1>
-                <p class="status-tag"><i class="fas fa-circle"></i> Çevrimiçi (Sonsuza Kadar)</p>
-            </div>
-        </header>
+        const size = Math.random() * (30 - 10) + 10;
+        const left = Math.random() * 100;
+        const duration = Math.random() * (8 - 4) + 4;
 
-        <section class="quote-section">
-            <div class="glass-card quote-card">
-                <i class="fas fa-quote-left icon-quote"></i>
-                <p id="dynamic-quote">"Her zaman arkanda, her zaman yanındayım." — Senin erkekbacin</p>
-                <div class="card-footer">
-                    <span>— Senin Abin / Kardeşin</span>
-                </div>
-            </div>
-        </section>
+        heart.style.left = left + 'vw';
+        heart.style.fontSize = size + 'px';
+        heart.style.animationDuration = duration + 's';
+        heart.style.opacity = Math.random();
 
-        <nav class="action-menu">
-            <div class="menu-grid">
-                <div class="menu-item" onclick="openModule('gallery')">
-                    <div class="menu-icon icon-pink"><i class="fas fa-images"></i></div>
-                    <span>Galeri</span>
-                </div>
-                <div class="menu-item" onclick="openModule('game')">
-                    <div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div>
-                    <span>Oyun</span>
-                </div>
-                <div class="menu-item" onclick="openModule('music')">
-                    <div class="menu-icon icon-blue"><i class="fas fa-music"></i></div>
-                    <span>Müzik</span>
-                </div>
-            </div>
-        </nav>
+        bg.appendChild(heart);
 
-        <footer class="ultra-footer">
-            <div class="credits-box">
-                <div class="dev-info">
-                    <span class="label">DEVELOPED BY</span>
-                    <span class="name">@NEMEXULTRA</span>
-                </div>
-                <div class="target-info">
-                    <span class="label">EXCLUSIVE FOR</span>
-                    <span class="name">@SOF_Aİ_2672</span>
-                </div>
-                <div class="divider-line"></div>
-                <div class="supporter-info">
-                    <span class="label">SPECIAL THANKS TO (CAN DOSTUM)</span>
-                    <span class="name">@FOFRİC</span>
-                </div>
-            </div>
-        </footer>
-    </div>
+        // Belleği temizlemek için kalbi sil
+        setTimeout(() => heart.remove(), duration * 1000);
+    }, 1000);
+}
 
-    <div id="module-gallery" class="full-screen-module">
-        <div class="module-header">
-            <button class="back-btn" onclick="closeModule('gallery')"><i class="fas fa-chevron-left"></i> Geri</button>
-            <h2>Bacişimin Albümü</h2>
+// 5. MÜZİK KONTROL ÜNİTESİ (Bacişimin Şarkısı)
+const sarki = document.getElementById('bg-music');
+const sarkiIkon = document.getElementById('music-icon');
+let isPlaying = false;
+
+function toggleMusic() {
+    if (!sarki) return;
+
+    if (isPlaying) {
+        sarki.pause();
+        sarkiIkon.classList.remove('music-playing');
+        isPlaying = false;
+        console.log("Müzik Durduruldu.");
+    } else {
+        sarki.play().then(() => {
+            sarkiIkon.classList.add('music-playing');
+            isPlaying = true;
+            console.log("Müzik Çalıyor: " + SETTINGS.audioFile);
+        }).catch(err => {
+            console.error("Otomatik oynatma engellendi, etkileşim bekleniyor.");
+            alert("Müziği başlatmak için önce ekranda herhangi bir yere dokun, sonra butona bas! ❤️");
+        });
+    }
+}
+
+// 6. MODÜL VE GALERİ YÖNETİMİ
+function openModule(name) {
+    const target = document.getElementById('module-' + name);
+    if (target) {
+        target.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Arka plan kaymasını engelle
+    }
+}
+
+function closeModule(name) {
+    const target = document.getElementById('module-' + name);
+    if (target) {
+        target.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// 7. FOTOĞRAF ZOOM EFEKTİ
+function zoomImage(el) {
+    el.style.transition = "transform 0.3s ease";
+    el.style.transform = "scale(0.95)";
+    setTimeout(() => {
+        el.style.transform = "scale(1)";
+        console.log("Fotoğraf incelendi: " + el.src);
+    }, 200);
+}
+
+// 8. OYUN MANTIĞI (BASİT TEST)
+function startGame() {
+    const zone = document.getElementById('game-zone');
+    zone.innerHTML = `
+        <div class="game-card glass-card">
+            <p>Bacişini ne kadar seviyorsun?</p>
+            <button class="start-game-btn" onclick="alert('Biliyoruz, dünyalar kadar! ❤️'); startGame();">Çok!</button>
+            <button class="start-game-btn" onclick="alert('Daha fazla sevmelisin! 😜');">Az</button>
         </div>
-        <div class="gallery-container">
-            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" onclick="zoomImage(this)"></div>
-            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" onclick="zoomImage(this)"></div>
-            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" onclick="zoomImage(this)"></div>
-            <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" onclick="zoomImage(this)"></div>
-        </div>
-    </div>
+    `;
+}
 
-    <div id="module-game" class="full-screen-module">
-        <div class="module-header">
-            <button class="back-btn" onclick="closeModule('game')"><i class="fas fa-chevron-left"></i> Geri</button>
-            <h2>Bacişimi Tanı</h2>
-        </div>
-        <div class="game-content">
-            <div id="game-zone">
-                <p>Hazır mısın? Bacişin hakkında sorular başlıyor...</p>
-                <button class="start-game-btn" onclick="startGame()">OYUNU BAŞLAT</button>
-            </div>
-        </div>
-    </div>
-
-    <audio id="bg-music" loop>
-        <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
-    </audio>
-
-    <script src="script.js"></script>
-</body>
-</html>
-    
+// 9. DEVELOPER SIGNATURE (Console)
+console.log(`
+ %c @NEMEXULTRA %c SİTE AKTİF 
+`, "background: #ff2d75; color: white; font-weight: bold; padding: 5px; border-radius: 5px;", "color: #00d2ff; padding: 5px;");
