@@ -9,47 +9,65 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,800;1,300&family=Dancing+Script:wght@700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
     <link rel="stylesheet" href="style.css">
 
     <style>
+        /* KRİTİK FİX: Fotoğrafların dev kare görünmesi için ek stiller */
         #preloader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, #111, #000);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999999;
+        }
+        
+        .big-square-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            z-index: 999999;
+            gap: 25px;
+            padding: 20px;
         }
-        .loader-glow {
-            width: 100px;
-            height: 100px;
-            background: #ff2d75;
-            filter: blur(50px);
-            border-radius: 50%;
-            position: absolute;
-            animation: pulse-glow 2s infinite;
+
+        .photo-frame {
+            width: 85vw;
+            height: 85vw;
+            max-width: 380px;
+            max-height: 380px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 45, 117, 0.4);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            position: relative;
         }
-        @keyframes pulse-glow {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.5); opacity: 0.8; }
-        }
-        /* Galeri resimlerini sığdırmak için küçük bir fix */
-        .gallery-item img {
+
+        .photo-frame img {
             width: 100%;
-            height: auto;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-            transition: 0.3s;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
-        .gallery-item img:hover {
-            border-color: #ff2d75;
-            transform: scale(1.02);
+
+        .photo-label {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            background: rgba(255, 45, 117, 0.6);
+            padding: 3px 10px;
+            border-radius: 4px;
+            backdrop-filter: blur(5px);
+        }
+
+        .gallery-scroll-area {
+            overflow-y: auto;
+            height: calc(100vh - 80px);
+            padding-bottom: 50px;
         }
     </style>
 </head>
@@ -58,9 +76,7 @@
     <div id="preloader">
         <div class="loader-glow"></div>
         <div class="heart-spinner animate__animated animate__heartBeat animate__infinite">❤️</div>
-        <p style="color: white; margin-top: 20px; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 10px;">
-            @NEMEXULTRA INITIALIZING...
-        </p>
+        <p style="color: white; margin-top: 20px; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 10px;">@NEMEXULTRA INITIALIZING...</p>
     </div>
 
     <div class="background-wrapper">
@@ -77,10 +93,7 @@
                     <div class="online-indicator"></div>
                 </div>
                 <h1 class="glow-text animate__animated animate__zoomIn">Bacişim</h1>
-                <p class="status-tag">
-                    <span class="active-dot"></span> 
-                    Çevrimiçi (Sonsuza Kadar)
-                </p>
+                <p class="status-tag"><span class="active-dot"></span> Çevrimiçi (Sonsuza Kadar)</p>
             </div>
         </header>
 
@@ -89,10 +102,7 @@
                 <div class="card-glow"></div>
                 <i class="fas fa-quote-left icon-quote"></i>
                 <p id="dynamic-quote">"Mesafeler sadece yollar içindir, kalpler hep yan yana."</p>
-                <div class="card-footer">
-                    <div class="divider"></div>
-                    <span>— NEMEXULTRA</span>
-                </div>
+                <div class="card-footer"><div class="divider"></div><span>— Senin Erkekbacın</span></div>
             </div>
         </section>
 
@@ -104,19 +114,15 @@
                         <span>Galeri</span>
                     </div>
                 </div>
-
                 <div class="menu-item glass-button animate__animated animate__fadeInUp" onclick="openModule('game')">
                     <div class="item-inner">
                         <div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div>
                         <span>Oyun</span>
                     </div>
                 </div>
-
                 <div class="menu-item glass-button animate__animated animate__fadeInRight" id="main-music-btn" onclick="toggleMusic()">
                     <div class="item-inner">
-                        <div class="menu-icon icon-blue" id="music-icon-container">
-                            <i class="fas fa-music" id="music-icon"></i>
-                        </div>
+                        <div class="menu-icon icon-blue" id="music-icon-container"><i class="fas fa-music" id="music-icon"></i></div>
                         <span>Müzik</span>
                     </div>
                 </div>
@@ -132,17 +138,27 @@
 
     <div id="module-gallery" class="full-screen-module">
         <div class="module-header">
-            <button class="back-btn" onclick="closeModule('gallery')">
-                <i class="fas fa-arrow-left"></i> Geri
-            </button>
+            <button class="back-btn" onclick="closeModule('gallery')"><i class="fas fa-arrow-left"></i> Geri</button>
             <h2 class="module-title">Bacişimin Albümü</h2>
         </div>
         <div class="gallery-scroll-area">
-            <div class="gallery-container" id="gallery-grid" style="padding: 20px;">
-                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" alt="Bacişim Anı 1"></div>
-                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" alt="Bacişim Anı 2"></div>
-                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" alt="Bacişim Anı 3"></div>
-                <div class="gallery-item"><img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" alt="Bacişim Anı 4"></div>
+            <div class="big-square-container">
+                <div class="photo-frame animate__animated animate__fadeInUp">
+                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" alt="Anı 1">
+                    <span class="photo-label">MEMORY_01</span>
+                </div>
+                <div class="photo-frame animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" alt="Anı 2">
+                    <span class="photo-label">MEMORY_02</span>
+                </div>
+                <div class="photo-frame animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" alt="Anı 3">
+                    <span class="photo-label">MEMORY_03</span>
+                </div>
+                <div class="photo-frame animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" alt="Anı 4">
+                    <span class="photo-label">MEMORY_04</span>
+                </div>
             </div>
         </div>
     </div>
@@ -155,24 +171,13 @@
         <div class="game-wrapper" id="game-zone"></div>
     </div>
 
-    <div id="module-message" class="full-screen-module">
-        <div class="module-header">
-            <button class="back-btn" onclick="closeModule('message')"><i class="fas fa-arrow-left"></i> Geri</button>
-            <h2 class="module-title">Gizli Not</h2>
-        </div>
-        <div class="message-content glass-card">
-            <i class="fas fa-envelope-open-heart pulse-icon"></i>
-            <p>Burası sadece bize özel bir alan bacişim. Her zaman yanındayım!</p>
-        </div>
-    </div>
-
-    <footer class="ultra-footer animate__animated animate__fadeInUp">
+    <footer class="ultra-footer">
         <div class="footer-glow-line"></div>
         <div class="credits-wrapper">
             <div class="credit-item"><span class="label">ENGINEERED BY</span><span class="name">@NEMEXULTRA</span></div>
             <div class="credit-item"><span class="label">EXCLUSIVE FOR</span><span class="name">@SOF_Aİ_2672</span></div>
             <div class="divider-diamond"><i class="fas fa-gem"></i></div>
-            <div class="credit-item"><span class="label">SPECIAL THANKS TO</span><span class="name">@FOFRİCX (CAN DOSTUM)</span></div>
+            <div class="credit-item"><span class="label">SPECIAL THANKS TO</span><span class="name">@FOFRİCX</span></div>
         </div>
         <div class="system-version">SYSTEM VERSION: 4.0.2672-STABLE</div>
     </footer>
@@ -183,5 +188,4 @@
 
     <script src="script.js"></script>
 </body>
-                        </html>
-                    
+</html>
