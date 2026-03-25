@@ -3,81 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MermiAİ - NEMEXULTRA</title>
+    <title>NemexUltra - Geliştirici Usulü Ramazan</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #111;
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        body { margin: 0; overflow: hidden; background-color: #000; font-family: 'Courier New', monospace; }
+        #input_video { display: none; }
+        #output_canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; transform: scaleX(-1); } /* Ayna görüntüsü */
+        
+        #ui-box {
+            position: absolute; bottom: 30px; left: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 20px; border-left: 5px solid #00ff00;
+            z-index: 100; color: #00ff00; pointer-events: none;
         }
-
-        /* Kamera Görüntüsü (Gizli tutacağız) */
-        #input_video {
-            display: none;
-        }
-
-        /* Çizim Tuvali */
-        #output_canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-        }
-
-        /* Geliştirici Mesajı Kutusu */
-        #dev-message {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            z-index: 20;
-            max-width: 80%;
-        }
-
-        #dev-message h2 {
-            margin: 0 0 10px;
-            color: #f1c40f; /* Altın Rengi */
-        }
-
-        #dev-message p {
-            margin: 5px 0;
-            font-size: 0.9em;
-            line-height: 1.4;
-        }
-
-        #dev-message .highlight {
-            color: #2ecc71; /* Yeşil (Developer Rengi) */
-        }
+        .status { font-weight: bold; color: #fff; }
     </style>
 </head>
 <body>
 
     <video id="input_video" autoplay playsinline></video>
-    
     <canvas id="output_canvas"></canvas>
 
-    <div id="dev-message">
-        <h2>console.log("NEMEXULTRA");</h2>
-        <p>Sending wishes the <span class="highlight">developer way</span>... 💻🌙</p>
-        <p>Use your <span class="highlight">index finger</span> to draw.</p>
+    <div id="ui-box">
+        <h1 style="margin:0;">> NemexUltra.exe</h1>
+        <p>Sistem: <span class="status">ÇALIŞIYOR</span></p>
+        <p style="color: #ffcc00;">Mesaj: Hayırlı Ramazanlar dilerim!</p>
+        <p style="font-size: 0.8em; opacity: 0.7;">* Çizmek için işaret parmağını kaldır.</p>
     </div>
 
     <script>
@@ -85,89 +39,77 @@
         const canvasElement = document.getElementById('output_canvas');
         const canvasCtx = canvasElement.getContext('2d');
 
-        // Tuval boyutunu ekran boyutuna eşitle
-        function resizeCanvas() {
+        function resize() {
             canvasElement.width = window.innerWidth;
             canvasElement.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        window.onresize = resize;
+        resize();
 
-        // El Takibi ve Çizim Ayarları
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-        const drawColor = '#f1c40f'; // Altın Rengi
-        const lineWidth = 10;
+        // Çizim noktalarını saklamak için dizi
+        let points = [];
 
-        // MediaPipe Hands Ayarları
-        const hands = new Hands({
-            locateFile: (file) => {
-                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+        function onResults(results) {
+            // Arka planı temizle ama siyah yap
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            canvasCtx.fillStyle = "black";
+            canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+            if (results.multiHandLandmarks) {
+                for (const landmarks of results.multiHandLandmarks) {
+                    // İşaret parmağı ucu (8) ve eklemi (6)
+                    const tip = landmarks[8];
+                    const x = tip.x * canvasElement.width;
+                    const y = tip.y * canvasElement.height;
+
+                    // Eğer parmak dik duruyorsa çiz (Basit bir kontrol)
+                    if (landmarks[8].y < landmarks[6].y) {
+                        points.push({x, y});
+                    } else {
+                        points.push(null); // Çizgiyi kes
+                    }
+                }
             }
+
+            // Tüm noktaları çiz
+            canvasCtx.beginPath();
+            canvasCtx.lineWidth = 8;
+            canvasCtx.strokeStyle = "#00ff00"; // Hacker yeşili
+            canvasCtx.lineCap = "round";
+            canvasCtx.lineJoin = "round";
+
+            for (let i = 1; i < points.length; i++) {
+                if (points[i] && points[i-1]) {
+                    canvasCtx.moveTo(points[i-1].x, points[i-1].y);
+                    canvasCtx.lineTo(points[i].x, points[i].y);
+                }
+            }
+            canvasCtx.stroke();
+            canvasCtx.restore();
+        }
+
+        const hands = new Hands({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
         });
-        
+
         hands.setOptions({
-            maxNumHands: 1, // Sadece tek el takibi (daha performanslı)
-            modelComplexity: 1, // Mobil için orta karmaşıklık
-            minDetectionConfidence: 0.7,
-            minTrackingConfidence: 0.7
+            maxNumHands: 1,
+            modelComplexity: 1,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
         });
-        
+
         hands.onResults(onResults);
 
-        // Kamera Ayarları
         const camera = new Camera(videoElement, {
             onFrame: async () => {
                 await hands.send({image: videoElement});
             },
-            width: 1280,
-            height: 720
+            width: 640,
+            height: 480
         });
         camera.start();
-
-        // Sonuçları İşleme ve Çizim
-        function onResults(results) {
-            canvasCtx.save();
-            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-            // Kamerayı çiz (İsteğe bağlı, videodaki gibi siyah arka plan için yorumda bırak)
-            // canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-
-            if (results.multiHandLandmarks) {
-                for (const landmarks of results.multiHandLandmarks) {
-                    // İşaret parmağı ucunu bul (INDEX_FINGER_TIP = 8)
-                    const indexFingerTip = landmarks[8];
-                    
-                    // İşaret parmağını tuvale yansıt
-                    const x = indexFingerTip.x * canvasElement.width;
-                    const y = indexFingerTip.y * canvasElement.height;
-
-                    // Çizim yapma mantığı (İşaret parmağı aşağıdaysa çiz)
-                    // (Bu kısım videodaki gibi karmaşık bir mantık yerine basit bir 'aşağıda' takibi yapar)
-                    if (landmarks[8].y < landmarks[7].y) { // Parmağın ucu (8), eklemden (7) daha yukardaysa (ekranda aşağıda)
-                        if (!isDrawing) {
-                            isDrawing = true;
-                            lastX = x;
-                            lastY = y;
-                        } else {
-                            canvasCtx.beginPath();
-                            canvasCtx.moveTo(lastX, lastY);
-                            canvasCtx.lineTo(x, y);
-                            canvasCtx.strokeStyle = drawColor;
-                            canvasCtx.lineWidth = lineWidth;
-                            canvasCtx.lineCap = 'round';
-                            canvasCtx.stroke();
-                            lastX = x;
-                            lastY = y;
-                        }
-                    } else {
-                        isDrawing = false;
-                    }
-                }
-            }
-            canvasCtx.restore();
-        }
     </script>
 </body>
 </html>
