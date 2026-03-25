@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>NemexUltra - Geliştirici Usulü Ramazan</title>
+    <title>NemexUltra - Geliştirici Usulü</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
     <style>
         body { margin: 0; overflow: hidden; background-color: #000; font-family: 'Courier New', monospace; }
         #input_video { display: none; }
-        #output_canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; transform: scaleX(-1); } /* Ayna görüntüsü */
+        #output_canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; }
         
         #ui-box {
             position: absolute; bottom: 30px; left: 20px;
             background: rgba(0, 255, 0, 0.1);
-            padding: 20px; border-left: 5px solid #00ff00;
+            padding: 15px; border-left: 5px solid #00ff00;
             z-index: 100; color: #00ff00; pointer-events: none;
         }
-        .status { font-weight: bold; color: #fff; }
     </style>
 </head>
 <body>
@@ -28,10 +28,11 @@
     <canvas id="output_canvas"></canvas>
 
     <div id="ui-box">
-        <h1 style="margin:0;">> NemexUltra.exe</h1>
-        <p>Sistem: <span class="status">ÇALIŞIYOR</span></p>
-        <p style="color: #ffcc00;">Mesaj: Hayırlı Ramazanlar dilerim!</p>
-        <p style="font-size: 0.8em; opacity: 0.7;">* Çizmek için işaret parmağını kaldır.</p>
+        <h2 style="margin:0;">> NemexUltra.v2</h2>
+        <p>Sistem: <span style="color:white">AKTİF</span></p>
+        <p>Mesaj: Hayırlı Ramazanlar!</p>
+        <p style="font-size: 0.7em;">* Yazmak için: İşaret Parmağı Yukarı</p>
+        <p style="font-size: 0.7em;">* Taşımak için: İşaret + Orta Parmak Birleşik</p>
     </div>
 
     <script>
@@ -39,46 +40,49 @@
         const canvasElement = document.getElementById('output_canvas');
         const canvasCtx = canvasElement.getContext('2d');
 
-        function resize() {
-            canvasElement.width = window.innerWidth;
-            canvasElement.height = window.innerHeight;
-        }
-        window.onresize = resize;
-        resize();
-
-        // Çizim noktalarını saklamak için dizi
-        let points = [];
+        let points = []; 
+        let offsetX = 0; let offsetY = 0;
 
         function onResults(results) {
-            // Arka planı temizle ama siyah yap
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            canvasCtx.fillStyle = "black";
-            canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+            
+            // Kamerayı çiz (Aynasız düz görüntü)
+            canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
             if (results.multiHandLandmarks) {
                 for (const landmarks of results.multiHandLandmarks) {
-                    // İşaret parmağı ucu (8) ve eklemi (6)
-                    const tip = landmarks[8];
-                    const x = tip.x * canvasElement.width;
-                    const y = tip.y * canvasElement.height;
+                    // El iskeletini çiz
+                    drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 2});
+                    drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 1, radius: 3});
 
-                    // Eğer parmak dik duruyorsa çiz (Basit bir kontrol)
-                    if (landmarks[8].y < landmarks[6].y) {
+                    const indexTip = landmarks[8];
+                    const middleTip = landmarks[12];
+                    const x = indexTip.x * canvasElement.width;
+                    const y = indexTip.y * canvasElement.height;
+
+                    // İki parmak birleşik mi? (Taşıma modu)
+                    const dist = Math.hypot(indexTip.x - middleTip.x, indexTip.y - middleTip.y);
+                    
+                    if (dist < 0.05) {
+                        // Sürükleme mantığı (Tüm noktaları kaydır)
+                        offsetX = x - (points.length > 0 ? points[points.length-1]?.x || x : x);
+                        offsetY = y - (points.length > 0 ? points[points.length-1]?.y || y : y);
+                        points = points.map(p => p ? {x: p.x + offsetX, y: p.y + offsetY} : null);
+                    } else if (landmarks[8].y < landmarks[6].y) {
+                        // Yazma modu
                         points.push({x, y});
                     } else {
-                        points.push(null); // Çizgiyi kes
+                        points.push(null);
                     }
                 }
             }
 
-            // Tüm noktaları çiz
+            // Çizgileri çiz
             canvasCtx.beginPath();
-            canvasCtx.lineWidth = 8;
-            canvasCtx.strokeStyle = "#00ff00"; // Hacker yeşili
+            canvasCtx.lineWidth = 6;
+            canvasCtx.strokeStyle = "#FFFF00"; // Sarı yazı
             canvasCtx.lineCap = "round";
-            canvasCtx.lineJoin = "round";
-
             for (let i = 1; i < points.length; i++) {
                 if (points[i] && points[i-1]) {
                     canvasCtx.moveTo(points[i-1].x, points[i-1].y);
@@ -92,24 +96,21 @@
         const hands = new Hands({
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
         });
-
-        hands.setOptions({
-            maxNumHands: 1,
-            modelComplexity: 1,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5
-        });
-
+        hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
         hands.onResults(onResults);
 
         const camera = new Camera(videoElement, {
-            onFrame: async () => {
-                await hands.send({image: videoElement});
-            },
-            width: 640,
-            height: 480
+            onFrame: async () => { await hands.send({image: videoElement}); },
+            width: 1280, height: 720
         });
         camera.start();
+
+        function resize() {
+            canvasElement.width = window.innerWidth;
+            canvasElement.height = window.innerHeight;
+        }
+        window.onresize = resize;
+        resize();
     </script>
 </body>
 </html>
