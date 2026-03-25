@@ -3,22 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>NemexUltra - Geliştirici Usulü</title>
+    <title>NemexUltra - Secure Access</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
     <style>
-        body { margin: 0; overflow: hidden; background-color: #000; font-family: 'Courier New', monospace; }
+        body { margin: 0; overflow: hidden; background-color: #000; font-family: 'Courier New', monospace; color: #00ff00; }
         #input_video { display: none; }
         #output_canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; }
         
+        /* Kilit Ekranı Overlay */
+        #lock-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center;
+        }
+
+        .scanner-line {
+            width: 80%; height: 2px; background: #00ff00;
+            position: absolute; top: 50%; animation: scan 2s infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 20%; } 50% { top: 80%; } 100% { top: 20%; }
+        }
+
         #ui-box {
             position: absolute; bottom: 30px; left: 20px;
-            background: rgba(0, 255, 0, 0.1);
-            padding: 15px; border-left: 5px solid #00ff00;
-            z-index: 100; color: #00ff00; pointer-events: none;
+            background: rgba(0, 255, 0, 0.1); padding: 15px;
+            border-left: 5px solid #00ff00; z-index: 100; pointer-events: none;
+        }
+
+        .btn {
+            background: #00ff00; color: #000; border: none;
+            padding: 10px 20px; font-weight: bold; cursor: pointer; margin-top: 20px;
         }
     </style>
 </head>
@@ -27,53 +48,81 @@
     <video id="input_video" autoplay playsinline></video>
     <canvas id="output_canvas"></canvas>
 
+    <div id="lock-screen">
+        <div class="scanner-line"></div>
+        <h1 id="lock-status">SİSTEM KİLİTLİ</h1>
+        <p id="lock-msg">Lütfen elinizi kameraya gösterin...</p>
+        <button id="save-btn" class="btn">ELİMİ KAYDET (İLK KURULUM)</button>
+    </div>
+
     <div id="ui-box">
-        <h2 style="margin:0;">> NemexUltra.v2</h2>
-        <p>Sistem: <span style="color:white">AKTİF</span></p>
-        <p>Mesaj: Hayırlı Ramazanlar!</p>
-        <p style="font-size: 0.7em;">* Yazmak için: İşaret Parmağı Yukarı</p>
-        <p style="font-size: 0.7em;">* Taşımak için: İşaret + Orta Parmak Birleşik</p>
+        <h2 style="margin:0;">> NemexUltra OS</h2>
+        <p>Durum: <span style="color:white" id="status-text">BEKLEMEDE</span></p>
     </div>
 
     <script>
         const videoElement = document.getElementById('input_video');
         const canvasElement = document.getElementById('output_canvas');
         const canvasCtx = canvasElement.getContext('2d');
+        const lockScreen = document.getElementById('lock-screen');
+        const lockStatus = document.getElementById('lock-status');
+        const saveBtn = document.getElementById('save-btn');
 
-        let points = []; 
-        let offsetX = 0; let offsetY = 0;
+        let savedHandHash = localStorage.getItem('nemexHandKey');
+        let isUnlocked = false;
+        let points = [];
+
+        // Elin "imzasını" (parmak arası mesafeleri) hesaplayan fonksiyon
+        function getHandHash(landmarks) {
+            // Baş parmak ucu (4) ile Serçe parmak ucu (20) arasındaki mesafe gibi verileri kullanır
+            let d1 = Math.hypot(landmarks[4].x - landmarks[20].x, landmarks[4].y - landmarks[20].y);
+            let d2 = Math.hypot(landmarks[8].x - landmarks[12].x, landmarks[8].y - landmarks[12].y);
+            return (d1 / d2).toFixed(2); // Elin oranını döndürür
+        }
+
+        saveBtn.onclick = () => {
+            alert("Lütfen elinizi ekrana tam gösterin, 3 saniye içinde kaydedilecek!");
+            saveBtn.innerText = "TARANIYOR...";
+        };
 
         function onResults(results) {
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            
-            // Kamerayı çiz (Aynasız düz görüntü)
             canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
             if (results.multiHandLandmarks) {
                 for (const landmarks of results.multiHandLandmarks) {
-                    // El iskeletini çiz
                     drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 2});
-                    drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 1, radius: 3});
-
-                    const indexTip = landmarks[8];
-                    const middleTip = landmarks[12];
-                    const x = indexTip.x * canvasElement.width;
-                    const y = indexTip.y * canvasElement.height;
-
-                    // İki parmak birleşik mi? (Taşıma modu)
-                    const dist = Math.hypot(indexTip.x - middleTip.x, indexTip.y - middleTip.y);
                     
-                    if (dist < 0.05) {
-                        // Sürükleme mantığı (Tüm noktaları kaydır)
-                        offsetX = x - (points.length > 0 ? points[points.length-1]?.x || x : x);
-                        offsetY = y - (points.length > 0 ? points[points.length-1]?.y || y : y);
-                        points = points.map(p => p ? {x: p.x + offsetX, y: p.y + offsetY} : null);
-                    } else if (landmarks[8].y < landmarks[6].y) {
-                        // Yazma modu
-                        points.push({x, y});
-                    } else {
-                        points.push(null);
+                    let currentHash = getHandHash(landmarks);
+
+                    // Kayıt Modu
+                    if (saveBtn.innerText === "TARANIYOR...") {
+                        localStorage.setItem('nemexHandKey', currentHash);
+                        savedHandHash = currentHash;
+                        saveBtn.innerText = "KAYDEDİLDİ!";
+                        setTimeout(() => { location.reload(); }, 1000);
+                    }
+
+                    // Giriş Kontrolü
+                    if (!isUnlocked && savedHandHash) {
+                        let diff = Math.abs(parseFloat(currentHash) - parseFloat(savedHandHash));
+                        if (diff < 0.1) { // Eğer elin şekli kayıtlı olana çok yakınsa
+                            isUnlocked = true;
+                            lockScreen.style.display = 'none';
+                            document.getElementById('status-text').innerText = "ERİŞİM ONAYLANDI";
+                        }
+                    }
+
+                    // Çizim Modu (Sadece kilit açıldıysa)
+                    if (isUnlocked) {
+                        const x = landmarks[8].x * canvasElement.width;
+                        const y = landmarks[8].y * canvasElement.height;
+                        if (landmarks[8].y < landmarks[6].y) {
+                            points.push({x, y});
+                        } else {
+                            points.push(null);
+                        }
                     }
                 }
             }
@@ -81,8 +130,7 @@
             // Çizgileri çiz
             canvasCtx.beginPath();
             canvasCtx.lineWidth = 6;
-            canvasCtx.strokeStyle = "#FFFF00"; // Sarı yazı
-            canvasCtx.lineCap = "round";
+            canvasCtx.strokeStyle = "#FFFF00";
             for (let i = 1; i < points.length; i++) {
                 if (points[i] && points[i-1]) {
                     canvasCtx.moveTo(points[i-1].x, points[i-1].y);
@@ -93,9 +141,7 @@
             canvasCtx.restore();
         }
 
-        const hands = new Hands({
-            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
-        });
+        const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
         hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
         hands.onResults(onResults);
 
@@ -105,12 +151,11 @@
         });
         camera.start();
 
-        function resize() {
+        window.onresize = () => {
             canvasElement.width = window.innerWidth;
             canvasElement.height = window.innerHeight;
-        }
-        window.onresize = resize;
-        resize();
+        };
+        window.onresize();
     </script>
 </body>
 </html>
