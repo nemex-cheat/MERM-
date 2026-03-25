@@ -2,190 +2,172 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Bacişim | Digital Universe v4.0</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,800;1,300&family=Dancing+Script:wght@700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MermiAİ - NEMEXULTRA</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 
     <style>
-        /* KRİTİK FİX: Fotoğrafların dev kare görünmesi için ek stiller */
-        #preloader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #111, #000);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999999;
-        }
-        
-        .big-square-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-            padding: 20px;
-        }
-
-        .photo-frame {
-            width: 85vw;
-            height: 85vw;
-            max-width: 380px;
-            max-height: 380px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 45, 117, 0.4);
-            border-radius: 20px;
+        body {
+            margin: 0;
+            padding: 0;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            position: relative;
+            background-color: #111;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        .photo-frame img {
+        /* Kamera Görüntüsü (Gizli tutacağız) */
+        #input_video {
+            display: none;
+        }
+
+        /* Çizim Tuvali */
+        #output_canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            display: block;
+            z-index: 10;
         }
 
-        .photo-label {
+        /* Geliştirici Mesajı Kutusu */
+        #dev-message {
             position: absolute;
-            bottom: 12px;
-            left: 12px;
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
-            background: rgba(255, 45, 117, 0.6);
-            padding: 3px 10px;
-            border-radius: 4px;
-            backdrop-filter: blur(5px);
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            z-index: 20;
+            max-width: 80%;
         }
 
-        .gallery-scroll-area {
-            overflow-y: auto;
-            height: calc(100vh - 80px);
-            padding-bottom: 50px;
+        #dev-message h2 {
+            margin: 0 0 10px;
+            color: #f1c40f; /* Altın Rengi */
+        }
+
+        #dev-message p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        #dev-message .highlight {
+            color: #2ecc71; /* Yeşil (Developer Rengi) */
         }
     </style>
 </head>
 <body>
 
-    <div id="preloader">
-        <div class="loader-glow"></div>
-        <div class="heart-spinner animate__animated animate__heartBeat animate__infinite">❤️</div>
-        <p style="color: white; margin-top: 20px; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 10px;">@NEMEXULTRA INITIALIZING...</p>
+    <video id="input_video" autoplay playsinline></video>
+    
+    <canvas id="output_canvas"></canvas>
+
+    <div id="dev-message">
+        <h2>console.log("NEMEXULTRA");</h2>
+        <p>Sending wishes the <span class="highlight">developer way</span>... 💻🌙</p>
+        <p>Use your <span class="highlight">index finger</span> to draw.</p>
     </div>
 
-    <div class="background-wrapper">
-        <canvas id="meteor-canvas"></canvas>
-        <div id="floating-hearts"></div>
-    </div>
+    <script>
+        const videoElement = document.getElementById('input_video');
+        const canvasElement = document.getElementById('output_canvas');
+        const canvasCtx = canvasElement.getContext('2d');
 
-    <div class="app-container">
-        <header class="main-header animate__animated animate__fadeInDown">
-            <div class="profile-section">
-                <div class="avatar-wrapper">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/profil.jpg" alt="Bacişim" class="profile-img">
-                    <div class="pulse-ring"></div>
-                    <div class="online-indicator"></div>
-                </div>
-                <h1 class="glow-text animate__animated animate__zoomIn">Bacişim</h1>
-                <p class="status-tag"><span class="active-dot"></span> Çevrimiçi (Sonsuza Kadar)</p>
-            </div>
-        </header>
+        // Tuval boyutunu ekran boyutuna eşitle
+        function resizeCanvas() {
+            canvasElement.width = window.innerWidth;
+            canvasElement.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        <section class="quote-section animate__animated animate__fadeIn">
-            <div class="glass-card quote-card">
-                <div class="card-glow"></div>
-                <i class="fas fa-quote-left icon-quote"></i>
-                <p id="dynamic-quote">"Mesafeler sadece yollar içindir, kalpler hep yan yana."</p>
-                <div class="card-footer"><div class="divider"></div><span>— NEMEXULTRA</span></div>
-            </div>
-        </section>
+        // El Takibi ve Çizim Ayarları
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        const drawColor = '#f1c40f'; // Altın Rengi
+        const lineWidth = 10;
 
-        <nav class="action-menu">
-            <div class="menu-grid">
-                <div class="menu-item glass-button animate__animated animate__fadeInLeft" onclick="openModule('gallery')">
-                    <div class="item-inner">
-                        <div class="menu-icon icon-pink"><i class="fas fa-images"></i></div>
-                        <span>Galeri</span>
-                    </div>
-                </div>
-                <div class="menu-item glass-button animate__animated animate__fadeInUp" onclick="openModule('game')">
-                    <div class="item-inner">
-                        <div class="menu-icon icon-purple"><i class="fas fa-gamepad"></i></div>
-                        <span>Oyun</span>
-                    </div>
-                </div>
-                <div class="menu-item glass-button animate__animated animate__fadeInRight" id="main-music-btn" onclick="toggleMusic()">
-                    <div class="item-inner">
-                        <div class="menu-icon icon-blue" id="music-icon-container"><i class="fas fa-music" id="music-icon"></i></div>
-                        <span>Müzik</span>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        // MediaPipe Hands Ayarları
+        const hands = new Hands({
+            locateFile: (file) => {
+                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+            }
+        });
+        
+        hands.setOptions({
+            maxNumHands: 1, // Sadece tek el takibi (daha performanslı)
+            modelComplexity: 1, // Mobil için orta karmaşıklık
+            minDetectionConfidence: 0.7,
+            minTrackingConfidence: 0.7
+        });
+        
+        hands.onResults(onResults);
 
-        <div class="extra-panel animate__animated animate__slideInUp">
-            <div class="mini-card glass-card">
-                <p><i class="fas fa-heart" style="color:#ff2d75;"></i> Bugün çok güzelsin!</p>
-            </div>
-        </div>
-    </div>
+        // Kamera Ayarları
+        const camera = new Camera(videoElement, {
+            onFrame: async () => {
+                await hands.send({image: videoElement});
+            },
+            width: 1280,
+            height: 720
+        });
+        camera.start();
 
-    <div id="module-gallery" class="full-screen-module">
-        <div class="module-header">
-            <button class="back-btn" onclick="closeModule('gallery')"><i class="fas fa-arrow-left"></i> Geri</button>
-            <h2 class="module-title">Bacişimin Albümü</h2>
-        </div>
-        <div class="gallery-scroll-area">
-            <div class="big-square-container">
-                <div class="photo-frame animate__animated animate__fadeInUp">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto1.jpg" alt="Anı 1">
-                    <span class="photo-label">MEMORY_01</span>
-                </div>
-                <div class="photo-frame animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto2.jpg" alt="Anı 2">
-                    <span class="photo-label">MEMORY_02</span>
-                </div>
-                <div class="photo-frame animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto3.jpg" alt="Anı 3">
-                    <span class="photo-label">MEMORY_03</span>
-                </div>
-                <div class="photo-frame animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
-                    <img src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/foto4.jpg" alt="Anı 4">
-                    <span class="photo-label">MEMORY_04</span>
-                </div>
-            </div>
-        </div>
-    </div>
+        // Sonuçları İşleme ve Çizim
+        function onResults(results) {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
-    <div id="module-game" class="full-screen-module">
-        <div class="module-header">
-            <button class="back-btn" onclick="closeModule('game')"><i class="fas fa-arrow-left"></i> Geri</button>
-            <h2 class="module-title">3D Bilgi Yarışması</h2>
-        </div>
-        <div class="game-wrapper" id="game-zone"></div>
-    </div>
+            // Kamerayı çiz (İsteğe bağlı, videodaki gibi siyah arka plan için yorumda bırak)
+            // canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
-    <footer class="ultra-footer">
-        <div class="footer-glow-line"></div>
-        <div class="credits-wrapper">
-            <div class="credit-item"><span class="label">ENGINEERED BY</span><span class="name">@NEMEXULTRA</span></div>
-            <div class="credit-item"><span class="label">EXCLUSIVE FOR</span><span class="name">@SOF_Aİ_2672</span></div>
-            <div class="divider-diamond"><i class="fas fa-gem"></i></div>
-            <div class="credit-item"><span class="label">SPECIAL THANKS TO</span><span class="name">@FOFRİCX</span></div>
-        </div>
-        <div class="system-version">SYSTEM VERSION: 4.0.2672-STABLE</div>
-    </footer>
+            if (results.multiHandLandmarks) {
+                for (const landmarks of results.multiHandLandmarks) {
+                    // İşaret parmağı ucunu bul (INDEX_FINGER_TIP = 8)
+                    const indexFingerTip = landmarks[8];
+                    
+                    // İşaret parmağını tuvale yansıt
+                    const x = indexFingerTip.x * canvasElement.width;
+                    const y = indexFingerTip.y * canvasElement.height;
 
-    <audio id="bg-music" loop preload="auto">
-        <source src="https://raw.githubusercontent.com/nemex-cheat/MERM-/main/gemini_generated_media_f0acc49d.mp3" type="audio/mpeg">
-    </audio>
-
-    <script src="script.js"></script>
+                    // Çizim yapma mantığı (İşaret parmağı aşağıdaysa çiz)
+                    // (Bu kısım videodaki gibi karmaşık bir mantık yerine basit bir 'aşağıda' takibi yapar)
+                    if (landmarks[8].y < landmarks[7].y) { // Parmağın ucu (8), eklemden (7) daha yukardaysa (ekranda aşağıda)
+                        if (!isDrawing) {
+                            isDrawing = true;
+                            lastX = x;
+                            lastY = y;
+                        } else {
+                            canvasCtx.beginPath();
+                            canvasCtx.moveTo(lastX, lastY);
+                            canvasCtx.lineTo(x, y);
+                            canvasCtx.strokeStyle = drawColor;
+                            canvasCtx.lineWidth = lineWidth;
+                            canvasCtx.lineCap = 'round';
+                            canvasCtx.stroke();
+                            lastX = x;
+                            lastY = y;
+                        }
+                    } else {
+                        isDrawing = false;
+                    }
+                }
+            }
+            canvasCtx.restore();
+        }
+    </script>
 </body>
 </html>
