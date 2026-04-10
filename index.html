@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İyi Ki Doğdun Ethem! 🎂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Katman 1: Arka plan animasyonu */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .floating-shape:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: #e94560;
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            top: 70%;
+            right: 10%;
+            width: 120px;
+            height: 120px;
+            background: #ffd700;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-delay: -5s;
+        }
+
+        .floating-shape:nth-child(3) {
+            top: 40%;
+            left: 80%;
+            width: 60px;
+            height: 60px;
+            background: #00d9ff;
+            transform: rotate(45deg);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        /* Katman 2: Konfeti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Katman 3: Ana içerik */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .birthday-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            animation: card-appear 1s ease-out;
+        }
+
+        @keyframes card-appear {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .age-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #fff 0%, #ffd700 50%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .name-highlight {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #ffd700, #ff6b6b, #00d9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            display: block;
+            margin: 10px 0;
+            animation: name-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes name-glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(255, 215, 0, 0.5)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(255, 215, 0, 0.8)); }
+        }
+
+        /* Pasta Bölümü */
+        .cake-section {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .cake {
+            font-size: 8rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: inline-block;
+            position: relative;
+        }
+
+        .cake:hover {
+            transform: scale(1.1);
+        }
+
+        .cake.shake {
+            animation: cake-shake 0.5s ease;
+        }
+
+        @keyframes cake-shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .candles {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .candle {
+            width: 8px;
+            height: 25px;
+            background: linear-gradient(to top, #8b4513, #d2691e);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 20px;
+            background: radial-gradient(ellipse at bottom, #ffff00 0%, #ff8c00 50%, #ff4500 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 0.5s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px #ff8c00, 0 0 40px #ff4500;
+        }
+
+        .flame.out {
+            animation: flame-out 0.5s ease forwards;
+        }
+
+        @keyframes flame-out {
+            to {
+                transform: translateX(-50%) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+            100% { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+        }
+
+        .blow-text {
+            margin-top: 15px;
+            color: #ffd700;
+            font-size: 1.1rem;
+            opacity: 0.8;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Mesaj Bölümü */
+        .message-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border-left: 4px solid #e94560;
+        }
+
+        .message-text {
+            color: #fff;
+            font-size: 1.5rem;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        .message-text .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        /* Sosyal Medya */
+        .social-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .instagram-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(220, 39, 67, 0.4);
+        }
+
+        .instagram-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(220, 39, 67, 0.6);
+        }
+
+        .instagram-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Partikül efekti */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: particle-float 15s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes particle-float {
+            0%, 100% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .name-highlight { font-size: 2.5rem; }
+            .birthday-card { padding: 25px; }
+            .cake { font-size: 6rem; }
+            .message-text { font-size: 1.2rem; }
+        }
+
+        /* Duman efekti */
+        .smoke {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(200,200,200,0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: smoke-rise 2s ease-out forwards;
+        }
+
+        @keyframes smoke-rise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) scale(3);
+                opacity: 0;
+            }
+        }
+
+        /* Dilek balonları */
+        .wish-balloon {
+            position: fixed;
+            font-size: 2rem;
+            animation: balloon-rise 4s ease-out forwards;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes balloon-rise {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 1;
+            }
+            10% {
+                transform: translateY(-50px) scale(1);
+            }
+            100% {
+                transform: translateY(-500px) scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Katman 1: Arka Plan Animasyonu -->
+    <div class="bg-animation">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <!-- Katman 2: Konfeti -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- Katman 3: Partiküller -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Ana İçerik -->
+    <div class="main-container">
+        <div class="birthday-card">
+            <div class="age-badge">🎉 16. Yaş 🎉</div>
+
+            <h1>İyi Ki Doğdun</h1>
+            <span class="name-highlight">ETHEM</span>
+
+            <!-- Pasta Bölümü -->
+            <div class="cake-section">
+                <div class="cake" id="cake" onclick="blowCandles()">
+                    <div class="candles">
+                        <div class="candle"><div class="flame" id="flame1"></div></div>
+                        <div class="candle"><div class="flame" id="flame2"></div></div>
+                        <div class="candle"><div class="flame" id="flame3"></div></div>
+                    </div>
+                    🎂
+                </div>
+                <p class="blow-text">👆 Pastaya tıkla ve mumları üfle! 🕯️</p>
+            </div>
+
+            <!-- Mesaj Bölümü -->
+            <div class="message-section">
+                <p class="message-text">
+                    <span class="highlight">İyi ki doğdun!</span><br>
+                    Nice mutlu yıllara <span class="highlight">Kralım</span> 🤩
+                </p>
+            </div>
+
+            <!-- Sosyal Medya -->
+            <div class="social-section">
+                <a href="https://instagram.com/owner._.nexus" target="_blank" class="instagram-link">
+                    <span class="instagram-icon">📸</span>
+                    @owner._.nexus
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Konfeti oluşturma - optimize edilmiş
+        function createConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#e94560', '#ffd700', '#00d9ff', '#ff6b6b', '#7b2cbf', '#ff006e'];
+            const confettiCount = window.innerWidth < 768 ? 30 : 50; // Mobilde daha az
+
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    container.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 100);
+            }
+        }
+
+        // Mum üfleme fonksiyonu
+        let candlesBlown = false;
+
+        function blowCandles() {
+            if (candlesBlown) return;
+
+            const cake = document.getElementById('cake');
+            const flames = document.querySelectorAll('.flame');
+
+            cake.classList.add('shake');
+
+            flames.forEach((flame, index) => {
+                setTimeout(() => {
+                    flame.classList.add('out');
+                    createSmoke(flame);
+                }, index * 200);
+            });
+
+            setTimeout(() => {
+                createWishBalloons();
+                createExtraConfetti();
+                document.querySelector('.blow-text').textContent = '🎉 Dileklerin gerçek olsun! 🎉';
+                document.querySelector('.blow-text').style.color = '#00ff88';
+            }, 1000);
+
+            candlesBlown = true;
+
+            setTimeout(() => cake.classList.remove('shake'), 500);
+        }
+
+        // Duman efekti
+        function createSmoke(flame) {
+            const rect = flame.getBoundingClientRect();
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const smoke = document.createElement('div');
+                    smoke.className = 'smoke';
+                    smoke.style.left = (rect.left + rect.width/2) + 'px';
+                    smoke.style.top = rect.top + 'px';
+                    document.body.appendChild(smoke);
+                    setTimeout(() => smoke.remove(), 2000);
+                }, i * 100);
+            }
+        }
+
+        // Dilek balonları
+        function createWishBalloons() {
+            const emojis = ['🎈', '🎉', '✨', '🌟', '🎊', '🎁', '💖', '🥳'];
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'wish-balloon';
+                    balloon.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    balloon.style.left = (Math.random() * 80 + 10) + '%';
+                    balloon.style.bottom = '30%';
+                    balloon.style.animationDelay = (Math.random() * 0.5) + 's';
+                    document.body.appendChild(balloon);
+                    setTimeout(() => balloon.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        // Ekstra konfeti patlaması
+        function createExtraConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#gold', '#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff'];
+
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = '50%';
+                confetti.style.top = '50%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                const angle = (Math.PI * 2 * i) / 100;
+                const velocity = Math.random() * 300 + 200;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                confetti.style.animation = 'none';
+                confetti.style.transition = 'all 1.5s ease-out';
+                confetti.style.transform = `translate(-50%, -50%)`;
+
+                container.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) rotate(${Math.random() * 720}deg)`;
+                    confetti.style.opacity = '0';
+                }, 10);
+
+                setTimeout(() => confetti.remove(), 1500);
+            }
+        }
+
+        // Partikül oluşturma - optimize
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = window.innerWidth < 768 ? 15 : 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Başlat
+        window.addEventListener('load', () => {
+            createConfetti();
+            createParticles();
+            setInterval(createConfetti, 8000); // Her 8 saniyede yenile
+        });
+
+        // Performans optimizasyonu - visibility API
+        document.addEventListener('visibilitychange', () => {
+            const confetti = document.querySelectorAll('.confetti');
+            confetti.forEach(c => {
+                c.style.animationPlayState = document.hidden ? 'paused' : 'running';
+            });
+        });
+    </script>
+</body>
+</html>
