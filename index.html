@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nesrin...</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #2d1b4e 0%, #1a0f2e 50%, #0d0a1f 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 2s ease;
+        }
+        
+        .header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5em;
+            background: linear-gradient(45deg, #f4e4c1, #d4af37, #f4e4c1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(244, 228, 193, 0.3);
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #d4af37;
+            font-style: italic;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+        }
+        
+        .letter {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(244, 228, 193, 0.2);
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 2s ease 0.5s both;
+            position: relative;
+        }
+        
+        .letter::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 4em;
+            color: rgba(244, 228, 193, 0.2);
+            font-family: Georgia, serif;
+        animation: fadeIn 1s ease 2s both;
+        }
+        
+        .letter p {
+            font-size: 1.3em;
+            line-height: 2;
+            margin-bottom: 25px;
+            color: #f0e6d3;
+            text-align: justify;
+        }
+        
+        .letter .highlight {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        
+        .joke-box {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(244, 228, 193, 0.1));
+            border-left: 4px solid #d4af37;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 0 15px 15px 0;
+            font-style: italic;
+            position: relative;
+        }
+        
+        .joke-box::after {
+            content: "💫";
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-size: 2em;
+            background: #2d1b4e;
+            padding: 0 10px;
+            animation: fadeIn 1s ease 3s both;
+        }
+        
+        .photo-section {
+            text-align: center;
+            margin: 40px 0;
+            animation: fadeInUp 2s ease 1s both;
+        }
+        
+        .photo-placeholder {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            border-radius: 50%;
+            border: 5px solid rgba(244, 228, 193, 0.3);
+            background: linear-gradient(135deg, #3d2b50, #2d1b4e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            box-shadow: 0 0 50px rgba(244, 228, 193, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .photo-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(244,228,193,0.1) 0%, transparent 70%);
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .photo-caption {
+            margin-top: 20px;
+            color: #d4af37;
+            font-style: italic;
+        }
+        
+        .reasons {
+            margin: 40px 0;
+            animation: fadeInUp 2s ease 1.5s both;
+        }
+        
+        .reasons h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #f4e4c1;
+        }
+        
+        .reason-card {
+            background: rgba(255, 255, 255, 255, 0.03);
+            border: 1px solid rgba(244, 228, 193, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+           px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reason-card:hover {
+            transform: translateX(10px);
+            border-color: rgba(244, 228, 193, 0.3);
+            background: rgba(255, 255, 255, 255, 0.08);
+        }
+        
+        .reason-card::before {
+            content: '♥';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d4af37;
+       color: #d4af37;
+            font-size: 1.5em;
+            opacity: 0;
+            transition: all 0.3s ease;
+        z-index: 1;
+        }
+        
+        .reason-card:hover::before {
+            left: 15px;
+            opacity: 1;
+        }
+        
+        .reason-number {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5em;
+            color: #d4af37;
+            margin-bottom: 10px;
+        z-index: 1;
+        }
+        
+        .final-section {
+            text-align: center;
+            margin-top: 60px;
+            padding: 50px;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), transparent);
+            border-radius: 20px;
+            animation: fadeInUp 2s ease 2s both;
+        position: relative;
+        z-index: 1;
+        }
+        
+        .final-section h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #f4e4c1;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Playfair Display', serif;
+            position: relative;
+            overflow: hidden;
+        z-index: 2;
+        }
+        
+        .btn-yes {
+            background: linear-gradient(135deg, #d4af37, #f4e4c1);
+            color: #2d1b4e;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-yes:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
+        }
+        
+        .btn-no {
+            background: transparent;
+            border: 2px solid rgba(244, 228, 193, 0.3);
+            color: #f4e4c1;
+        }
+        
+        .btn-no:hover {
+            background: rgba(244, 228, 193, 0.1);
+        }
+        
+        .hidden-message {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(212, 165, 116, 0.1);
+            border-radius: 15px;
+            animation: fadeIn 1s ease;
+        position: relative;
+        z-index: 1;
+        }
+        
+        .hidden-message.show {
+            display: block;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: rgba(244, 228, 193, 0.5);
+            font-size: 0.9em;
+        }
+        
+        .heart {
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2.5em; }
+            .letter { padding: 30px 20px; }
+            .letter p { font-size: 1.1em; }
+            .photo-placeholder { width: 200px; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1>Nesrin</h1>
+            <p>Bu sayfa sadece senin için...</p>
+        </header>
+        
+        <div class="letter">
+            <p>
+                Nesrin,<br><br>
+                
+                Bu satırları yazarken elim biraz titriyor, çünkü sana karşı hissettiklerimi kelimelere dökmek gerçekten zor. Ama denemek istedim.
+            </p>
+            
+            <p>
+                İlk gördüğüm andan beri aklımdasın! <span class="highlight">Gülüşün</span> güneşi bile kıskandırıyor, <span class="highlight">gözlerin</span> içinde kaybolmak istiyorum. Her konuşmamızda zaman nasıl geçiyor anlamıyorum.
+            </p>
+            
+            <div class="joke-box">
+                <p style="margin:0; text-align: left;">
+                    P.S. Biliyorum, kumralları seviyorsun ve ben kumral değilim... Ama şunu unutma: <strong>"Yakışıklılık kumralda değil, kalpte aranır"</strong> 🫶🏻<br>
+                    <small>(Ve ben ikisinde de iddialıyım 😎)</small>
+                </p>
+            </div>
+            
+            <p>
+                Ciddi olmak gerekirse, seninle daha fazla zaman geçirmek, seni daha iyi tanımak, belki de bir kahve içmek için bahane arıyorum Sürekli.
+            </p>
+            
+            <p>
+                Bu bir <span class="highlight">çıkma teklifi</span> değil aslında. Bu, <span class="highlight">"seni beğeniyorum"</span> demenin en samimi hali. Devamını beraber yazalım Mı?
+            </p>
+        </div>
+        
+        <div class="photo-section">
+            <div class="photo-placeholder">
+                🫶🏻
+            </div>
+            <p class="photo-caption">Senin gülüşünü yerimm...</p>
+        </div>
+        
+        <div class="reasons">
+            <h2>Neden Nesrin?</h2>
+            
+            <div class="reason-card">
+                <div class="reason-number">01.</div>
+                <p>Gülüşün etrafındaki herkesi mutlu ediyor, buna ben de dahilim.</p>
+            </div>
+            
+            <div class="reason-card">
+                <div class="reason-number">02.</div>
+                <p>Konuşurken gözlerinin içi gülüyor, bu beni çok etkiliyor.</p>
+            </div>
+            
+            <div class="reason-card">
+                <div class="reason-number">03.</div>
+                <p>Seninle konuşurken kendimi çok rahat hissediyorum.</p>
+            </div>
+            
+            <div class="reason-card">
+                <div class="reason-number">04.</div>
+                <p>Ve evet, kumral sevdiğini biliyorum ama belki de beklediğin senden başkasıdır 😉</p>
+            </div>
+        </div>
+        
+        <div class="final-section">
+            <h2>Peki ya sen?</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">
+                Bana bir şans verir misin?<br>
+                Kahve içelim, konuşalım, belki yürüyüş yapalım...<br>
+                <span style="color: #d4af37;">Gerisi zaten kader.</span>
+            </p>
+            
+            <div class="buttons">
+                <button class="btn btn-yes" onclick="showYes()">Evet, Olur! 💫</button>
+                <button class="btn btn-no" onclick="showNo()">Düşüneyim...</button>
+            </div>
+            
+            <div id="yesMessage" class="hidden-message">
+                <h3 style="color: #d4af37; margin-bottom: 15px;">Harika! 🎉</h3>
+                <p>En kısa zamanda seninle iletişime geçeceğim. Bu yanıt beni çok mutlu etti Nesrin!</p>
+                <p style="margin-top: 15px; font-size: 2em;">🫶🏻</p>
+            </div>
+            
+            <div id="noMessage" class="hidden-message">
+                <h3 style="color: #d4af37; margin-bottom: 15px;">Sorun değil!</h3>
+                <p>Düşünmek için zaman ayırman bile benim için değerli. Ama unutma, kumrallar gelir geçer, yakışıklılar kalır 😄<br>
+                (Şaka bir yana, senin kararın her ne olursa olsun saygı duyarım)</p>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>Bu sayfa <span class="heart">EMREZAMİR </span>tarafından yapıldı</p>
+            <p style="margin-top: 10px; font-size: 0.8em;">© 2026 | Sadece Nesrin'e özel</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Yıldızlar oluştur
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        createStars();
+        
+        function showYes() {
+            document.getElementById('yesMessage').classList.add('show');
+            document.getElementById('noMessage').classList.remove('show');
+            
+            // Konfeti efekti
+            for(let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = ['#d4af37', '#f4e4c1', '#fff'][Math.floor(Math.random() * 3)];
+                    confetti.style.zIndex = '9999';
+                    confetti.style.pointerEvents = 'none';
+                    confetti.style.animation = 'fall 3s linear forwards';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+        
+        function showNo() {
+            document.getElementById('noMessage').classList.add('show');
+            document.getElementById('yesMessage').classList.remove('show');
+        }
+        
+        // CSS animation for confetti
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
