@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeynep...</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+        }
+        
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .heart-float {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1.5s ease;
+        }
+        
+        .header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5em;
+            color: #fff;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+        
+        .letter {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease 0.3s both;
+            color: #4a4a4a;
+        }
+        
+        .letter p {
+            font-size: 1.15em;
+            line-height: 1.9;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .letter .highlight {
+            color: #764ba2;
+            font-weight: 600;
+        }
+        
+        .emoji-big {
+            font-size: 1.5em;
+            vertical-align: middle;
+        }
+        
+        .memory-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 15px 15px 0;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .apology-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: rgba(118, 75, 162, 0.1);
+            border-radius: 20px;
+            animation: fadeInUp 1.5s ease 0.6s both;
+        }
+        
+        .apology-section h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2em;
+            color: #764ba2;
+            margin-bottom: 20px;
+        }
+        
+        .apology-section p {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+        }
+        
+        .btn-yes {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-yes:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+        
+        .btn-no {
+            background: white;
+            border: 2px solid #ddd;
+            color: #888;
+        }
+        
+        .btn-no:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .hidden-message {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .hidden-message.show {
+            display: block;
+        }
+        
+        .friend-reminder {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            margin-top: 30px;
+            text-align: center;
+            animation: fadeInUp 1.5s ease 0.9s both;
+        }
+        
+        .friend-reminder h3 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .friend-reminder p {
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2.5em; }
+            .letter { padding: 25px; }
+            .letter p { font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="hearts"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1>Zeynep</h1>
+            <p>Bir aydır çok şey eksik...</p>
+        </header>
+        
+        <div class="letter">
+            <p>
+                Zeynep,<br><br>
+                
+                Bu bir aylık sessizlik bana <span class="highlight">ne kadar değerli</span> olduğunu bir kez daha hatırlattı. Konuşmadan geçen her gün, senin eksikliğini hissettim.
+            </p>
+            
+            <p>
+                Aramızda ne olduysa, <span class="highlight">özür dilerim</span>. Belki haklıydım belki haksız, ama bunun arkadaşlığımızdan daha önemli olduğunu düşünmüyorum artık.
+            </p>
+            
+            <div class="memory-box">
+                <p style="margin:0;">
+                    "En son konuştuğumuzda güldüğümüz o şeyi hâlâ hatırlıyorum. O anları özlüyorum."
+                </p>
+            </div>
+            
+            <p>
+                Seninle olan <span class="highlight">arkadaşlığımız</span> benim için çok kıymetli. Bir aydır kahve içerken yanımda seni anlatacak birini arıyorum, dizi önerisi isteyecek kimsem yok, saçma sapan şakalarıma gülen biri yok.
+            </p>
+            
+            <p>
+                <span class="emoji-big">🥹</span> Sadece eskisi gibi konuşalım, gülelim, takılalım istiyorum. Sevgili falan filan değil, sadece <span class="highlight">iyi arkadaşlar</span> olarak.
+            </p>
+        </div>
+        
+        <div class="apology-section">
+            <h2>Barışalım mı?</h2>
+            <p>
+                Geçmişi geride bırakıp yeniden başlayalım.<br>
+                Kahve içelim, konuşalım, eskisi gibi takılalım.<br>
+                <span style="color:#667eea; font-weight:600;">Ne dersin?</span>
+            </p>
+            
+            <div class="buttons">
+                <button class="btn btn-yes" onclick="showYes()">Tamam, barışalım ☕</button>
+                <button class="btn btn-no" onclick="showNo()">Henüz değil...</button>
+            </div>
+            
+            <div id="yesMessage" class="hidden-message">
+                <h3 style="color: #667eea; margin-bottom: 10px;">Çok sevindim! 🎉</h3>
+                <p>En kısa zamanda yazacağım sana. Bu sessizlik bitsin artık.</p>
+            </div>
+            
+            <div id="noMessage" class="hidden-message">
+                <h3 style="color: #888; margin-bottom: 10px;">Anlıyorum</h3>
+                <p>Zaman lazımsa zaman veririm. Ama unutma, buradayım ve seni özledim.</p>
+            </div>
+        </div>
+        
+        <div class="friend-reminder">
+            <h3>🤝 Sadece Arkadaşlık</h3>
+            <p>
+                Bu site sadece <strong>arkadaş olarak</strong> barışmak için.<br>
+                Seninle olan dostluğumu çok özledim.<br>
+                <span style="color:#667eea;">Kumral sevdiğini biliyorum ama bu sefer sadece "eski dost" olarak geri dönmek istiyorum 😄</span>
+            </p>
+        </div>
+        
+        <footer class="footer">
+            <p>Bir arkadaşın özledi 💙</p>
+            <p style="margin-top: 8px; font-size: 0.8em;">© 2026 | Zeynep'e özel</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Kalp animasyonları
+        function createHearts() {
+            const container = document.getElementById('hearts');
+            const emojis = ['💙', '🤝', '☕', '🌟', '✨'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-float';
+                heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 8 + 's';
+                heart.style.animationDuration = (6 + Math.random() * 4) + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+        
+        function showYes() {
+            document.getElementById('yesMessage').classList.add('show');
+            document.getElementById('noMessage').classList.remove('show');
+        }
+        
+        function showNo() {
+            document.getElementById('noMessage').classList.add('show');
+            document.getElementById('yesMessage').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
